@@ -1,28 +1,5006 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Class: Unknown</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: #070b16;
-      color: #edf6ff;
-      font-family: Arial, sans-serif;
-    }
-    .box {
-      padding: 2rem 3rem;
-      border: 1px solid rgba(166, 205, 232, 0.2);
-      border-radius: 12px;
-      background: rgba(255,255,255,0.02);
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Class: Unknown | Character Database</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#040713;
+  --panel:#091021;
+  --panel2:#0d1730;
+  --ink:#edf8ff;
+  --muted:#8da5bd;
+  --line:rgba(129,221,255,.22);
+
+  --system:#67d8ff;
+  --government:#67d8ff;
+  --personal:#c59cff;
+
+  --accent:var(--system);
+
+  --warning:#ffe45c;
+  --danger:#ff708f;
+  --ok:#7fffb7;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+}
+
+body{
+  background:
+    radial-gradient(
+      circle at 12% 0,
+      rgba(103,216,255,.10),
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 92% 8%,
+      rgba(197,156,255,.10),
+      transparent 26%
+    ),
+    var(--bg);
+
+  color:var(--ink);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+.app{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:280px 1fr;
+}
+
+
+/* ==============================
+   SIDEBAR
+============================== */
+
+.sidebar{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:auto;
+
+  padding:16px;
+
+  background:rgba(4,7,19,.96);
+
+  border-right:
+    1px solid var(--line);
+}
+
+.brand{
+  font-weight:950;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-size:15px;
+}
+
+.brand small{
+  display:block;
+
+  color:var(--muted);
+
+  letter-spacing:.12em;
+
+  font-size:10px;
+
+  margin-top:4px;
+}
+
+.search{
+  width:100%;
+
+  margin:
+    14px 0 10px;
+
+  padding:
+    10px 11px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:10px;
+
+  background:#071025;
+
+  color:var(--ink);
+
+  outline:none;
+}
+
+.char-list{
+  display:grid;
+  gap:7px;
+}
+
+.char-item{
+  display:flex;
+  align-items:center;
+  gap:9px;
+
+  width:100%;
+
+  padding:10px;
+
+  border:
+    1px solid rgba(255,255,255,.06);
+
+  border-radius:11px;
+
+  background:#081126;
+
+  color:var(--ink);
+
+  cursor:pointer;
+
+  text-align:left;
+}
+
+.char-item:hover,
+.char-item.active{
+  border-color:var(--accent);
+
+  box-shadow:
+    0 0 14px
+    color-mix(
+      in srgb,
+      var(--accent) 16%,
+      transparent
+    );
+}
+
+.mini-avatar{
+  width:34px;
+  height:34px;
+
+  border-radius:9px;
+
+  object-fit:cover;
+
+  background:#111a33;
+
+  border:
+    1px solid rgba(255,255,255,.10);
+}
+
+.char-name{
+  font-weight:800;
+  font-size:13px;
+}
+
+.char-meta{
+  font-size:10px;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.side-actions{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:7px;
+
+  margin-top:10px;
+}
+
+.side-actions button,
+.ghost-btn,
+.primary-btn,
+.danger-btn{
+  border:
+    1px solid var(--line);
+
+  background:#0b1530;
+
+  color:var(--ink);
+
+  border-radius:9px;
+
+  padding:
+    9px 10px;
+
+  cursor:pointer;
+
+  font-weight:750;
+}
+
+.side-actions button:hover,
+.ghost-btn:hover,
+.primary-btn:hover{
+  border-color:var(--accent);
+}
+
+.danger-btn{
+  border-color:
+    rgba(255,112,143,.35);
+
+  color:#ff9eb3;
+}
+
+.danger-btn:hover{
+  border-color:var(--danger);
+}
+
+
+/* ==============================
+   MAIN
+============================== */
+
+.main{
+  min-width:0;
+
+  padding:
+    16px 18px 60px;
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+
+  z-index:20;
+
+  display:flex;
+  gap:9px;
+  align-items:center;
+  flex-wrap:wrap;
+
+  padding:
+    10px 12px;
+
+  margin-bottom:12px;
+
+  background:
+    rgba(4,7,19,.92);
+
+  backdrop-filter:
+    blur(14px);
+
+  border:
+    1px solid var(--line);
+
+  border-radius:14px;
+}
+
+.character-title{
+  font-size:18px;
+  font-weight:900;
+  margin-right:auto;
+}
+
+.badge{
+  font-size:10px;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+
+  color:var(--accent);
+
+  border:
+    1px solid var(--accent);
+
+  border-radius:99px;
+
+  padding:
+    5px 8px;
+}
+
+.primary-btn{
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 16%,
+      #0b1530
+    );
+
+  border-color:var(--accent);
+}
+
+.sync-dot{
+  width:9px;
+  height:9px;
+
+  border-radius:99px;
+
+  background:#7b8796;
+
+  display:inline-block;
+
+  margin-right:4px;
+}
+
+.sync-dot.online{
+  background:var(--ok);
+
+  box-shadow:
+    0 0 10px
+    var(--ok);
+}
+
+
+/* ==============================
+   TABS
+============================== */
+
+.tabs{
+  display:flex;
+
+  gap:7px;
+
+  flex-wrap:wrap;
+
+  margin:
+    10px 0 14px;
+}
+
+.tab{
+  border:
+    1px solid var(--line);
+
+  background:#071025;
+
+  color:var(--ink);
+
+  border-radius:10px;
+
+  padding:
+    9px 12px;
+
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+.tab.active{
+  border-color:var(--accent);
+
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 13%,
+      #071025
+    );
+}
+
+
+/* ==============================
+   EMPTY STATE
+============================== */
+
+.empty-state{
+  min-height:60vh;
+
+  display:grid;
+  place-items:center;
+
+  text-align:center;
+
+  padding:30px;
+
+  border:
+    1px dashed var(--line);
+
+  border-radius:18px;
+
+  background:
+    rgba(255,255,255,.012);
+}
+
+.empty-state h2{
+  margin:0 0 8px;
+
+  font-size:
+    clamp(26px,4vw,48px);
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+}
+
+.empty-state p{
+  margin:0 0 18px;
+
+  max-width:550px;
+
+  color:var(--muted);
+
+  line-height:1.6;
+}
+
+
+/* ==============================
+   SHEETS
+============================== */
+
+.sheet-shell{
+  --accent:var(--system);
+
+  position:relative;
+
+  overflow:hidden;
+
+  border:
+    1px solid var(--accent);
+
+  border-radius:18px;
+
+  padding:16px;
+
+  background:
+    linear-gradient(
+      transparent 31px,
+      rgba(255,255,255,.022) 32px
+    ),
+    linear-gradient(
+      90deg,
+      transparent 31px,
+      rgba(255,255,255,.022) 32px
+    ),
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.03),
+      transparent 35%
+    ),
+    #060b18;
+
+  background-size:
+    32px 32px,
+    32px 32px,
+    auto,
+    auto;
+
+  box-shadow:
+    0 0 28px
+    color-mix(
+      in srgb,
+      var(--accent) 15%,
+      transparent
+    ),
+    inset 0 0 70px
+    rgba(0,0,0,.35);
+}
+
+.sheet-shell.government{
+  --accent:
+    var(--government);
+}
+
+.sheet-shell.personal{
+  --accent:
+    var(--personal);
+}
+
+.sheet-head{
+  display:flex;
+
+  justify-content:
+    space-between;
+
+  gap:16px;
+
+  align-items:center;
+
+  padding:
+    4px 2px 14px;
+
+  border-bottom:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--accent) 38%,
+      transparent
+    );
+}
+
+.sheet-title{
+  font-size:
+    clamp(24px,3vw,40px);
+
+  font-weight:950;
+
+  letter-spacing:.11em;
+
+  text-transform:uppercase;
+
+  text-shadow:
+    0 0 14px
+    color-mix(
+      in srgb,
+      var(--accent) 48%,
+      transparent
+    );
+}
+
+.sheet-sub{
+  font-size:11px;
+
+  color:var(--accent);
+
+  letter-spacing:.18em;
+
+  text-transform:uppercase;
+
+  margin-top:3px;
+}
+
+
+/* ==============================
+   GRID + CARDS
+============================== */
+
+.grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(12,1fr);
+
+  gap:10px;
+
+  margin-top:12px;
+}
+
+.card{
+  grid-column:
+    span 6;
+
+  padding:12px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--accent) 30%,
+      transparent
+    );
+
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.027),
+      rgba(255,255,255,.01)
+    );
+}
+
+.card.wide{
+  grid-column:
+    span 12;
+}
+
+.card.narrow{
+  grid-column:
+    span 4;
+}
+
+.card h3{
+  margin:
+    0 0 10px;
+
+  color:var(--accent);
+
+  font-size:12px;
+
+  letter-spacing:.15em;
+
+  text-transform:uppercase;
+}
+
+
+/* ==============================
+   FIELDS
+============================== */
+
+.field-row{
+  display:grid;
+
+  grid-template-columns:
+    minmax(140px,.75fr)
+    1.35fr;
+
+  gap:9px;
+
+  align-items:start;
+
+  padding:
+    6px 0;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.05);
+}
+
+.field-label{
+  font-size:10px;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+
+  color:var(--muted);
+
+  padding-top:2px;
+}
+
+.field-value{
+  min-height:1.3em;
+
+  outline:none;
+
+  border-radius:4px;
+
+  font-weight:620;
+
+  white-space:pre-wrap;
+
+  word-break:break-word;
+}
+
+.field-value:empty::before{
+  content:"Click to edit…";
+
+  color:
+    rgba(141,165,189,.45);
+
+  font-weight:400;
+}
+
+.field-value[contenteditable="true"]:focus{
+  background:
+    rgba(255,255,255,.06);
+
+  box-shadow:
+    inset 0 -1px 0
+    var(--accent);
+}
+
+.blackout{
+  display:inline-block;
+
+  min-width:130px;
+
+  background:#010103;
+
+  color:#010103;
+
+  border-radius:2px;
+
+  user-select:none;
+}
+
+.warning{
+  color:var(--warning);
+
+  font-weight:900;
+
+  text-shadow:
+    0 0 9px
+    rgba(255,228,92,.35);
+}
+
+
+/* ==============================
+   CUSTOM FIELDS
+============================== */
+
+.add-field{
+  margin-top:8px;
+
+  border:
+    1px dashed
+    color-mix(
+      in srgb,
+      var(--accent) 40%,
+      transparent
+    );
+
+  background:transparent;
+
+  color:var(--muted);
+
+  border-radius:8px;
+
+  padding:
+    6px 8px;
+
+  cursor:pointer;
+
+  font-size:11px;
+}
+
+.add-field:hover{
+  color:var(--ink);
+
+  border-color:var(--accent);
+}
+
+.custom-row{
+  position:relative;
+}
+
+.custom-row:hover
+.delete-field{
+  opacity:1;
+}
+
+.delete-field{
+  opacity:0;
+
+  position:absolute;
+
+  right:2px;
+  top:4px;
+
+  border:0;
+
+  background:transparent;
+
+  color:#ff8ca3;
+
+  cursor:pointer;
+
+  font-size:12px;
+}
+
+
+/* ==============================
+   PORTRAIT
+============================== */
+
+.portrait-wrap{
+  display:grid;
+
+  grid-template-columns:
+    190px 1fr;
+
+  gap:12px;
+
+  align-items:start;
+}
+
+.portrait{
+  width:190px;
+
+  aspect-ratio:4 / 5;
+
+  border-radius:12px;
+
+  overflow:hidden;
+
+  border:
+    1px dashed var(--accent);
+
+  display:grid;
+
+  place-items:center;
+
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      color-mix(
+        in srgb,
+        var(--accent) 14%,
+        transparent
+      ),
+      transparent 64%
+    );
+
+  color:var(--muted);
+}
+
+.portrait img{
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+}
+
+.portrait-controls{
+  display:grid;
+  gap:8px;
+}
+
+.portrait-controls label{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.portrait-controls input{
+  max-width:100%;
+  color:var(--muted);
+}
+
+
+/* ==============================
+   COLORS
+============================== */
+
+.color-row{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:8px;
+}
+
+.color-box{
+  padding:9px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:10px;
+
+  background:#071025;
+}
+
+.color-box label{
+  display:block;
+
+  font-size:10px;
+
+  color:var(--muted);
+
+  text-transform:uppercase;
+
+  letter-spacing:.08em;
+
+  margin-bottom:6px;
+}
+
+.color-box input{
+  width:100%;
+
+  height:32px;
+
+  border:0;
+
+  background:transparent;
+}
+
+
+/* ==============================
+   FOOTER
+============================== */
+
+.footer{
+  display:flex;
+
+  justify-content:
+    space-between;
+
+  gap:10px;
+
+  margin-top:12px;
+
+  padding-top:10px;
+
+  border-top:
+    1px solid rgba(255,255,255,.07);
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  letter-spacing:.12em;
+
+  text-transform:uppercase;
+}
+
+
+/* ==============================
+   PREVIEW MODE
+============================== */
+
+.preview-mode
+.editable-only{
+  display:none !important;
+}
+
+.preview-mode
+[contenteditable="true"]{
+  pointer-events:none;
+}
+
+.preview-mode
+.field-value{
+  box-shadow:none !important;
+}
+
+
+/* ==============================
+   MODAL
+============================== */
+
+.modal-backdrop{
+  position:fixed;
+
+  inset:0;
+
+  z-index:99;
+
+  background:
+    rgba(0,0,0,.72);
+
+  display:none;
+
+  place-items:center;
+
+  padding:18px;
+}
+
+.modal-backdrop.open{
+  display:grid;
+}
+
+.modal{
+  width:
+    min(720px,100%);
+
+  max-height:90vh;
+
+  overflow:auto;
+
+  background:#071025;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:16px;
+
+  padding:16px;
+
+  box-shadow:
+    0 0 50px
+    rgba(0,0,0,.5);
+}
+
+.modal h2{
+  margin:
+    0 0 12px;
+}
+
+.form-grid{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:10px;
+}
+
+.form-grid .full{
+  grid-column:
+    1 / -1;
+}
+
+.form-grid label{
+  display:grid;
+
+  gap:5px;
+
+  font-size:11px;
+
+  color:var(--muted);
+}
+
+.form-grid input{
+  padding:10px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:9px;
+
+  background:#050b1b;
+
+  color:var(--ink);
+}
+
+.modal-actions{
+  display:flex;
+
+  justify-content:
+    flex-end;
+
+  gap:8px;
+
+  margin-top:14px;
+}
+
+.small-note{
+  font-size:11px;
+
+  color:var(--muted);
+
+  line-height:1.5;
+}
+
+.status-line{
+  font-size:12px;
+
+  color:var(--muted);
+
+  margin-top:10px;
+}
+
+
+/* ==============================
+   RESPONSIVE
+============================== */
+
+@media(max-width:980px){
+
+  .app{
+    grid-template-columns:
+      1fr;
+  }
+
+  .sidebar{
+    position:relative;
+
+    height:auto;
+
+    border-right:0;
+
+    border-bottom:
+      1px solid var(--line);
+  }
+
+  .char-list{
+    grid-template-columns:
+      repeat(
+        auto-fit,
+        minmax(180px,1fr)
+      );
+  }
+
+  .portrait-wrap{
+    grid-template-columns:
+      1fr;
+  }
+
+  .portrait{
+    width:100%;
+
+    max-width:260px;
+  }
+
+  .card,
+  .card.narrow{
+    grid-column:
+      span 12;
+  }
+
+}
+
+@media(max-width:620px){
+
+  .main{
+    padding:10px;
+  }
+
+  .field-row{
+    grid-template-columns:
+      1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:
+      1fr;
+  }
+
+  .color-row{
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
+
+/* ==============================
+   PRINT
+============================== */
+
+@media print{
+
+  .sidebar,
+  .topbar,
+  .tabs,
+  .editable-only{
+    display:none !important;
+  }
+
+  .app{
+    display:block;
+  }
+
+  .main{
+    padding:0;
+  }
+
+  .sheet-shell{
+    border-radius:0;
+
+    box-shadow:none;
+
+    min-height:100vh;
+  }
+
+}
+</style>
 </head>
+
 <body>
-  <div class="box">Page cleared.</div>
+
+<div
+  class="app"
+  id="app"
+>
+
+<aside class="sidebar">
+
+  <div class="brand">
+    CLASS: UNKNOWN
+
+    <small>
+      Character Database
+    </small>
+  </div>
+
+  <input
+    id="search"
+    class="search"
+    placeholder="Search characters…"
+  >
+
+  <div
+    id="characterList"
+    class="char-list"
+  ></div>
+
+  <div class="side-actions editable-only">
+
+    <button onclick="newCharacter()">
+      ＋ New
+    </button>
+
+    <button onclick="duplicateCharacter()">
+      ⧉ Duplicate
+    </button>
+
+    <button onclick="renameCharacter()">
+      ✎ Rename
+    </button>
+
+    <button
+      class="danger-btn"
+      onclick="deleteCharacter()"
+    >
+      Delete
+    </button>
+
+  </div>
+
+  <div class="side-actions editable-only">
+
+    <button onclick="exportDatabase()">
+      Export JSON
+    </button>
+
+    <button
+      onclick="
+        document
+        .getElementById('importFile')
+        .click()
+      "
+    >
+      Import JSON
+    </button>
+
+    <input
+      id="importFile"
+      type="file"
+      accept=".json,application/json"
+      hidden
+    >
+
+    <button onclick="openCloud()">
+      Cloud Sync
+    </button>
+
+    <button onclick="togglePreview()">
+      Preview
+    </button>
+
+  </div>
+
+</aside>
+
+
+<main class="main">
+
+  <div class="topbar">
+
+    <div>
+
+      <div
+        id="characterTitle"
+        class="character-title"
+      >
+        No Character Selected
+      </div>
+
+      <div
+        id="characterSnapshot"
+        style="
+          font-size:10px;
+          color:var(--muted);
+        "
+      >
+        Create a character to begin
+      </div>
+
+    </div>
+
+    <span
+      id="cloudBadge"
+      class="badge"
+    >
+
+      <span
+        id="syncDot"
+        class="sync-dot"
+      ></span>
+
+      Local
+
+    </span>
+
+    <button
+      class="ghost-btn editable-only"
+      onclick="saveLocal()"
+    >
+      Save Local
+    </button>
+
+    <button
+      class="primary-btn editable-only"
+      onclick="saveEverywhere()"
+    >
+      Save + Sync
+    </button>
+
+    <button
+      class="ghost-btn"
+      onclick="window.print()"
+    >
+      Print / PDF
+    </button>
+
+  </div>
+
+
+  <div class="tabs">
+
+    <button
+      class="tab active"
+      data-sheet="system"
+    >
+      World System
+    </button>
+
+    <button
+      class="tab"
+      data-sheet="government"
+    >
+      Government Authority
+    </button>
+
+    <button
+      class="tab"
+      data-sheet="personal"
+    >
+      Personal Profile
+    </button>
+
+  </div>
+
+
+  <section id="sheet"></section>
+
+</main>
+
+</div>
+
+
+<!-- ==============================
+     CLOUD MODAL
+============================== -->
+
+<div
+  id="cloudModal"
+  class="modal-backdrop"
+>
+
+  <div class="modal">
+
+    <h2>
+      Supabase Cloud Sync
+    </h2>
+
+    <p class="small-note">
+
+      Cloud sync is optional.
+
+      Local saving works without Supabase.
+
+      For multi-device sync, create the Supabase
+      table using the SQL provided below, then
+      enter your project details here.
+
+    </p>
+
+    <div class="form-grid">
+
+      <label class="full">
+
+        Project URL
+
+        <input
+          id="sbUrl"
+          placeholder="https://YOURPROJECT.supabase.co"
+        >
+
+      </label>
+
+      <label class="full">
+
+        Anon / Publishable Key
+
+        <input
+          id="sbKey"
+          placeholder="eyJ..."
+        >
+
+      </label>
+
+      <label>
+
+        Email
+
+        <input
+          id="sbEmail"
+          type="email"
+          placeholder="you@example.com"
+        >
+
+      </label>
+
+      <label>
+
+        Password
+
+        <input
+          id="sbPassword"
+          type="password"
+          placeholder="••••••••"
+        >
+
+      </label>
+
+    </div>
+
+    <div
+      id="cloudStatus"
+      class="status-line"
+    >
+      Not connected.
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="ghost-btn"
+        onclick="closeCloud()"
+      >
+        Close
+      </button>
+
+      <button
+        class="ghost-btn"
+        onclick="signOutCloud()"
+      >
+        Sign Out
+      </button>
+
+      <button
+        class="primary-btn"
+        onclick="connectCloud()"
+      >
+        Connect / Sign In
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* ==============================
+   STORAGE
+============================== */
+
+const DB_KEY =
+"classUnknown.characterDB.blank.v1";
+
+const SETTINGS_KEY =
+"classUnknown.cloudSettings.v1";
+
+
+/* ==============================
+   TEMPLATE SCHEMAS
+============================== */
+
+const SCHEMAS = {
+
+
+system:{
+
+  title:
+  "World System",
+
+  sub:
+  "Entity Status File",
+
+  className:
+  "system",
+
+  sections:[
+
+
+    [
+      "Basic Information",
+
+      [
+        "Name",
+        "Known As",
+        "Entity ID",
+        "Species",
+        "Class",
+        "Class Type",
+        "Class Rarity",
+        "System Rank",
+        "Level",
+        "EXP",
+        "Title(s)",
+        "Status",
+        "Potential",
+        "Hunter Name",
+        "Guild",
+        "Party",
+        "Occupation",
+        "Current Residence",
+        "Awakening Age",
+        "Years Awakened"
+      ]
+    ],
+
+
+    [
+      "Core Stats",
+
+      [
+        "Strength",
+        "Endurance",
+        "Agility",
+        "Dexterity",
+        "Perception",
+        "Intelligence",
+        "Wisdom",
+        "Charisma",
+        "Mana",
+        "Mana Control",
+        "Vitality",
+        "Luck",
+        "Stat Assessment",
+        "System Note"
+      ]
+    ],
+
+
+    [
+      "Resources & Condition",
+
+      [
+        "HP",
+        "MP",
+        "Stamina",
+        "Mana Regeneration",
+        "HP Regeneration",
+        "Stamina Recovery",
+        "Status Effects",
+        "Permanent Conditions",
+        "System Compatibility",
+        "Mana Affinity",
+        "Corruption Resistance",
+        "Mental Resistance",
+        "Pain Tolerance",
+        "Recovery Efficiency",
+        "Resource Note"
+      ]
+    ],
+
+
+    [
+      "Skills & Abilities",
+
+      [
+        "Primary Skill",
+        "Secondary Skill",
+        "Support Skill",
+        "Bond Skill",
+        "Emergency Skill",
+        "Additional Skill I",
+        "Additional Skill II",
+        "Additional Skill III",
+        "Passive Trait I",
+        "Passive Trait II",
+        "Passive Trait III",
+        "Passive Trait IV",
+        "Passive Trait V",
+        "Passive Trait VI",
+        "Passive Trait VII",
+        "Passive Trait VIII",
+        "System Classification",
+        "Skills Note"
+      ]
+    ],
+
+
+    [
+      "Equipment & Inventory",
+
+      [
+        "Primary Weapon",
+        "Secondary Weapon",
+        "Head",
+        "Torso",
+        "Arms",
+        "Legs",
+        "Feet",
+        "Accessory I",
+        "Accessory II",
+        "Accessory III",
+        "Artifact / Relic",
+        "Inventory Summary",
+        "Equipment Style",
+        "Equipment Note"
+      ]
+    ],
+
+
+    [
+      "Resistances & Affinities",
+
+      [
+        "Physical Resistance",
+        "Fire Resistance",
+        "Cold Resistance",
+        "Poison Resistance",
+        "Mental Resistance",
+        "Holy Resistance",
+        "Abyssal Resistance",
+        "Corruption Resistance",
+        "Primary Affinity",
+        "Secondary Affinity",
+        "Environmental Adaptation",
+        "Creature Compatibility",
+        "Status Resistance",
+        "Resistance Note"
+      ]
+    ],
+
+
+    [
+      "Lineage & Evolution",
+
+      [
+        "Primary Lineage",
+        "Secondary Lineage",
+        "Dormant Lineage(s)",
+        "Evolution Potential",
+        "Growth Classification",
+        "Inherited Supernatural Markers",
+        "Post-Awakening Biological Divergence",
+        "Evolutionary Influence",
+        "Compatible Evolution Pathways",
+        "Forced Evolution Capacity",
+        "Species Preservation Response",
+        "Lineage Assessment",
+        "Lineage Note"
+      ]
+    ],
+
+
+    [
+      "Bonds & Affiliations",
+
+      [
+        "Primary Affiliation",
+        "Secondary Affiliation",
+        "Kin Compatible",
+        "Bond Type",
+        "Bonded Entity",
+        "Bond Strength",
+        "Number of Confirmed Kin",
+        "Party Compatibility",
+        "Guild Compatibility",
+        "Authority Compatibility",
+        "Family Bond Stability",
+        "Bonds Note"
+      ]
+    ],
+
+
+    [
+      "System Notes",
+
+      [
+        "Classification Status",
+        "Observed Growth Pattern",
+        "Level Progression",
+        "Stat Progression",
+        "Creature Response",
+        "Bond Formation",
+        "Hidden Interaction",
+        "Healing Interaction",
+        "System Classification Conflict",
+        "Black-Boxed Data",
+        "Administrative Concern",
+        "Behavioral Note",
+        "Combat Assessment",
+        "System Flag",
+        "System Addendum"
+      ]
+    ]
+
+  ]
+
+},
+
+
+
+government:{
+
+  title:
+  "Government Hunter Authority",
+
+  sub:
+  "Biological & Operational File",
+
+  className:
+  "government",
+
+  sections:[
+
+
+    [
+      "File Information",
+
+      [
+        "Subject ID",
+        "File Classification",
+        "Last Scan",
+        "Facility",
+        "Scanner Model",
+        "Scan Reliability",
+        "Association Rank",
+        "Hunter License #",
+        "Registered Hunter Name",
+        "Current Status",
+        "Special File Flag",
+        "Administrative Note"
+      ]
+    ],
+
+
+    [
+      "Personal Information",
+
+      [
+        "Legal Name",
+        "Korean Name",
+        "Date of Birth",
+        "Age",
+        "Nationality",
+        "Citizenship",
+        "Registered Sex",
+        "Gender",
+        "Pronouns",
+        "Hunter Name",
+        "Occupation",
+        "Primary Residence",
+        "Languages",
+        "Signed Languages",
+        "Awakening Age",
+        "Years Awakened",
+        "Registered Class",
+        "Registered Rank",
+        "Guild Affiliation",
+        "Permanent Party Affiliation"
+      ]
+    ],
+
+
+    [
+      "Physical Profile",
+
+      [
+        "Height",
+        "Weight",
+        "Build",
+        "Hair",
+        "Eyes",
+        "Complexion",
+        "Identifying Features",
+        "Ear Morphology",
+        "Chest Profile",
+        "External Genital Configuration",
+        "Reproductive Capacity",
+        "Dominant Hand",
+        "Blood Type",
+        "Baseline Body Temperature",
+        "Resting Heart Rate",
+        "Vision"
+      ]
+    ],
+
+
+    [
+      "Medical & Sensory Profile",
+
+      [
+        "Hearing",
+        "Onset",
+        "Cause",
+        "Vestibular Function",
+        "Balance Assessment",
+        "Speech Production",
+        "Primary Communication",
+        "Accessibility Requirements",
+        "Mobility",
+        "Chronic Disease",
+        "Neurological Status",
+        "Mana-Related Pathology",
+        "Known Allergies",
+        "Allergy Clinical Note",
+        "Current Medication",
+        "Scarring",
+        "Healing Classification"
+      ]
+    ],
+
+
+    [
+      "Biological & Mana Scan",
+
+      [
+        "Species Classification",
+        "Supernatural Lineage Markers",
+        "Pre-E-Day Anomalous Ancestry",
+        "Mana Core",
+        "Mana Capacity",
+        "Mana Control",
+        "Mana Signature",
+        "Mana Stability",
+        "Corruption Indicators",
+        "Pathological Mutation Indicators",
+        "Class-Induced Biological Alteration",
+        "Regenerative Response",
+        "Creature-Mana Compatibility",
+        "Cross-Species Mana Response",
+        "Creature Development Anomaly",
+        "Scan Anomaly"
+      ]
+    ],
+
+
+    [
+      "Operational Assessment",
+
+      [
+        "Primary Role",
+        "Secondary Role",
+        "Tertiary Role",
+        "Preferred Engagement Range",
+        "Direct Combat Rating",
+        "Support Rating",
+        "Creature Handling Rating",
+        "Field Adaptability",
+        "Improvisation",
+        "Team Compatibility",
+        "Solo Operational Clearance",
+        "Dungeon Clearance",
+        "Primary Weapon",
+        "Secondary Weapon",
+        "Artifact Provenance",
+        "Authority Note",
+        "Combat Style",
+        "Operational Weaknesses",
+        "Operational Strengths",
+        "Risk-Taking Assessment",
+        "Self-Preservation Assessment",
+        "Protective Instinct"
+      ]
+    ],
+
+
+    [
+      "Government Classification Notes",
+
+      [
+        "Observed System Level",
+        "Observed Luck",
+        "Level/Age Assessment",
+        "Stat/Level Assessment",
+        "Class Verification",
+        "Current Administrative Classification",
+        "Rank Verification",
+        "Known Bonded Creature",
+        "Bonded-Creature Concern",
+        "Subject Involvement",
+        "Threat Classification",
+        "Potential Classification",
+        "Monitoring Recommendation",
+        "Containment Recommendation",
+        "Final Administrative Note"
+      ]
+    ]
+
+  ]
+
+},
+
+
+
+personal:{
+
+  title:
+  "World System",
+
+  sub:
+  "Personal Profile File",
+
+  className:
+  "personal",
+
+  sections:[
+
+
+    [
+      "Basic Identity",
+
+      [
+        "Name",
+        "Korean Name",
+        "Preferred Name",
+        "Hunter Name",
+        "Age",
+        "Birthday",
+        "Species",
+        "Gender",
+        "Pronouns",
+        "Current Residence",
+        "Occupation",
+        "Registered Rank",
+        "Registered Class",
+        "System Class",
+        "Relationship Status",
+        "Primary Kin",
+        "Favorite Color",
+        "System Interface Theme",
+        "Profile Visibility",
+        "System Familiarity"
+      ]
+    ],
+
+
+    [
+      "Profile Summary",
+
+      [
+        "Personality Summary",
+        "General Disposition",
+        "Social Energy",
+        "Emotional Openness",
+        "Independence",
+        "Protective Instinct",
+        "Nurturing Instinct",
+        "Curiosity",
+        "Impulse Control",
+        "Self-Preservation",
+        "Humor",
+        "Conflict Style",
+        "Core Behavioral Pattern",
+        "System Observation"
+      ]
+    ],
+
+
+    [
+      "Personality Core",
+
+      [
+        "Core Alignment",
+        "Primary Traits",
+        "Secondary Traits",
+        "Social Confidence",
+        "Emotional Intelligence",
+        "Conventional Caution",
+        "Practical Intelligence",
+        "Academic / Administrative Patience",
+        "Creature Empathy",
+        "Human Empathy",
+        "Protectiveness",
+        "Stubbornness",
+        "Curiosity Level",
+        "Impulse Control Pattern",
+        "Risk Awareness",
+        "Risk Compliance",
+        "Authority Response",
+        "Rules Response",
+        "Attachment Style",
+        "Trust Pattern",
+        "Anger Pattern",
+        "Protective Escalation",
+        "Forgiveness",
+        "Cruelty Tolerance",
+        "Ableism Tolerance",
+        "Emotional Resilience",
+        "Help-Seeking Behavior",
+        "Self-Advocacy",
+        "Primary Internal Contradiction",
+        "System Summary"
+      ]
+    ],
+
+
+    [
+      "Likes & Dislikes",
+
+      [
+        "Favorite Color",
+        "Favorite Aesthetic",
+        "Favorite Clothing Style",
+        "Favorite Creatures",
+        "Favorite Activity",
+        "Favorite Comfort Activity",
+        "Favorite Social Activity",
+        "Favorite Kind of Person",
+        "Favorite Kind of Hunter",
+        "Favorite Food Profile",
+        "Favorite Snacks",
+        "Favorite Drink",
+        "Favorite Weather",
+        "Favorite Time of Day",
+        "Favorite Environment",
+        "Favorite Gift Type",
+        "Favorite Physical Affection",
+        "Favorite Compliment",
+        "Preferred Sensory Comfort",
+        "Likes",
+        "Strong Likes",
+        "Dislikes",
+        "Strong Dislikes",
+        "Pet Peeve I",
+        "Pet Peeve II",
+        "Pet Peeve III",
+        "Instant Irritation Trigger",
+        "Instant Anger Trigger",
+        "Instant Soft Spot",
+        "Preference Observation"
+      ]
+    ],
+
+
+    [
+      "Habits & Quirks",
+
+      [
+        "Accessory Count",
+        "Creature Greeting Habit",
+        "Naming Habit",
+        "Touch Habit",
+        "Communication Habit",
+        "Attention Habit",
+        "Balance Habit",
+        "Pocket Habit",
+        "Emergency Item",
+        "Collection Habit",
+        "Fashion Habit",
+        "Hair Habit",
+        "Creature-Care Learning Style",
+        "Retention Pattern",
+        "Administrative Habit",
+        "Stress Habit",
+        "Comfort Habit",
+        "Excitement Tell",
+        "Suspicion Tell",
+        "Anger Tell",
+        "Affection Tell",
+        "Embarrassment Tell",
+        "Sleep Habit",
+        "Food Habit",
+        "Creature-Care Habit",
+        "Photography Habit",
+        "Kin-Specific Habit",
+        "System Interaction Habit",
+        "System Observation I",
+        "System Clarification",
+        "User Response",
+        "Habit Summary"
+      ]
+    ],
+
+
+    [
+      "Relationships & Bonds",
+
+      [
+        "Family Orientation",
+        "Mother",
+        "Father",
+        "Older Brother",
+        "Family Bond Stability",
+        "Primary Kin",
+        "Kin Bond Type",
+        "Kin Relationship",
+        "Kin Attachment Pattern",
+        "Kin Autonomy",
+        "Kin Protective Response",
+        "Friendship Pattern",
+        "Affection Style",
+        "Care Style",
+        "Receiving Care",
+        "Minor Injury Behavior",
+        "Infantilization Response",
+        "Conflict With Loved Ones",
+        "Possessiveness",
+        "Jealousy",
+        "Chosen-Family Response",
+        "Leadership Bond Pattern",
+        "Relationship Summary"
+      ]
+    ],
+
+
+    [
+      "Comfort & Emotional Patterns",
+
+      [
+        "Baseline Emotional State",
+        "Emotional Expression",
+        "Emotional Suppression",
+        "Primary Comfort Need",
+        "Preferred Comfort",
+        "Comfort-Seeking Pattern",
+        "Family Comfort Behavior",
+        "Distress Tell",
+        "Serious Distress Tell",
+        "Overwhelm Response",
+        "Isolation Preference",
+        "Fear Response",
+        "Pain Response",
+        "Minor Injury Response",
+        "Major Injury Response",
+        "Pain Observation",
+        "Anger Response",
+        "Grief Response",
+        "Grief Self-Regulation",
+        "Separation During Grief",
+        "Fear of Being Comforted",
+        "Fear of Appearing Needy",
+        "Help-Seeking Difficulty",
+        "Reassurance Preference",
+        "Apology Preference",
+        "Conflict Recovery",
+        "Emotional Memory",
+        "Forgiveness Pattern",
+        "Non-Forgiveness Pattern",
+        "Safety Association",
+        "Physical Safety Association",
+        "Emotional Safety Association",
+        "Accessibility Comfort",
+        "Comfort Observation I",
+        "Comfort Observation II",
+        "Comfort Addendum"
+      ]
+    ],
+
+
+    [
+      "Values & Motivations",
+
+      [
+        "Core Value",
+        "Primary Motivation",
+        "Secondary Motivation",
+        "Family Value",
+        "Kin Value",
+        "Autonomy",
+        "Consent",
+        "Protection",
+        "Compassion",
+        "Mercy",
+        "Cruelty",
+        "Accessibility",
+        "Disability Philosophy",
+        "Healing Philosophy",
+        "Evolution Philosophy",
+        "Leadership Philosophy",
+        "Authority Philosophy",
+        "Power Philosophy",
+        "Strength Philosophy",
+        "Rank Philosophy",
+        "Creature Philosophy",
+        "Knowledge Philosophy",
+        "Failure Response",
+        "Primary Long-Term Goal",
+        "Professional Motivation",
+        "Kin Motivation",
+        "Human-Kin Motivation",
+        "Romantic Motivation",
+        "Material Ambition",
+        "Recognition",
+        "Legacy"
+      ]
+    ],
+
+
+    [
+      "Fears & Vulnerabilities",
+
+      [
+        "Primary Fear",
+        "Secondary Fear",
+        "Family Loss Fear",
+        "Kin Loss Fear",
+        "Abandonment Fear",
+        "Helplessness Trigger",
+        "Medical Helplessness Trigger",
+        "Control Vulnerability",
+        "Protective Vulnerability",
+        "Self-Sacrifice Risk",
+        "Failure Vulnerability",
+        "Guilt Pattern",
+        "Grief Vulnerability",
+        "Grief Presentation",
+        "Separation During Grief",
+        "Fear Response After Crisis",
+        "Major Injury Fear",
+        "Creature Harm Vulnerability",
+        "Child Harm Vulnerability",
+        "Ableism Vulnerability",
+        "Pity Response",
+        "Underestimation Response",
+        "Sensory Vulnerability",
+        "Accessibility Failure Vulnerability",
+        "Dependence Vulnerability",
+        "Fear of Death",
+        "Fear of Own Disability",
+        "Fear of Being Fixed",
+        "Fear of Intimacy",
+        "Fear of Commitment",
+        "Fear of Vulnerability",
+        "Emotional Blind Spot",
+        "Protective Blind Spot",
+        "Vulnerability Warning I",
+        "Vulnerability Warning II",
+        "Vulnerability Observation",
+        "Vulnerability Assessment"
+      ]
+    ],
+
+
+    [
+      "Private / Locked Data",
+
+      [
+        "Privacy Classification",
+        "Medical History",
+        "Reproductive / Anatomical Data",
+        "Gestational Capacity",
+        "Biological Scan Access",
+        "System-Class Investigation Data",
+        "Black-Boxed Class Fields",
+        "Relationship Detail",
+        "Relationship Visibility",
+        "Location Privacy",
+        "Private Emotional Flag",
+        "Private Grief Flag",
+        "Private Protective Flag",
+        "Kin Classification Data",
+        "Consent Directive",
+        "Emergency Override",
+        "Audit Access",
+        "Locked Internal Note",
+        "System Internal Status"
+      ]
+    ],
+
+
+    [
+      "Final System Observations",
+
+      [
+        "Behavioral Consistency",
+        "Decision Pattern",
+        "Kin Recognition",
+        "Human Kin Response",
+        "Leadership Pattern",
+        "Bond Stability",
+        "Bond Failure Pattern",
+        "Class Prediction",
+        "Potential Ceiling",
+        "Growth Model",
+        "Registered Rank Reliability",
+        "Notable Contradiction",
+        "System Concern",
+        "System Recommendation",
+        "Historical Compliance",
+        "Accessibility Recommendation",
+        "Current Classification Status",
+        "Threat Designation",
+        "Observation Status",
+        "Final System Note",
+        "Personal Node Addendum I",
+        "Personal Node Addendum II"
+      ]
+    ]
+
+  ]
+
+}
+
+};
+
+
+/* ==============================
+   GENERATE BLANK SHEETS
+============================== */
+
+function blankData(){
+
+  const output = {
+
+    system:{},
+    government:{},
+    personal:{}
+
+  };
+
+
+  for(
+    const [
+      sheet,
+      schema
+    ]
+    of Object.entries(SCHEMAS)
+  ){
+
+    for(
+      const [
+        section,
+        fields
+      ]
+      of schema.sections
+    ){
+
+      for(
+        const field
+        of fields
+      ){
+
+        output[sheet][field] = "";
+
+      }
+
+    }
+
+  }
+
+
+  return output;
+
+}
+
+
+/* ==============================
+   COMPLETELY BLANK DATABASE
+============================== */
+
+const starterDB = {
+
+  version:1,
+
+  selected:null,
+
+  characters:{}
+
+};
+
+
+/* ==============================
+   STATE
+============================== */
+
+let db =
+loadDB();
+
+let currentSheet =
+"system";
+
+let preview =
+false;
+
+let sb =
+null;
+
+let session =
+null;
+
+
+/* ==============================
+   LOCAL DATABASE
+============================== */
+
+function loadDB(){
+
+  try{
+
+    const raw =
+    localStorage
+    .getItem(
+      DB_KEY
+    );
+
+    if(raw){
+
+      return JSON.parse(
+        raw
+      );
+
+    }
+
+  }
+  catch(error){}
+
+
+  return structuredClone(
+    starterDB
+  );
+
+}
+
+
+function persist(){
+
+  localStorage
+  .setItem(
+    DB_KEY,
+    JSON.stringify(db)
+  );
+
+}
+
+
+function char(){
+
+  if(
+    !db.selected
+  ){
+
+    return null;
+
+  }
+
+
+  return db.characters[
+    db.selected
+  ]
+  ||
+  null;
+
+}
+
+
+/* ==============================
+   UTILITIES
+============================== */
+
+function slugify(text){
+
+  return text
+
+  .toLowerCase()
+
+  .trim()
+
+  .replace(
+    /[^a-z0-9]+/g,
+    "-"
+  )
+
+  .replace(
+    /^-|-$/g,
+    ""
+  )
+
+  ||
+
+  "character-" +
+  Date.now();
+
+}
+
+
+function escapeHTML(
+  text = ""
+){
+
+  return String(text)
+  .replace(
+    /[&<>"']/g,
+    character => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    })[character]
+  );
+
+}
+
+
+/* ==============================
+   CHARACTER LIST
+============================== */
+
+function renderList(){
+
+  const query =
+  (
+    document
+    .getElementById(
+      "search"
+    )
+    .value
+    ||
+    ""
+  )
+  .toLowerCase();
+
+
+  const list =
+  document
+  .getElementById(
+    "characterList"
+  );
+
+
+  list.innerHTML =
+  "";
+
+
+  Object
+  .values(
+    db.characters
+  )
+
+  .filter(
+    character =>
+    character.name
+    .toLowerCase()
+    .includes(query)
+  )
+
+  .sort(
+    (a,b) =>
+    a.name
+    .localeCompare(
+      b.name
+    )
+  )
+
+  .forEach(
+    character => {
+
+      const button =
+      document
+      .createElement(
+        "button"
+      );
+
+
+      button.className =
+      "char-item" +
+      (
+        character.id ===
+        db.selected
+
+        ? " active"
+
+        : ""
+      );
+
+
+      const rank =
+
+      character
+      .data
+      .system[
+        "System Rank"
+      ]
+
+      ||
+
+      character
+      .data
+      .government[
+        "Registered Rank"
+      ]
+
+      ||
+
+      "";
+
+
+      button.innerHTML = `
+
+      ${
+        character.portrait
+
+        ? `
+          <img
+            class="mini-avatar"
+            src="${character.portrait}"
+          >
+        `
+
+        : `
+          <div
+            class="mini-avatar"
+          ></div>
+        `
+      }
+
+      <div>
+
+        <div class="char-name">
+          ${escapeHTML(character.name)}
+        </div>
+
+        <div class="char-meta">
+          ${escapeHTML(rank)}
+        </div>
+
+      </div>
+
+      `;
+
+
+      button.onclick =
+      () => {
+
+        db.selected =
+        character.id;
+
+        persist();
+
+        renderAll();
+
+      };
+
+
+      list.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
+
+
+/* ==============================
+   EMPTY SCREEN
+============================== */
+
+function renderEmptyState(){
+
+  document
+  .getElementById(
+    "characterTitle"
+  )
+  .textContent =
+  "No Character Selected";
+
+
+  document
+  .getElementById(
+    "characterSnapshot"
+  )
+  .textContent =
+  "Create a character to begin";
+
+
+  document
+  .getElementById(
+    "sheet"
+  )
+  .innerHTML = `
+
+    <div class="empty-state">
+
+      <div>
+
+        <h2>
+          Character Database Empty
+        </h2>
+
+        <p>
+
+          No characters have been created yet.
+
+          Click <strong>+ New</strong> to create
+          your first blank character profile.
+
+          All three templates will be generated
+          automatically.
+
+        </p>
+
+        <button
+          class="primary-btn"
+          onclick="newCharacter()"
+        >
+          ＋ Create First Character
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ==============================
+   FIELD DISPLAY
+============================== */
+
+function showValue(value){
+
+  const clean =
+  (value || "")
+  .replace(
+    /\s/g,
+    ""
+  );
+
+
+  if(
+    /^█+$/.test(clean)
+  ){
+
+    return `
+
+      <span class="blackout">
+
+        ${escapeHTML(value)}
+
+      </span>
+
+    `;
+
+  }
+
+
+  const warning =
+
+  (value || "")
+  .includes("⚠")
+
+  ? " warning"
+
+  : "";
+
+
+  return `
+
+    <span
+      class="field-value${warning}"
+      contenteditable="${
+        preview
+        ? "false"
+        : "true"
+      }"
+    >
+      ${escapeHTML(value || "")}
+    </span>
+
+  `;
+
+}
+
+
+/* ==============================
+   SHEET RENDERING
+============================== */
+
+function renderSheet(){
+
+  const character =
+  char();
+
+
+  if(
+    !character
+  ){
+
+    renderEmptyState();
+
+    return;
+
+  }
+
+
+  const schema =
+  SCHEMAS[
+    currentSheet
+  ];
+
+
+  const data =
+  character
+  .data[
+    currentSheet
+  ];
+
+
+  const custom =
+  character
+  .custom[
+    currentSheet
+  ]
+  ||
+  {};
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--system",
+    character.themes.system
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--government",
+    character.themes.government
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--personal",
+    character.themes.personal
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--accent",
+    character.themes[
+      currentSheet
+    ]
+  );
+
+
+  const themePanel = `
+
+    <div
+      class="card wide editable-only"
+    >
+
+      <h3>
+        Character Theme + Portrait
+      </h3>
+
+      <div class="portrait-wrap">
+
+        <div
+          class="portrait"
+          id="portraitBox"
+        >
+
+          ${
+            character.portrait
+
+            ? `
+              <img
+                src="${character.portrait}"
+              >
+            `
+
+            : "Insert Portrait"
+          }
+
+        </div>
+
+
+        <div class="portrait-controls">
+
+          <label>
+
+            Portrait Image
+
+            <input
+              id="portraitInput"
+              type="file"
+              accept="image/*"
+            >
+
+          </label>
+
+
+          <button
+            class="ghost-btn"
+            onclick="clearPortrait()"
+          >
+            Clear Portrait
+          </button>
+
+
+          <div class="color-row">
+
+
+            <div class="color-box">
+
+              <label>
+                World System
+              </label>
+
+              <input
+                type="color"
+                value="${character.themes.system}"
+                onchange="
+                  setTheme(
+                    'system',
+                    this.value
+                  )
+                "
+              >
+
+            </div>
+
+
+            <div class="color-box">
+
+              <label>
+                Government
+              </label>
+
+              <input
+                type="color"
+                value="${character.themes.government}"
+                onchange="
+                  setTheme(
+                    'government',
+                    this.value
+                  )
+                "
+              >
+
+            </div>
+
+
+            <div class="color-box">
+
+              <label>
+                Personal
+              </label>
+
+              <input
+                type="color"
+                value="${character.themes.personal}"
+                onchange="
+                  setTheme(
+                    'personal',
+                    this.value
+                  )
+                "
+              >
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  const cards =
+  schema.sections
+
+  .map(
+    (
+      [
+        title,
+        fields
+      ],
+      index
+    ) => {
+
+
+      const fixedFields =
+      fields
+
+      .map(
+        field => `
+
+          <div
+            class="field-row"
+            data-field="${escapeHTML(field)}"
+          >
+
+            <div class="field-label">
+              ${escapeHTML(field)}
+            </div>
+
+            ${showValue(
+              data[field]
+            )}
+
+          </div>
+
+        `
+      )
+
+      .join("");
+
+
+      const customFields =
+      (
+        custom[title]
+        ||
+        []
+      )
+
+      .map(
+        field => `
+
+          <div
+            class="field-row custom-row"
+            data-custom-id="${escapeHTML(field.id)}"
+          >
+
+            <div class="field-label">
+              ${escapeHTML(field.label)}
+            </div>
+
+            ${showValue(
+              field.value
+            )}
+
+            <button
+              class="delete-field editable-only"
+              onclick="
+                deleteCustomField(
+                  '${escapeHTML(title)}',
+                  '${escapeHTML(field.id)}'
+                )
+              "
+            >
+              ✕
+            </button>
+
+          </div>
+
+        `
+      )
+
+      .join("");
+
+
+      const wide =
+      index ===
+      schema.sections.length - 1
+
+      ? " wide"
+
+      : "";
+
+
+      return `
+
+        <div
+          class="card${wide}"
+          data-section="${escapeHTML(title)}"
+        >
+
+          <h3>
+            ${escapeHTML(title)}
+          </h3>
+
+          ${fixedFields}
+
+          ${customFields}
+
+          <button
+            class="add-field editable-only"
+            onclick="
+              addCustomField(
+                '${escapeHTML(title)}'
+              )
+            "
+          >
+            ＋ Add Field
+          </button>
+
+        </div>
+
+      `;
+
+    }
+  )
+
+  .join("");
+
+
+  document
+  .getElementById(
+    "sheet"
+  )
+  .innerHTML = `
+
+    <div
+      class="sheet-shell ${schema.className}"
+    >
+
+      <div class="sheet-head">
+
+        <div>
+
+          <div class="sheet-title">
+            ${escapeHTML(schema.title)}
+          </div>
+
+          <div class="sheet-sub">
+            ${escapeHTML(schema.sub)}
+          </div>
+
+        </div>
+
+        <div class="badge">
+          ${escapeHTML(character.name)}
+        </div>
+
+      </div>
+
+
+      <div class="grid">
+
+        ${themePanel}
+
+        ${cards}
+
+      </div>
+
+
+      <div class="footer">
+
+        <span>
+          ${escapeHTML(schema.title)}
+          •
+          ${escapeHTML(schema.sub)}
+        </span>
+
+        <span>
+          ${escapeHTML(
+            character.snapshot
+            ||
+            "Introduction Snapshot"
+          )}
+        </span>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  bindInlineEditing();
+
+
+  const portraitInput =
+  document
+  .getElementById(
+    "portraitInput"
+  );
+
+
+  if(
+    portraitInput
+  ){
+
+    portraitInput
+    .onchange =
+    handlePortrait;
+
+  }
+
+}
+
+
+/* ==============================
+   EDIT FIELDS
+============================== */
+
+function bindInlineEditing(){
+
+  document
+  .querySelectorAll(
+    ".field-row"
+  )
+
+  .forEach(
+    row => {
+
+      const value =
+      row
+      .querySelector(
+        ".field-value"
+      );
+
+
+      if(
+        !value
+      ){
+
+        return;
+
+      }
+
+
+      value
+      .addEventListener(
+        "input",
+        () => {
+
+
+          const character =
+          char();
+
+
+          if(
+            !character
+          ){
+
+            return;
+
+          }
+
+
+          const field =
+          row.dataset.field;
+
+
+          const customID =
+          row.dataset.customId;
+
+
+          if(
+            field
+          ){
+
+            character
+            .data[
+              currentSheet
+            ][field]
+            =
+            value.innerText;
+
+          }
+
+
+          else if(
+            customID
+          ){
+
+            const section =
+            row
+            .closest(
+              ".card"
+            )
+            .dataset
+            .section;
+
+
+            const item =
+            (
+              character
+              .custom[
+                currentSheet
+              ][section]
+              ||
+              []
+            )
+            .find(
+              item =>
+              item.id ===
+              customID
+            );
+
+
+            if(
+              item
+            ){
+
+              item.value =
+              value.innerText;
+
+            }
+
+          }
+
+
+          character.updatedAt =
+          new Date()
+          .toISOString();
+
+
+          debouncedPersist();
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+/* ==============================
+   AUTOSAVE
+============================== */
+
+let saveTimer;
+
+
+function debouncedPersist(){
+
+  clearTimeout(
+    saveTimer
+  );
+
+
+  saveTimer =
+  setTimeout(
+    () => {
+
+      persist();
+
+      renderList();
+
+    },
+    350
+  );
+
+}
+
+
+/* ==============================
+   RENDER APP
+============================== */
+
+function renderAll(){
+
+  const character =
+  char();
+
+
+  document
+  .getElementById(
+    "app"
+  )
+  .classList
+  .toggle(
+    "preview-mode",
+    preview
+  );
+
+
+  document
+  .querySelectorAll(
+    ".tab"
+  )
+  .forEach(
+    tab => {
+
+      tab
+      .classList
+      .toggle(
+        "active",
+        tab.dataset.sheet
+        ===
+        currentSheet
+      );
+
+    }
+  );
+
+
+  renderList();
+
+
+  if(
+    !character
+  ){
+
+    renderEmptyState();
+
+    updateCloudBadge();
+
+    return;
+
+  }
+
+
+  document
+  .getElementById(
+    "characterTitle"
+  )
+  .textContent =
+  character.name;
+
+
+  document
+  .getElementById(
+    "characterSnapshot"
+  )
+  .textContent =
+  character.snapshot
+  ||
+  "Introduction Snapshot";
+
+
+  renderSheet();
+
+  updateCloudBadge();
+
+}
+
+
+/* ==============================
+   SHEET TABS
+============================== */
+
+document
+.querySelectorAll(
+  ".tab"
+)
+
+.forEach(
+  tab => {
+
+    tab.onclick =
+    () => {
+
+      currentSheet =
+      tab.dataset.sheet;
+
+      renderAll();
+
+    };
+
+  }
+);
+
+
+/* ==============================
+   SEARCH
+============================== */
+
+document
+.getElementById(
+  "search"
+)
+
+.addEventListener(
+  "input",
+  renderList
+);
+
+
+/* ==============================
+   NEW CHARACTER
+============================== */
+
+function newCharacter(){
+
+  const name =
+  prompt(
+    "Character name:"
+  );
+
+
+  if(
+    !name
+  ){
+
+    return;
+
+  }
+
+
+  let id =
+  slugify(
+    name
+  );
+
+
+  while(
+    db.characters[id]
+  ){
+
+    id +=
+    "-" +
+    Math.floor(
+      Math.random() * 999
+    );
+
+  }
+
+
+  const data =
+  blankData();
+
+
+  data.system[
+    "Name"
+  ]
+  =
+  name;
+
+
+  data.government[
+    "Legal Name"
+  ]
+  =
+  name;
+
+
+  data.personal[
+    "Name"
+  ]
+  =
+  name;
+
+
+  db.characters[id] = {
+
+    id,
+
+    name,
+
+    snapshot:
+    "Modern-story introduction snapshot",
+
+    portrait:
+    "",
+
+    themes:{
+
+      system:
+      "#67d8ff",
+
+      government:
+      "#67d8ff",
+
+      personal:
+      "#c59cff"
+
+    },
+
+    data,
+
+    custom:{
+
+      system:{},
+      government:{},
+      personal:{}
+
+    },
+
+    updatedAt:
+    new Date()
+    .toISOString()
+
+  };
+
+
+  db.selected =
+  id;
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+/* ==============================
+   DUPLICATE
+============================== */
+
+function duplicateCharacter(){
+
+  const source =
+  char();
+
+
+  if(
+    !source
+  ){
+
+    alert(
+      "Create a character first."
+    );
+
+    return;
+
+  }
+
+
+  const name =
+  prompt(
+    "Duplicate as:",
+    source.name +
+    " Copy"
+  );
+
+
+  if(
+    !name
+  ){
+
+    return;
+
+  }
+
+
+  let id =
+  slugify(
+    name
+  );
+
+
+  while(
+    db.characters[id]
+  ){
+
+    id +=
+    "-copy";
+
+  }
+
+
+  const copy =
+  structuredClone(
+    source
+  );
+
+
+  copy.id =
+  id;
+
+
+  copy.name =
+  name;
+
+
+  copy.updatedAt =
+  new Date()
+  .toISOString();
+
+
+  copy.data.system[
+    "Name"
+  ]
+  =
+  name;
+
+
+  copy.data.government[
+    "Legal Name"
+  ]
+  =
+  name;
+
+
+  copy.data.personal[
+    "Name"
+  ]
+  =
+  name;
+
+
+  db.characters[id] =
+  copy;
+
+
+  db.selected =
+  id;
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+/* ==============================
+   RENAME
+============================== */
+
+function renameCharacter(){
+
+  const character =
+  char();
+
+
+  if(
+    !character
+  ){
+
+    alert(
+      "Create a character first."
+    );
+
+    return;
+
+  }
+
+
+  const name =
+  prompt(
+    "New name:",
+    character.name
+  );
+
+
+  if(
+    !name
+  ){
+
+    return;
+
+  }
+
+
+  character.name =
+  name;
+
+
+  character
+  .data
+  .system[
+    "Name"
+  ]
+  =
+  name;
+
+
+  character
+  .data
+  .government[
+    "Legal Name"
+  ]
+  =
+  name;
+
+
+  character
+  .data
+  .personal[
+    "Name"
+  ]
+  =
+  name;
+
+
+  character.updatedAt =
+  new Date()
+  .toISOString();
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+/* ==============================
+   DELETE
+============================== */
+
+function deleteCharacter(){
+
+  const character =
+  char();
+
+
+  if(
+    !character
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !confirm(
+      `Delete ${character.name}?`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  delete
+  db.characters[
+    character.id
+  ];
+
+
+  const remaining =
+  Object.keys(
+    db.characters
+  );
+
+
+  db.selected =
+  remaining.length
+
+  ? remaining[0]
+
+  : null;
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+/* ==============================
+   SAVE LOCAL
+============================== */
+
+function saveLocal(){
+
+  const character =
+  char();
+
+
+  if(
+    !character
+  ){
+
+    alert(
+      "No character selected."
+    );
+
+    return;
+
+  }
+
+
+  character.updatedAt =
+  new Date()
+  .toISOString();
+
+
+  persist();
+
+  renderList();
+
+
+  alert(
+    "Saved locally."
+  );
+
+}
+
+
+/* ==============================
+   SAVE + CLOUD
+============================== */
+
+async function saveEverywhere(){
+
+  const character =
+  char();
+
+
+  if(
+    !character
+  ){
+
+    alert(
+      "No character selected."
+    );
+
+    return;
+
+  }
+
+
+  character.updatedAt =
+  new Date()
+  .toISOString();
+
+
+  persist();
+
+
+  if(
+    session
+  ){
+
+    await
+    syncCurrentToCloud();
+
+  }
+
+  else{
+
+    alert(
+      "Saved locally. Cloud sync is not connected."
+    );
+
+  }
+
+}
+
+
+/* ==============================
+   PREVIEW
+============================== */
+
+function togglePreview(){
+
+  preview =
+  !preview;
+
+  renderAll();
+
+}
+
+
+/* ==============================
+   THEMES
+============================== */
+
+function setTheme(
+  type,
+  value
+){
+
+  const character =
+  char();
+
+
+  if(
+    !character
+  ){
+
+    return;
+
+  }
+
+
+  character
+  .themes[
+    type
+  ]
+  =
+  value;
+
+
+  character.updatedAt =
+  new Date()
+  .toISOString();
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+/* ==============================
+   PORTRAITS
+============================== */
+
+function clearPortrait(){
+
+  const character =
+  char();
+
+
+  if(
+    !character
+  ){
+
+    return;
+
+  }
+
+
+  character.portrait =
+  "";
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+function handlePortrait(
+  event
+){
+
+  const character =
+  char();
+
+
+  if(
+    !character
+  ){
+
+    return;
+
+  }
+
+
+  const file =
+  event
+  .target
+  .files?.[0];
+
+
+  if(
+    !file
+  ){
+
+    return;
+
+  }
+
+
+  const reader =
+  new FileReader();
+
+
+  reader.onload =
+  event => {
+
+
+    const image =
+    new Image();
+
+
+    image.onload =
+    () => {
+
+
+      const max =
+      1000;
+
+
+      const scale =
+      Math.min(
+        1,
+        max /
+        Math.max(
+          image.width,
+          image.height
+        )
+      );
+
+
+      const canvas =
+      document
+      .createElement(
+        "canvas"
+      );
+
+
+      canvas.width =
+      Math.round(
+        image.width *
+        scale
+      );
+
+
+      canvas.height =
+      Math.round(
+        image.height *
+        scale
+      );
+
+
+      canvas
+      .getContext(
+        "2d"
+      )
+      .drawImage(
+        image,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+
+      character.portrait =
+      canvas
+      .toDataURL(
+        "image/webp",
+        .82
+      );
+
+
+      character.updatedAt =
+      new Date()
+      .toISOString();
+
+
+      persist();
+
+      renderAll();
+
+    };
+
+
+    image.src =
+    event.target.result;
+
+  };
+
+
+  reader
+  .readAsDataURL(
+    file
+  );
+
+}
+
+
+/* ==============================
+   CUSTOM FIELDS
+============================== */
+
+function addCustomField(
+  section
+){
+
+  const character =
+  char();
+
+
+  if(
+    !character
+  ){
+
+    return;
+
+  }
+
+
+  const label =
+  prompt(
+    "Field label:"
+  );
+
+
+  if(
+    !label
+  ){
+
+    return;
+
+  }
+
+
+  const value =
+  prompt(
+    "Starting value:"
+  )
+  ||
+  "";
+
+
+  character
+  .custom[
+    currentSheet
+  ][section]
+  ??=
+  [];
+
+
+  character
+  .custom[
+    currentSheet
+  ][section]
+  .push({
+
+    id:
+    "field-" +
+    Date.now(),
+
+    label,
+
+    value
+
+  });
+
+
+  persist();
+
+  renderSheet();
+
+}
+
+
+function deleteCustomField(
+  section,
+  id
+){
+
+  const character =
+  char();
+
+
+  if(
+    !character
+  ){
+
+    return;
+
+  }
+
+
+  character
+  .custom[
+    currentSheet
+  ][section]
+  =
+  (
+    character
+    .custom[
+      currentSheet
+    ][section]
+    ||
+    []
+  )
+  .filter(
+    item =>
+    item.id !== id
+  );
+
+
+  persist();
+
+  renderSheet();
+
+}
+
+
+/* ==============================
+   EXPORT
+============================== */
+
+function exportDatabase(){
+
+  const blob =
+  new Blob(
+    [
+      JSON.stringify(
+        db,
+        null,
+        2
+      )
+    ],
+    {
+      type:
+      "application/json"
+    }
+  );
+
+
+  const anchor =
+  document
+  .createElement(
+    "a"
+  );
+
+
+  anchor.href =
+  URL.createObjectURL(
+    blob
+  );
+
+
+  anchor.download =
+  "class-unknown-character-database.json";
+
+
+  anchor.click();
+
+
+  URL.revokeObjectURL(
+    anchor.href
+  );
+
+}
+
+
+/* ==============================
+   IMPORT
+============================== */
+
+document
+.getElementById(
+  "importFile"
+)
+
+.onchange =
+async event => {
+
+
+  const file =
+  event
+  .target
+  .files?.[0];
+
+
+  if(
+    !file
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+
+    const object =
+    JSON.parse(
+      await file.text()
+    );
+
+
+    if(
+      !object.characters
+    ){
+
+      throw new Error(
+        "Invalid database"
+      );
+
+    }
+
+
+    if(
+      confirm(
+        "Replace the current database with this import?"
+      )
+    ){
+
+      db =
+      object;
+
+
+      persist();
+
+
+      renderAll();
+
+    }
+
+  }
+
+  catch(error){
+
+    alert(
+      "Invalid Class: Unknown database file."
+    );
+
+  }
+
+
+  event.target.value =
+  "";
+
+};
+
+
+/* ==============================
+   CLOUD MODAL
+============================== */
+
+function openCloud(){
+
+  const modal =
+  document
+  .getElementById(
+    "cloudModal"
+  );
+
+
+  const settings =
+  JSON.parse(
+    localStorage
+    .getItem(
+      SETTINGS_KEY
+    )
+    ||
+    "{}"
+  );
+
+
+  document
+  .getElementById(
+    "sbUrl"
+  )
+  .value =
+  settings.url
+  ||
+  "";
+
+
+  document
+  .getElementById(
+    "sbKey"
+  )
+  .value =
+  settings.key
+  ||
+  "";
+
+
+  modal
+  .classList
+  .add(
+    "open"
+  );
+
+}
+
+
+function closeCloud(){
+
+  document
+  .getElementById(
+    "cloudModal"
+  )
+  .classList
+  .remove(
+    "open"
+  );
+
+}
+
+
+/* ==============================
+   CONNECT SUPABASE
+============================== */
+
+async function connectCloud(){
+
+  const url =
+  document
+  .getElementById(
+    "sbUrl"
+  )
+  .value
+  .trim();
+
+
+  const key =
+  document
+  .getElementById(
+    "sbKey"
+  )
+  .value
+  .trim();
+
+
+  const email =
+  document
+  .getElementById(
+    "sbEmail"
+  )
+  .value
+  .trim();
+
+
+  const password =
+  document
+  .getElementById(
+    "sbPassword"
+  )
+  .value;
+
+
+  if(
+    !url ||
+    !key ||
+    !email ||
+    !password
+  ){
+
+    setCloudStatus(
+      "Fill in all connection fields."
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+
+    localStorage
+    .setItem(
+      SETTINGS_KEY,
+      JSON.stringify({
+        url,
+        key
+      })
+    );
+
+
+    sb =
+    window
+    .supabase
+    .createClient(
+      url,
+      key
+    );
+
+
+    const {
+      data,
+      error
+    }
+    =
+    await sb.auth
+    .signInWithPassword({
+
+      email,
+
+      password
+
+    });
+
+
+    if(
+      error
+    ){
+
+      throw error;
+
+    }
+
+
+    session =
+    data.session;
+
+
+    setCloudStatus(
+      "Connected. Loading characters…"
+    );
+
+
+    await pullCloud();
+
+
+    setCloudStatus(
+      "Connected and synced."
+    );
+
+
+    updateCloudBadge();
+
+  }
+
+  catch(error){
+
+    setCloudStatus(
+      "Connection failed: " +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* ==============================
+   RESTORE CLOUD
+============================== */
+
+async function restoreCloud(){
+
+  const settings =
+  JSON.parse(
+    localStorage
+    .getItem(
+      SETTINGS_KEY
+    )
+    ||
+    "{}"
+  );
+
+
+  if(
+    !settings.url ||
+    !settings.key
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+
+    sb =
+    window
+    .supabase
+    .createClient(
+      settings.url,
+      settings.key
+    );
+
+
+    const {
+      data
+    }
+    =
+    await sb.auth
+    .getSession();
+
+
+    session =
+    data.session;
+
+
+    if(
+      session
+    ){
+
+      await pullCloud();
+
+      updateCloudBadge();
+
+    }
+
+  }
+
+  catch(error){}
+
+}
+
+
+/* ==============================
+   SIGN OUT
+============================== */
+
+async function signOutCloud(){
+
+  if(
+    sb
+  ){
+
+    await
+    sb.auth
+    .signOut();
+
+  }
+
+
+  session =
+  null;
+
+
+  updateCloudBadge();
+
+
+  setCloudStatus(
+    "Signed out."
+  );
+
+}
+
+
+/* ==============================
+   CLOUD UI
+============================== */
+
+function setCloudStatus(
+  message
+){
+
+  document
+  .getElementById(
+    "cloudStatus"
+  )
+  .textContent =
+  message;
+
+}
+
+
+function updateCloudBadge(){
+
+  const badge =
+  document
+  .getElementById(
+    "cloudBadge"
+  );
+
+
+  const dot =
+  document
+  .getElementById(
+    "syncDot"
+  );
+
+
+  if(
+    session
+  ){
+
+    badge
+    .lastChild
+    .textContent =
+    " Cloud";
+
+
+    dot
+    .classList
+    .add(
+      "online"
+    );
+
+  }
+
+  else{
+
+    badge
+    .lastChild
+    .textContent =
+    " Local";
+
+
+    dot
+    .classList
+    .remove(
+      "online"
+    );
+
+  }
+
+}
+
+
+/* ==============================
+   CLOUD SAVE
+============================== */
+
+async function syncCurrentToCloud(){
+
+  const character =
+  char();
+
+
+  if(
+    !character
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !sb ||
+    !session
+  ){
+
+    alert(
+      "Cloud sync is not connected."
+    );
+
+    return;
+
+  }
+
+
+  const row = {
+
+    user_id:
+    session.user.id,
+
+    character_id:
+    character.id,
+
+    name:
+    character.name,
+
+    payload:
+    character,
+
+    updated_at:
+    new Date()
+    .toISOString()
+
+  };
+
+
+  const {
+    error
+  }
+  =
+  await sb
+
+  .from(
+    "characters"
+  )
+
+  .upsert(
+    row,
+    {
+      onConflict:
+      "user_id,character_id"
+    }
+  );
+
+
+  if(
+    error
+  ){
+
+    alert(
+      "Cloud sync failed: " +
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  alert(
+    "Saved and synced."
+  );
+
+}
+
+
+/* ==============================
+   CLOUD LOAD
+============================== */
+
+async function pullCloud(){
+
+  if(
+    !sb ||
+    !session
+  ){
+
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  }
+  =
+  await sb
+
+  .from(
+    "characters"
+  )
+
+  .select(
+    "*"
+  )
+
+  .eq(
+    "user_id",
+    session.user.id
+  );
+
+
+  if(
+    error
+  ){
+
+    setCloudStatus(
+      "Could not load cloud data: " +
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !data?.length
+  ){
+
+    return;
+
+  }
+
+
+  for(
+    const row
+    of data
+  ){
+
+    const remote =
+    row.payload;
+
+
+    const local =
+    db.characters[
+      row.character_id
+    ];
+
+
+    if(
+      !local
+      ||
+      new Date(
+        row.updated_at || 0
+      )
+      >
+      new Date(
+        local.updatedAt || 0
+      )
+    ){
+
+      db.characters[
+        row.character_id
+      ]
+      =
+      remote;
+
+    }
+
+  }
+
+
+  const ids =
+  Object.keys(
+    db.characters
+  );
+
+
+  if(
+    ids.length &&
+    !db.characters[
+      db.selected
+    ]
+  ){
+
+    db.selected =
+    ids[0];
+
+  }
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+/* ==============================
+   START
+============================== */
+
+renderAll();
+
+restoreCloud();
+
+</script>
+
 </body>
 </html>
