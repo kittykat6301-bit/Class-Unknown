@@ -12,7 +12,7 @@
       --panel-raised: #111b30;
       --ink: #edf6ff;
       --muted: #91a6bd;
-      --line: rgba(166, 205, 232, .18);
+      --line: rgba(166, 205, 232, 0.18);
       --system: #be91ff;
       --government: #6fddff;
       --personal: #ff91d8;
@@ -32,16 +32,19 @@
       font-family: var(--sans);
       line-height: 1.45;
     }
+
     body::before {
       position: fixed;
       inset: 0;
       z-index: -1;
       pointer-events: none;
       content: "";
-      background: radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 28rem),
-        radial-gradient(circle at 100% 8%, rgba(111, 221, 255, .1), transparent 25rem),
+      background:
+        radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 28rem),
+        radial-gradient(circle at 100% 8%, rgba(111, 221, 255, 0.1), transparent 25rem),
         linear-gradient(115deg, transparent 0 48%, rgba(255,255,255,.018) 48.1% 48.2%, transparent 48.3%);
     }
+
     button, input { font: inherit; }
     button { color: inherit; }
     button:focus-visible, input:focus-visible, [contenteditable="true"]:focus-visible {
@@ -49,78 +52,379 @@
       outline-offset: 3px;
     }
 
-    .app { width: min(1480px, 100%); margin: auto; padding: 18px; }
+    .app {
+      width: min(1480px, 100%);
+      margin: auto;
+      padding: 18px;
+    }
+
     .toolbar {
-      position: sticky; top: 12px; z-index: 10;
-      display: flex; align-items: center; flex-wrap: wrap; gap: 9px;
-      padding: 11px 13px; margin-bottom: 14px;
-      background: rgba(7, 11, 22, .88); border: 1px solid var(--line);
-      border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,.22); backdrop-filter: blur(16px);
+      position: sticky;
+      top: 12px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 9px;
+      padding: 11px 13px;
+      margin-bottom: 14px;
+      background: rgba(7, 11, 22, .88);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 15px 40px rgba(0,0,0,.22);
+      backdrop-filter: blur(16px);
     }
-    .brand { display: flex; align-items: center; gap: 10px; margin-right: auto; font-weight: 900; letter-spacing: .16em; }
-    .brand-mark { width: 10px; height: 10px; border: 2px solid var(--accent); transform: rotate(45deg); box-shadow: 0 0 14px var(--accent); }
-    .toolbar-group { display: flex; align-items: center; gap: 6px; color: var(--muted); font: 10px var(--mono); text-transform: uppercase; letter-spacing: .07em; }
-    .color-picker { width: 28px; height: 28px; padding: 0; cursor: pointer; background: transparent; border: 0; }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-right: auto;
+      font-weight: 900;
+      letter-spacing: .16em;
+    }
+
+    .brand-mark {
+      width: 10px;
+      height: 10px;
+      border: 2px solid var(--accent);
+      transform: rotate(45deg);
+      box-shadow: 0 0 14px var(--accent);
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font: 10px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    .color-picker {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+    }
+
     .button, .tab {
-      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-      min-height: 36px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 7px;
-      background: #101a2c; cursor: pointer; font-weight: 800; font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #101a2c;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 12px;
     }
-    .button:hover, .tab:hover { border-color: var(--accent); background: #17243b; }
-    .button.primary { color: #07101c; background: var(--accent); border-color: var(--accent); }
-    .button.icon { width: 36px; padding: 0; font-size: 16px; }
-    .save-state { width: 100%; color: var(--muted); font: 10px var(--mono); letter-spacing: .05em; }
+
+    .button:hover, .tab:hover {
+      border-color: var(--accent);
+      background: #17243b;
+    }
+
+    .button.primary {
+      color: #07101c;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .button.icon {
+      width: 36px;
+      padding: 0;
+      font-size: 16px;
+    }
+
+    .save-state {
+      width: 100%;
+      color: var(--muted);
+      font: 10px var(--mono);
+      letter-spacing: .05em;
+    }
+
     .save-state.is-saved { color: #8ff2bd; }
 
-    .tabs { display: flex; gap: 7px; flex-wrap: wrap; margin: 0 0 14px; }
-    .tab.active { color: #07101c; background: var(--accent); border-color: var(--accent); }
+    .tabs {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin: 0 0 14px;
+    }
+
+    .tab.active {
+      color: #07101c;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
     .sheet { display: none; }
-    .sheet.active { display: block; animation: rise .24s ease both; }
-    @keyframes rise { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+    .sheet.active {
+      display: block;
+      animation: rise .24s ease both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: none; }
+    }
+
     .page {
       --accent: var(--system);
-      position: relative; overflow: hidden; padding: clamp(16px, 3vw, 28px);
+      position: relative;
+      overflow: hidden;
+      padding: clamp(16px, 3vw, 28px);
       background: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px), #090f1d;
-      background-size: 32px 32px; border: 1px solid var(--accent); border-radius: 14px;
+      background-size: 32px 32px;
+      border: 1px solid var(--accent);
+      border-radius: 14px;
       box-shadow: 0 0 45px color-mix(in srgb, var(--accent) 13%, transparent);
     }
+
     .government-page { --accent: var(--government); }
     .personal-page { --accent: var(--personal); }
-    .page::after { position: absolute; top: 0; right: 0; width: 150px; height: 150px; content: ""; opacity: .18; background: linear-gradient(135deg, transparent 48%, var(--accent) 49% 50%, transparent 51%); pointer-events: none; }
-    .sheet-header { display: flex; align-items: start; justify-content: space-between; gap: 18px; padding-bottom: 17px; border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
-    .eyebrow { margin-bottom: 6px; color: var(--accent); font: 10px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
-    h1 { margin: 0; font-size: clamp(25px, 4vw, 44px); line-height: 1.02; letter-spacing: .06em; text-transform: uppercase; text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 70%, transparent); }
-    .subtitle { margin-top: 7px; color: var(--muted); font-size: 13px; }
-    .status { min-width: 120px; padding: 8px 11px; color: var(--accent); border: 1px solid var(--accent); border-radius: 5px; font: 800 11px var(--mono); text-align: center; }
-    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; margin-top: 14px; }
-    .card { min-width: 0; padding: 15px; background: linear-gradient(150deg, rgba(255,255,255,.045), rgba(255,255,255,.012)); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); border-radius: 8px; }
-    .card h2 { margin: 0 0 13px; color: var(--accent); font: 800 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
-    .span-3 { grid-column: span 3; } .span-4 { grid-column: span 4; } .span-5 { grid-column: span 5; } .span-6 { grid-column: span 6; } .span-12 { grid-column: span 12; }
-    .portrait { display: grid; place-items: center; aspect-ratio: 4/5; overflow: hidden; border: 1px dashed var(--accent); border-radius: 5px; color: var(--muted); background: radial-gradient(circle, color-mix(in srgb, var(--accent) 16%, transparent), transparent 68%); font: 11px var(--mono); text-align: center; }
-    .portrait img { width: 100%; height: 100%; object-fit: cover; }
-    .image-upload { width: 100%; margin-top: 9px; color: var(--muted); font-size: 11px; }
-    .row { display: grid; grid-template-columns: minmax(110px, .72fr) 1.5fr; gap: 12px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+
+    .page::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      content: "";
+      opacity: .18;
+      background: linear-gradient(135deg, transparent 48%, var(--accent) 49% 50%, transparent 51%);
+    }
+
+    .sheet-header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 17px;
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    }
+
+    .eyebrow {
+      margin-bottom: 6px;
+      color: var(--accent);
+      font: 10px var(--mono);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(25px, 4vw, 44px);
+      line-height: 1.02;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 70%, transparent);
+    }
+
+    .subtitle {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .status {
+      min-width: 120px;
+      padding: 8px 11px;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 5px;
+      font: 800 11px var(--mono);
+      text-align: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 15px;
+      background: linear-gradient(150deg, rgba(255,255,255,.045), rgba(255,255,255,.012));
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+      border-radius: 12px;
+      box-shadow: inset 0 0 18px rgba(255,255,255,.02);
+    }
+
+    .card h2 {
+      margin: 0 0 13px;
+      color: var(--accent);
+      font: 800 11px var(--mono);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .span-3 { grid-column: span 3; }
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-6 { grid-column: span 6; }
+    .span-12 { grid-column: span 12; }
+
+    .portrait {
+      display: grid;
+      place-items: center;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      border: 1px dashed var(--accent);
+      border-radius: 5px;
+      color: var(--muted);
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.06), transparent 45%), rgba(255,255,255,.01);
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-upload {
+      width: 100%;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: minmax(110px, .72fr) 1.5fr;
+      gap: 12px;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
     .row:last-child { border-bottom: 0; }
-    .label { color: var(--muted); font: 10px var(--mono); letter-spacing: .05em; text-transform: uppercase; }
-    .value { min-width: 0; min-height: 1.3em; font-size: 13px; font-weight: 700; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+    .label {
+      color: var(--muted);
+      font: 10px var(--mono);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .value {
+      min-width: 0;
+      min-height: 1.3em;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
     .value[contenteditable="true"] { cursor: text; }
     .value[contenteditable="true"]:hover { background: rgba(255,255,255,.035); }
-    .blackout { display: inline-block; min-width: 86px; color: transparent; background: #050608; border-radius: 2px; user-select: none; }
-    .blackout.revealed { color: var(--ink); background: rgba(255,255,255,.09); }
+
+    .blackout {
+      display: inline-block;
+      min-width: 86px;
+      color: transparent;
+      background: #050608;
+      border-radius: 2px;
+      user-select: none;
+    }
+
+    .blackout.revealed {
+      color: var(--ink);
+      background: rgba(255,255,255,.09);
+    }
+
     .warning { color: var(--warning); }
     .note { color: #c9d9e8; font-style: italic; font-weight: 500; }
-    .footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 15px; padding-top: 13px; color: var(--muted); border-top: 1px solid rgba(255,255,255,.1); font: 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
-    .empty-search { display: none; padding: 26px; color: var(--muted); text-align: center; }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 15px;
+      padding-top: 13px;
+      color: var(--muted);
+      border-top: 1px solid rgba(255,255,255,.1);
+      font: 10px var(--mono);
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .empty-search {
+      display: none;
+      padding: 26px;
+      color: var(--muted);
+      text-align: center;
+    }
+
     .search-wrap { position: relative; flex: 1 1 160px; max-width: 260px; }
-    .search { width: 100%; padding: 9px 11px 9px 31px; color: var(--ink); background: #0b1425; border: 1px solid var(--line); border-radius: 7px; }
-    .search-icon { position: absolute; top: 8px; left: 11px; color: var(--muted); }
-    dialog { width: min(520px, calc(100% - 30px)); color: var(--ink); background: #0d1424; border: 1px solid var(--accent); border-radius: 10px; box-shadow: 0 25px 80px #000; }
-    dialog::backdrop { background: rgba(0,0,0,.7); backdrop-filter: blur(4px); }
+    .search {
+      width: 100%;
+      padding: 9px 11px 9px 31px;
+      color: var(--ink);
+      background: #0b1425;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 8px;
+      left: 11px;
+      color: var(--muted);
+    }
+
+    dialog {
+      width: min(520px, calc(100% - 30px));
+      color: var(--ink);
+      background: #0d1424;
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      box-shadow: 0 25px 80px #000;
+    }
+
+    dialog::backdrop {
+      background: rgba(0,0,0,.7);
+      backdrop-filter: blur(4px);
+    }
+
     dialog h2 { margin-top: 0; }
-    .dialog-actions { display: flex; justify-content: end; gap: 8px; margin-top: 20px; }
-    @media (max-width: 900px) { .span-3, .span-4, .span-5, .span-6 { grid-column: span 12; } }
-    @media (max-width: 620px) { .app { padding: 10px; } .toolbar { top: 6px; } .brand { width: 100%; } .sheet-header { flex-direction: column; } .status { align-self: stretch; } .row { grid-template-columns: 1fr; gap: 3px; } .footer { flex-direction: column; } }
-    @media print { body { background: white; color: #111; } .toolbar, .tabs, dialog, .image-upload, .search-wrap { display: none !important; } .sheet { display: block !important; page-break-after: always; } .page { color: #111; border-radius: 0; box-shadow: none; background: white; } .value, h1 { color: #111; text-shadow: none; } .label, .footer, .subtitle { color: #444; } }
+
+    .dialog-actions {
+      display: flex;
+      justify-content: end;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .span-3, .span-4, .span-5, .span-6 { grid-column: span 12; }
+    }
+
+    @media (max-width: 620px) {
+      .app { padding: 10px; }
+      .toolbar { top: 6px; }
+      .brand { width: 100%; }
+      .sheet-header { flex-direction: column; }
+      .status { align-self: stretch; }
+      .row { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: white; color: #111; }
+      .toolbar, .tabs, dialog, .image-upload, .search-wrap { display: none !important; }
+      .sheet { display: block !important; page-break-after: always; }
+    }
   </style>
 </head>
 <body>
@@ -148,54 +452,218 @@
 
     <section id="system" class="sheet active" role="tabpanel">
       <article class="page system-page">
-        <header class="sheet-header"><div><div class="eyebrow">Entity Status File / WS-022</div><h1>World System</h1><div class="subtitle">An incomplete classification under continued observation.</div></div><div class="status" contenteditable="true">ACTIVE</div></header>
+        <header class="sheet-header">
+          <div>
+            <div class="eyebrow">Entity Status File / WS-022</div>
+            <h1>World System</h1>
+            <div class="subtitle">An incomplete classification under continued observation.</div>
+          </div>
+          <div class="status">Active</div>
+        </header>
+
         <div class="grid">
-          <div class="card span-3"><h2>Entity Portrait</h2><div class="portrait"><span>Insert portrait<br>or upload below</span></div><input class="image-upload" type="file" accept="image/*" aria-label="Upload entity portrait"></div>
-          <div class="card span-5"><h2>Basic Information</h2><div class="row"><span class="label">Name</span><span class="value" contenteditable="true">Valentine Byrne</span></div><div class="row"><span class="label">Known As</span><span class="value" contenteditable="true">Val / Seo Sa-rang</span></div><div class="row"><span class="label">Entity ID</span><span class="value" contenteditable="true">VB-022-EDAY</span></div><div class="row"><span class="label">Species</span><span class="value" contenteditable="true">Human</span></div><div class="row"><span class="label">Class</span><span class="value" contenteditable="true">[CLASS: CALCULATING...]</span></div><div class="row"><span class="label">Class Type</span><span class="value" contenteditable="true">Beast / Support / <span class="blackout">HIDDEN</span></span></div><div class="row"><span class="label">Class Rarity</span><span class="value"><span class="blackout">HIDDEN</span></span></div><div class="row"><span class="label">Rank / Level</span><span class="value" contenteditable="true">C-Rank / Lv. 14</span></div><div class="row"><span class="label">Hunter Name</span><span class="value" contenteditable="true">Nova</span></div></div>
-          <div class="card span-4"><h2>Status</h2><div class="row"><span class="label">Status</span><span class="value" contenteditable="true">Active</span></div><div class="row"><span class="label">Potential</span><span class="value" contenteditable="true">Unable to Determine</span></div><div class="row"><span class="label">Guild / Party</span><span class="value" contenteditable="true">None / None Permanently Registered</span></div><div class="row"><span class="label">Awakening Age</span><span class="value" contenteditable="true">12</span></div></div>
-          <div class="card span-6"><h2>Core Stats</h2><div class="row"><span class="label">Strength</span><span class="value" contenteditable="true">22</span></div><div class="row"><span class="label">Endurance</span><span class="value" contenteditable="true">28</span></div><div class="row"><span class="label">Agility</span><span class="value" contenteditable="true">41</span></div><div class="row"><span class="label">Perception</span><span class="value" contenteditable="true">67</span></div><div class="row"><span class="label">Mana / Control</span><span class="value" contenteditable="true">119 / 92</span></div><div class="row"><span class="label">Luck</span><span class="value warning" contenteditable="true">222</span></div></div>
-          <div class="card span-6"><h2>Skills & Abilities</h2><div class="row"><span class="label">Primary</span><span class="value" contenteditable="true">Nurture Kin</span></div><div class="row"><span class="label">Secondary</span><span class="value" contenteditable="true">Mend</span></div><div class="row"><span class="label">Support</span><span class="value"><span class="blackout">HIDDEN</span></span></div><div class="row"><span class="label">Bond Skill</span><span class="value" contenteditable="true">Beloved Kin</span></div><div class="row"><span class="label">Passives</span><span class="value" contenteditable="true">Enhanced Creature Affinity<br>Kin Growth Acceleration</span></div></div>
-          <div class="card span-6"><h2>Equipment</h2><div class="row"><span class="label">Primary Weapon</span><span class="value" contenteditable="true">Arcane Dungeon-Artifact Handgun (Unregistered)</span></div><div class="row"><span class="label">Provenance</span><span class="value" contenteditable="true">Unknown</span></div><div class="row"><span class="label">System Note</span><span class="value note" contenteditable="true">Authority records contain no verified acquisition history. User reports that the chicken gave it to him.</span></div></div>
-          <div class="card span-6"><h2>Bonds & Affiliations</h2><div class="row"><span class="label">Bonded Entity</span><span class="value" contenteditable="true">Nugget</span></div><div class="row"><span class="label">Bond Strength</span><span class="value" contenteditable="true">Extremely High</span></div><div class="row"><span class="label">Confirmed Kin</span><span class="value" contenteditable="true">1</span></div><div class="row"><span class="label">Family Stability</span><span class="value" contenteditable="true">Extremely High</span></div></div>
-          <div class="card span-12"><h2>System Notes</h2><div class="row"><span class="label">Classification</span><span class="value" contenteditable="true">Incomplete / Ongoing</span></div><div class="row"><span class="label">Level Progression</span><span class="value" contenteditable="true">Significantly slower than expected for years since Awakening</span></div><div class="row"><span class="label">Flag</span><span class="value warning" contenteditable="true">CONTINUE OBSERVATION</span></div><div class="row"><span class="label">Addendum</span><span class="value" contenteditable="true">DO NOT INTERPRET LOW LEVEL AS LOW POTENTIAL.</span></div></div>
-        </div><footer class="footer"><span>World System Entity Status File</span><span>Class: Unknown</span></footer>
+          <div class="card span-3">
+            <h2>Entity Portrait</h2>
+            <div class="portrait"><span>Insert portrait<br>or upload below</span></div>
+            <input class="image-upload" type="file" accept="image/*" aria-label="Upload system portrait">
+          </div>
+
+          <div class="card span-5">
+            <h2>Basic Information</h2>
+            <div class="row"><span class="label">Name</span><span class="value" contenteditable="true">Valentine Byrne</span></div>
+            <div class="row"><span class="label">Alias</span><span class="value" contenteditable="true">The Candle-Eyed Warden</span></div>
+            <div class="row"><span class="label">Birthplace</span><span class="value" contenteditable="true">Cradle of Vessels</span></div>
+          </div>
+
+          <div class="card span-4">
+            <h2>Status</h2>
+            <div class="row"><span class="label">Status</span><span class="value" contenteditable="true">Active</span></div>
+            <div class="row"><span class="label">Threat</span><span class="value" contenteditable="true">Moderate / Unstable</span></div>
+            <div class="row"><span class="label">Classification</span><span class="value" contenteditable="true">Incomplete / Ongoing</span></div>
+          </div>
+
+          <div class="card span-6">
+            <h2>Core Stats</h2>
+            <div class="row"><span class="label">Strength</span><span class="value" contenteditable="true">22</span></div>
+            <div class="row"><span class="label">Agility</span><span class="value" contenteditable="true">18</span></div>
+            <div class="row"><span class="label">Focus</span><span class="value" contenteditable="true">27</span></div>
+          </div>
+
+          <div class="card span-6">
+            <h2>Skills & Abilities</h2>
+            <div class="row"><span class="label">Primary</span><span class="value" contenteditable="true">Nurture Kin</span></div>
+            <div class="row"><span class="label">Secondary</span><span class="value" contenteditable="true">Echo Mapping</span></div>
+            <div class="row"><span class="label">Special</span><span class="value" contenteditable="true">Field Repair / Soft-Space Recovery</span></div>
+          </div>
+
+          <div class="card span-6">
+            <h2>Equipment</h2>
+            <div class="row"><span class="label">Primary Weapon</span><span class="value" contenteditable="true">Arcane Dungeon-Artifact Handgun (Unregistered)</span></div>
+            <div class="row"><span class="label">Support Gear</span><span class="value" contenteditable="true">Pocket-Registry, Sigil Thread, Bone Charm</span></div>
+          </div>
+
+          <div class="card span-6">
+            <h2>Bonds & Affiliations</h2>
+            <div class="row"><span class="label">Bonded Entity</span><span class="value" contenteditable="true">Nugget</span></div>
+            <div class="row"><span class="label">Institution</span><span class="value" contenteditable="true">Class: Unknown / Hunter Authority</span></div>
+          </div>
+
+          <div class="card span-12">
+            <h2>System Notes</h2>
+            <div class="row"><span class="label">Observation</span><span class="value" contenteditable="true">Emotionally reactive, unusually protective, and highly adaptive under stress.</span></div>
+            <div class="row"><span class="label">Warnings</span><span class="value" contenteditable="true">Avoid prolonged direct eye contact while the receptor is ungrounded.</span></div>
+          </div>
+        </div>
+
+        <footer class="footer"><span>World System Entity Status File</span><span>Class: Unknown</span></footer>
       </article>
     </section>
 
     <section id="government" class="sheet" role="tabpanel">
       <article class="page government-page">
-        <header class="sheet-header"><div><div class="eyebrow">Government Hunter Authority / GHA-KR-022-VB</div><h1>Hunter Authority</h1><div class="subtitle">Biological and operational file.</div></div><div class="status" contenteditable="true">CONFIDENTIAL</div></header>
+        <header class="sheet-header">
+          <div>
+            <div class="eyebrow">Government Hunter Authority / GHA-KR-022-VB</div>
+            <h1>Hunter Authority</h1>
+            <div class="subtitle">Biological and operational file.</div>
+          </div>
+          <div class="status">Active</div>
+        </header>
+
         <div class="grid">
-          <div class="card span-6"><h2>File Information</h2><div class="row"><span class="label">Subject ID</span><span class="value" contenteditable="true">GHA-KR-022-VB</span></div><div class="row"><span class="label">Classification</span><span class="value" contenteditable="true">Confidential</span></div><div class="row"><span class="label">Rank / Scan</span><span class="value" contenteditable="true">C-Rank / 87% reliable</span></div><div class="row"><span class="label">Hunter Name</span><span class="value" contenteditable="true">Nova</span></div><div class="row"><span class="label">Special Flag</span><span class="value warning" contenteditable="true">CLASSIFICATION DISCREPANCY</span></div></div>
-          <div class="card span-3"><h2>Subject Image</h2><div class="portrait"><span>Insert portrait<br>or upload below</span></div><input class="image-upload" type="file" accept="image/*" aria-label="Upload subject portrait"></div>
-          <div class="card span-3"><h2>Registration</h2><div class="row"><span class="label">Status</span><span class="value" contenteditable="true">Active</span></div><div class="row"><span class="label">Occupation</span><span class="value" contenteditable="true">Independent Hunter</span></div><div class="row"><span class="label">Class</span><span class="value" contenteditable="true">Beast Tender [ASSUMED]</span></div></div>
-          <div class="card span-6"><h2>Personal Information</h2><div class="row"><span class="label">Legal Name</span><span class="value" contenteditable="true">Valentine Byrne</span></div><div class="row"><span class="label">Korean Name</span><span class="value" contenteditable="true">Seo Sa-rang</span></div><div class="row"><span class="label">Birthday / Age</span><span class="value" contenteditable="true">October 18, E-Day / 22</span></div><div class="row"><span class="label">Residence</span><span class="value" contenteditable="true">South Korea</span></div><div class="row"><span class="label">Height</span><span class="value" contenteditable="true">157 cm / 5'2&quot;</span></div></div>
-          <div class="card span-6"><h2>Medical & Sensory Profile</h2><div class="row"><span class="label">Hearing</span><span class="value" contenteditable="true">Severe-to-profound bilateral sensorineural deafness</span></div><div class="row"><span class="label">Vestibular</span><span class="value" contenteditable="true">Permanently impaired</span></div><div class="row"><span class="label">Speech</span><span class="value" contenteditable="true">Largely preserved following acquired hearing loss</span></div><div class="row"><span class="label">Allergy</span><span class="value" contenteditable="true">Kiwifruit - mild oral allergic reaction</span></div><div class="row"><span class="label">Clinical Note</span><span class="value note" contenteditable="true">Subject reports that kiwifruit tastes spicy and delicious.</span></div></div>
-          <div class="card span-6"><h2>Biological & Mana Scan</h2><div class="row"><span class="label">Species</span><span class="value" contenteditable="true">Human</span></div><div class="row"><span class="label">Mana Capacity</span><span class="value" contenteditable="true">Far above expected C-Rank parameters</span></div><div class="row"><span class="label">Mana Control</span><span class="value" contenteditable="true">Exceptional</span></div><div class="row"><span class="label">Creature Compatibility</span><span class="value" contenteditable="true">Exceptionally High</span></div><div class="row"><span class="label">Nugget Anomaly</span><span class="value" contenteditable="true">Developmental characteristics inconsistent with documented norms</span></div></div>
-          <div class="card span-6"><h2>Operational Assessment</h2><div class="row"><span class="label">Role</span><span class="value" contenteditable="true">Creature Specialist / Support Combatant</span></div><div class="row"><span class="label">Field Adaptability</span><span class="value" contenteditable="true">High</span></div><div class="row"><span class="label">Combat</span><span class="value" contenteditable="true">Active ranged combatant</span></div><div class="row"><span class="label">Risk Taking</span><span class="value" contenteditable="true">Elevated</span></div><div class="row"><span class="label">Self-Preservation</span><span class="value warning" contenteditable="true">CONCERNING</span></div></div>
-          <div class="card span-12"><h2>Government Notes</h2><div class="row"><span class="label">Observed Level / Luck</span><span class="value" contenteditable="true">Lv. 14 / 222</span></div><div class="row"><span class="label">Class Verification</span><span class="value" contenteditable="true">Failed / Inconclusive</span></div><div class="row"><span class="label">Threat / Containment</span><span class="value" contenteditable="true">Low under ordinary conditions / None</span></div></div>
-        </div><footer class="footer"><span>Government Hunter Authority</span><span>Biological & Operational File</span></footer>
+          <div class="card span-6">
+            <h2>File Information</h2>
+            <div class="row"><span class="label">Subject ID</span><span class="value" contenteditable="true">GHA-KR-022-VB</span></div>
+            <div class="row"><span class="label">Designation</span><span class="value" contenteditable="true">Creature Specialist / Support Combatant</span></div>
+            <div class="row"><span class="label">Priority</span><span class="value" contenteditable="true">High, informal review pending</span></div>
+          </div>
+
+          <div class="card span-3">
+            <h2>Subject Image</h2>
+            <div class="portrait"><span>Insert portrait<br>or upload below</span></div>
+            <input class="image-upload" type="file" accept="image/*" aria-label="Upload authority portrait">
+          </div>
+
+          <div class="card span-3">
+            <h2>Registration</h2>
+            <div class="row"><span class="label">Status</span><span class="value" contenteditable="true">Active</span></div>
+            <div class="row"><span class="label">Clearance</span><span class="value" contenteditable="true">Tier 3 / Restricted</span></div>
+          </div>
+
+          <div class="card span-6">
+            <h2>Personal Information</h2>
+            <div class="row"><span class="label">Legal Name</span><span class="value" contenteditable="true">Valentine Byrne</span></div>
+            <div class="row"><span class="label">Guardian</span><span class="value" contenteditable="true">Meehan Byrne</span></div>
+            <div class="row"><span class="label">Residence</span><span class="value" contenteditable="true">Zone 7 / Ashmore Quarters</span></div>
+          </div>
+
+          <div class="card span-6">
+            <h2>Medical & Sensory Profile</h2>
+            <div class="row"><span class="label">Hearing</span><span class="value" contenteditable="true">Severe-to-profound bilateral sensorineural loss</span></div>
+            <div class="row"><span class="label">Visual</span><span class="value" contenteditable="true">Normal, with some strain under low light</span></div>
+          </div>
+
+          <div class="card span-6">
+            <h2>Biological & Mana Scan</h2>
+            <div class="row"><span class="label">Species</span><span class="value" contenteditable="true">Human</span></div>
+            <div class="row"><span class="label">Mana Core</span><span class="value" contenteditable="true">Unstable, adaptive, highly reactive</span></div>
+          </div>
+
+          <div class="card span-6">
+            <h2>Operational Assessment</h2>
+            <div class="row"><span class="label">Role</span><span class="value" contenteditable="true">Creature Specialist / Support Combatant</span></div>
+            <div class="row"><span class="label">Field Notes</span><span class="value" contenteditable="true">Strong instincts, poor risk tolerance, effective under pressure</span></div>
+          </div>
+
+          <div class="card span-12">
+            <h2>Government Notes</h2>
+            <div class="row"><span class="label">Observed Level / Luck</span><span class="value" contenteditable="true">Lv. 14 / 222</span></div>
+            <div class="row"><span class="label">Note</span><span class="value" contenteditable="true">Subject responds well to calm instructions and direct reassurance.</span></div>
+          </div>
+        </div>
+
+        <footer class="footer"><span>Government Hunter Authority</span><span>Biological & Operational File</span></footer>
       </article>
     </section>
 
     <section id="personal" class="sheet" role="tabpanel">
       <article class="page personal-page">
-        <header class="sheet-header"><div><div class="eyebrow">World System / Personal Archive</div><h1>Personal Profile</h1><div class="subtitle">Mostly public. Privacy filters remain active.</div></div><div class="status" contenteditable="true">MOSTLY PUBLIC</div></header>
+        <header class="sheet-header">
+          <div>
+            <div class="eyebrow">World System / Personal Archive</div>
+            <h1>Personal Profile</h1>
+            <div class="subtitle">Mostly public. Privacy filters remain active.</div>
+          </div>
+          <div class="status">Public</div>
+        </header>
+
         <div class="grid">
-          <div class="card span-3"><h2>User Portrait</h2><div class="portrait"><span>Insert portrait<br>or upload below</span></div><input class="image-upload" type="file" accept="image/*" aria-label="Upload personal portrait"></div>
-          <div class="card span-5"><h2>Basic Identity</h2><div class="row"><span class="label">Name</span><span class="value" contenteditable="true">Valentine Byrne</span></div><div class="row"><span class="label">Preferred Name</span><span class="value" contenteditable="true">Val</span></div><div class="row"><span class="label">Hunter Name</span><span class="value" contenteditable="true">Nova</span></div><div class="row"><span class="label">Age</span><span class="value" contenteditable="true">22</span></div><div class="row"><span class="label">Relationship</span><span class="value" contenteditable="true">Single</span></div><div class="row"><span class="label">Primary Kin</span><span class="value" contenteditable="true">Nugget</span></div></div>
-          <div class="card span-4"><h2>Profile Summary</h2><div class="row"><span class="label">Personality</span><span class="value" contenteditable="true">Affectionate, energetic, curious, impulsive, playful, nurturing and fiercely protective</span></div><div class="row"><span class="label">Social Energy</span><span class="value" contenteditable="true">High</span></div><div class="row"><span class="label">Curiosity</span><span class="value" contenteditable="true">System recommends supervision.</span></div><div class="row"><span class="label">Self-Preservation</span><span class="value warning" contenteditable="true">CONCERNING</span></div></div>
-          <div class="card span-6"><h2>Personality Core</h2><div class="row"><span class="label">Alignment</span><span class="value" contenteditable="true">Chaotic Good</span></div><div class="row"><span class="label">Protectiveness</span><span class="value" contenteditable="true">Extreme</span></div><div class="row"><span class="label">Impulse Control</span><span class="value" contenteditable="true">Inconsistent</span></div><div class="row"><span class="label">System Summary</span><span class="value note" contenteditable="true">Temporary rescue status frequently becomes permanent adoption. User considers this outcome normal.</span></div></div>
-          <div class="card span-6"><h2>Likes & Dislikes</h2><div class="row"><span class="label">Aesthetic</span><span class="value" contenteditable="true">Pastel Y2K / Weirdcore / Aliencore</span></div><div class="row"><span class="label">Favorite Snacks</span><span class="value" contenteditable="true">Cherries and chocolate</span></div><div class="row"><span class="label">Likes</span><span class="value" contenteditable="true">Creatures, affection, weird things, astronomy and strange artifacts</span></div><div class="row"><span class="label">Dislikes</span><span class="value" contenteditable="true">Cruelty, ableism, infantilization and coercive control</span></div></div>
-          <div class="card span-6"><h2>Habits & Quirks</h2><div class="row"><span class="label">Greeting</span><span class="value" contenteditable="true">Aww, look at the baby.</span></div><div class="row"><span class="label">Balance Habit</span><span class="value" contenteditable="true">Automatically grabs the nearest wall, object, Kin or person</span></div><div class="row"><span class="label">Emergency Item</span><span class="value" contenteditable="true">Pink rubber duck</span></div><div class="row"><span class="label">Isolation Response</span><span class="value" contenteditable="true">Turns into a caterpillar and cocoons himself in whatever soft material is closest</span></div></div>
-          <div class="card span-6"><h2>Relationships & Values</h2><div class="row"><span class="label">Mother / Father</span><span class="value" contenteditable="true">Han Seo-yeon / Cillian Byrne</span></div><div class="row"><span class="label">Older Brother</span><span class="value" contenteditable="true">Seo Gun-woo (adopted)</span></div><div class="row"><span class="label">Autonomy</span><span class="value" contenteditable="true">Extremely Important</span></div><div class="row"><span class="label">Consent</span><span class="value" contenteditable="true">Core Principle</span></div><div class="row"><span class="label">Kin</span><span class="value" contenteditable="true">Family, human or nonhuman</span></div></div>
-          <div class="card span-12"><h2>Private / Locked Data <button class="button" id="revealButton" type="button">Reveal filters</button></h2><div class="row"><span class="label">Medical Information</span><span class="value">[PRIVACY FILTERED]</span></div><div class="row"><span class="label">Reproductive Information</span><span class="value">[PRIVACY FILTERED]</span></div><div class="row"><span class="label">Class Investigation</span><span class="value"><span class="blackout">HIDDEN</span></span></div><div class="row"><span class="label">System Observation</span><span class="value" contenteditable="true">User remains difficult to model.</span></div></div>
-        </div><footer class="footer"><span>World System Personal Profile File</span><span>Mostly Public / Privacy-Filtered</span></footer>
+          <div class="card span-3">
+            <h2>User Portrait</h2>
+            <div class="portrait"><span>Insert portrait<br>or upload below</span></div>
+            <input class="image-upload" type="file" accept="image/*" aria-label="Upload personal portrait">
+          </div>
+
+          <div class="card span-5">
+            <h2>Basic Identity</h2>
+            <div class="row"><span class="label">Name</span><span class="value" contenteditable="true">Valentine Byrne</span></div>
+            <div class="row"><span class="label">Preferred Name</span><span class="value" contenteditable="true">Val</span></div>
+            <div class="row"><span class="label">Pronouns</span><span class="value" contenteditable="true">she/they</span></div>
+          </div>
+
+          <div class="card span-4">
+            <h2>Profile Summary</h2>
+            <div class="row"><span class="label">Personality</span><span class="value" contenteditable="true">Affectionate, energetic, curious, impulsive</span></div>
+            <div class="row"><span class="label">Mood</span><span class="value" contenteditable="true">Warm, a little chaotic, deeply loyal</span></div>
+          </div>
+
+          <div class="card span-6">
+            <h2>Personality Core</h2>
+            <div class="row"><span class="label">Alignment</span><span class="value" contenteditable="true">Chaotic Good</span></div>
+            <div class="row"><span class="label">Values</span><span class="value" contenteditable="true">Kindness, honesty, second chances</span></div>
+          </div>
+
+          <div class="card span-6">
+            <h2>Likes & Dislikes</h2>
+            <div class="row"><span class="label">Aesthetic</span><span class="value" contenteditable="true">Pastel Y2K / Weirdcore / Aliencore</span></div>
+            <div class="row"><span class="label">Dislikes</span><span class="value" contenteditable="true">Pretension, coldness, being ignored</span></div>
+          </div>
+
+          <div class="card span-6">
+            <h2>Habits & Quirks</h2>
+            <div class="row"><span class="label">Greeting</span><span class="value" contenteditable="true">Aww, look at the baby.</span></div>
+            <div class="row"><span class="label">Tells</span><span class="value" contenteditable="true">Touches hair when nervous; hums when excited</span></div>
+          </div>
+
+          <div class="card span-6">
+            <h2>Relationships & Values</h2>
+            <div class="row"><span class="label">Mother / Father</span><span class="value" contenteditable="true">Han Seo-yeon / Cillian Byrne</span></div>
+            <div class="row"><span class="label">Core Desire</span><span class="value" contenteditable="true">To be wanted without needing to earn it</span></div>
+          </div>
+
+          <div class="card span-12">
+            <h2>Private / Locked Data <button class="button" id="revealButton" type="button">Reveal filters</button></h2>
+            <div class="row"><span class="label">Medical Info</span><span class="value blackout" contenteditable="false">This is hidden until revealed</span></div>
+            <div class="row"><span class="label">Secret Notes</span><span class="value blackout" contenteditable="false">Still under lock and key</span></div>
+          </div>
+        </div>
+
+        <footer class="footer"><span>World System Personal Profile File</span><span>Mostly Public / Privacy-Filtered</span></footer>
       </article>
     </section>
+
     <div class="empty-search" id="emptySearch">No matching records in this file.</div>
   </main>
-  <dialog id="importDialog"><h2>Import profile data</h2><p>Choose a previously exported JSON file to restore editable fields, colors, and portraits.</p><div class="dialog-actions"><button class="button" id="cancelImport" type="button">Cancel</button><button class="button primary" id="confirmImport" type="button">Choose file</button></div></dialog>
+
+  <dialog id="importDialog">
+    <h2>Import profile data</h2>
+    <p>Choose a previously exported JSON file to restore editable fields, colors, and portraits.</p>
+    <div class="dialog-actions">
+      <button class="button" id="cancelImport" type="button">Cancel</button>
+      <button class="button primary" id="confirmImport" type="button">Import</button>
+    </div>
+  </dialog>
+
   <script>
     const STORAGE_KEY = "classUnknownProfile.v2";
     const editableSelector = '[contenteditable="true"]';
@@ -209,6543 +677,161 @@
       tab: document.querySelector(".tab.active")?.dataset.target || "system"
     });
 
-    function setSaveState(text, saved = false) { saveState.textContent = text; saveState.classList.toggle("is-saved", saved); }
+    function setSaveState(text, saved = false) {
+      saveState.textContent = text;
+      saveState.classList.toggle("is-saved", saved);
+    }
+
     function persist(message = "Saved locally") {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state()));
       setSaveState(`${message} - ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`, true);
     }
-    function scheduleSave() { setSaveState("Unsaved changes...", false); clearTimeout(saveTimer); saveTimer = setTimeout(() => persist(), 450); }
+
+    function scheduleSave() {
+      setSaveState("Unsaved changes...", false);
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => persist(), 450);
+    }
+
     function activate(target) {
-      document.querySelectorAll(".tab").forEach((tab) => { const active = tab.dataset.target === target; tab.classList.toggle("active", active); tab.setAttribute("aria-selected", active); });
-      document.querySelectorAll(".sheet").forEach((sheet) => sheet.classList.toggle("active", sheet.id === target));
+      document.querySelectorAll(".tab").forEach((tab) => {
+        const active = tab.dataset.target === target;
+        tab.classList.toggle("active", active);
+        tab.setAttribute("aria-selected", String(active));
+      });
+
+      document.querySelectorAll(".sheet").forEach((sheet) => {
+        sheet.classList.toggle("active", sheet.id === target);
+      });
+
       scheduleSave();
     }
+
     function restore(data) {
       if (!data) return;
-      document.querySelectorAll(editableSelector).forEach((element, index) => { if (data.html?.[index] !== undefined) element.innerHTML = data.html[index]; });
-      document.querySelectorAll(".portrait").forEach((element, index) => { if (data.images?.[index]) element.innerHTML = `<img src="${data.images[index]}" alt="Uploaded portrait">`; });
-      Object.entries(data.colors || {}).forEach(([id, color]) => { const input = document.getElementById(id); if (input && /^#[0-9a-f]{6}$/i.test(color)) { input.value = color; input.dispatchEvent(new Event("input")); } });
-      if (data.tab) activate(data.tab); setSaveState("Profile restored", true);
-    }
 
-    document.querySelectorAll(".tab").forEach((tab, index, all) => tab.addEventListener("click", () => activate(tab.dataset.target)) || tab.addEventListener("keydown", (event) => { if (event.key === "ArrowRight" || event.key === "ArrowLeft") { event.preventDefault(); all[(index + (event.key === "ArrowRight" ? 1 : all.length - 1)) % all.length].focus(); } if (event.key === "Enter" || event.key === " ") activate(tab.dataset.target); }));
-    document.querySelectorAll(editableSelector).forEach((element) => element.addEventListener("input", scheduleSave));
-    ["systemColor", "governmentColor", "personalColor"].forEach((id) => { const input = document.getElementById(id); const variable = `--${id.replace("Color", "")}`; input.addEventListener("input", () => { document.documentElement.style.setProperty(variable, input.value); scheduleSave(); }); });
-    document.querySelectorAll(".image-upload").forEach((input) => input.addEventListener("change", () => { const file = input.files[0]; if (!file || !file.type.startsWith("image/")) return; const reader = new FileReader(); reader.onload = () => { input.closest(".card").querySelector(".portrait").innerHTML = `<img src="${reader.result}" alt="Uploaded portrait">`; scheduleSave(); }; reader.readAsDataURL(file); }));
-    document.querySelectorAll(".blackout").forEach((element) => element.addEventListener("click", () => element.classList.toggle("revealed")));
-    document.getElementById("revealButton").addEventListener("click", () => { document.querySelectorAll(".blackout").forEach((element) => element.classList.toggle("revealed")); });
-    document.getElementById("saveButton").addEventListener("click", () => persist("Saved manually"));
-    document.getElementById("printButton").addEventListener("click", () => window.print());
-    document.getElementById("resetButton").addEventListener("click", () => { if (confirm("Reset all saved edits, colors, and portraits?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } });
-    document.querySelector(".search").addEventListener("input", (event) => { const query = event.target.value.trim().toLowerCase(); let count = 0; document.querySelectorAll(".card").forEach((card) => { const match = !query || card.textContent.toLowerCase().includes(query); card.hidden = !match; if (match) count++; }); document.getElementById("emptySearch").style.display = count ? "none" : "block"; });
-    const dialog = document.getElementById("importDialog"); document.getElementById("importButton").addEventListener("click", () => dialog.showModal()); document.getElementById("cancelImport").addEventListener("click", () => dialog.close()); document.getElementById("confirmImport").addEventListener("click", () => { dialog.close(); document.getElementById("importFile").click(); }); document.getElementById("importFile").addEventListener("change", () => { const file = document.getElementById("importFile").files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { try { const data = JSON.parse(reader.result); restore(data); persist("Imported and saved"); } catch { setSaveState("Import failed: invalid JSON", false); } }; reader.readAsText(file); });
-    document.getElementById("exportButton").addEventListener("click", () => { const blob = new Blob([JSON.stringify(state(), null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = "class-unknown-profile.json"; link.click(); URL.revokeObjectURL(url); setSaveState("Exported profile", true); });
-    try { restore(JSON.parse(localStorage.getItem(STORAGE_KEY))); } catch { setSaveState("Ready. Changes autosave locally."); }
-  </script>
-</body>
-</html>
-
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>Class: Unknown | Character Database</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-
-:root {
-  --bg: #040713;
-  --panel: #091021;
-  --panel2: #0d1730;
-
-  --ink: #edf8ff;
-  --muted: #8da5bd;
-
-  --line: rgba(129,221,255,.22);
-
-  --system: #ff77cb;
-  --government: #67d8ff;
-  --personal: #c59cff;
-
-  --accent: var(--system);
-
-  --warning: #ffe45c;
-  --danger: #ff708f;
-  --ok: #7fffb7;
-}
-
-
-/* =========================================
-   BASIC
-========================================= */
-
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  min-height: 100%;
-}
-
-body {
-
-  background:
-
-    radial-gradient(
-      circle at 12% 0,
-      rgba(255,119,203,.10),
-      transparent 27%
-    ),
-
-    radial-gradient(
-      circle at 92% 8%,
-      rgba(103,216,255,.10),
-      transparent 26%
-    ),
-
-    var(--bg);
-
-  color: var(--ink);
-
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Arial,
-    sans-serif;
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-
-/* =========================================
-   APP LAYOUT
-========================================= */
-
-.app {
-
-  min-height: 100vh;
-
-  display: grid;
-
-  grid-template-columns:
-    280px 1fr;
-}
-
-
-/* =========================================
-   SIDEBAR
-========================================= */
-
-.sidebar {
-
-  position: sticky;
-
-  top: 0;
-
-  height: 100vh;
-
-  overflow: auto;
-
-  padding: 16px;
-
-  background:
-    rgba(4,7,19,.96);
-
-  border-right:
-    1px solid var(--line);
-}
-
-.brand {
-
-  font-weight: 950;
-
-  letter-spacing: .16em;
-
-  text-transform: uppercase;
-
-  font-size: 15px;
-}
-
-.brand small {
-
-  display: block;
-
-  color: var(--muted);
-
-  letter-spacing: .12em;
-
-  font-size: 10px;
-
-  margin-top: 4px;
-}
-
-.search {
-
-  width: 100%;
-
-  margin:
-    14px 0 10px;
-
-  padding:
-    10px 11px;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:
-    10px;
-
-  background:
-    #071025;
-
-  color:
-    var(--ink);
-
-  outline:
-    none;
-}
-
-.char-list {
-
-  display: grid;
-
-  gap: 7px;
-}
-
-.char-item {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 9px;
-
-  width: 100%;
-
-  padding: 10px;
-
-  border:
-    1px solid rgba(255,255,255,.06);
-
-  border-radius:
-    11px;
-
-  background:
-    #081126;
-
-  color:
-    var(--ink);
-
-  cursor:
-    pointer;
-
-  text-align:
-    left;
-}
-
-.char-item:hover,
-.char-item.active {
-
-  border-color:
-    var(--accent);
-
-  box-shadow:
-    0 0 14px
-    color-mix(
-      in srgb,
-      var(--accent) 16%,
-      transparent
-    );
-}
-
-.mini-avatar {
-
-  width: 34px;
-
-  height: 34px;
-
-  border-radius:
-    9px;
-
-  object-fit:
-    cover;
-
-  background:
-    #111a33;
-
-  border:
-    1px solid rgba(255,255,255,.10);
-}
-
-.char-name {
-
-  font-weight:
-    800;
-
-  font-size:
-    13px;
-}
-
-.char-meta {
-
-  font-size:
-    10px;
-
-  color:
-    var(--muted);
-
-  margin-top:
-    2px;
-}
-
-
-/* =========================================
-   SIDEBAR BUTTONS
-========================================= */
-
-.side-actions {
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:
-    7px;
-
-  margin-top:
-    10px;
-}
-
-.side-actions button,
-.ghost-btn,
-.primary-btn,
-.danger-btn {
-
-  border:
-    1px solid var(--line);
-
-  background:
-    #0b1530;
-
-  color:
-    var(--ink);
-
-  border-radius:
-    9px;
-
-  padding:
-    9px 10px;
-
-  cursor:
-    pointer;
-
-  font-weight:
-    750;
-}
-
-.side-actions button:hover,
-.ghost-btn:hover,
-.primary-btn:hover {
-
-  border-color:
-    var(--accent);
-}
-
-.danger-btn {
-
-  border-color:
-    rgba(255,112,143,.35);
-
-  color:
-    #ff9eb3;
-}
-
-.danger-btn:hover {
-
-  border-color:
-    var(--danger);
-}
-
-
-/* =========================================
-   MAIN
-========================================= */
-
-.main {
-
-  min-width:
-    0;
-
-  padding:
-    16px 18px 60px;
-}
-
-
-/* =========================================
-   TOP BAR
-========================================= */
-
-.topbar {
-
-  position:
-    sticky;
-
-  top:
-    0;
-
-  z-index:
-    20;
-
-  display:
-    flex;
-
-  gap:
-    9px;
-
-  align-items:
-    center;
-
-  flex-wrap:
-    wrap;
-
-  padding:
-    10px 12px;
-
-  margin-bottom:
-    12px;
-
-  background:
-    rgba(4,7,19,.92);
-
-  backdrop-filter:
-    blur(14px);
-
-  border:
-    1px solid var(--line);
-
-  border-radius:
-    14px;
-}
-
-.character-title {
-
-  font-size:
-    18px;
-
-  font-weight:
-    900;
-
-  margin-right:
-    auto;
-}
-
-.badge {
-
-  font-size:
-    10px;
-
-  letter-spacing:
-    .12em;
-
-  text-transform:
-    uppercase;
-
-  color:
-    var(--accent);
-
-  border:
-    1px solid var(--accent);
-
-  border-radius:
-    99px;
-
-  padding:
-    5px 8px;
-}
-
-.primary-btn {
-
-  background:
-    color-mix(
-      in srgb,
-      var(--accent) 16%,
-      #0b1530
-    );
-
-  border-color:
-    var(--accent);
-}
-
-.sync-dot {
-
-  width:
-    9px;
-
-  height:
-    9px;
-
-  border-radius:
-    99px;
-
-  background:
-    #7b8796;
-
-  display:
-    inline-block;
-
-  margin-right:
-    4px;
-}
-
-.sync-dot.online {
-
-  background:
-    var(--ok);
-
-  box-shadow:
-    0 0 10px
-    var(--ok);
-}
-
-
-/* =========================================
-   TABS
-========================================= */
-
-.tabs {
-
-  display:
-    flex;
-
-  gap:
-    7px;
-
-  flex-wrap:
-    wrap;
-
-  margin:
-    10px 0 14px;
-}
-
-.tab {
-
-  border:
-    1px solid var(--line);
-
-  background:
-    #071025;
-
-  color:
-    var(--ink);
-
-  border-radius:
-    10px;
-
-  padding:
-    9px 12px;
-
-  font-weight:
-    800;
-
-  cursor:
-    pointer;
-}
-
-.tab.active {
-
-  border-color:
-    var(--accent);
-
-  background:
-    color-mix(
-      in srgb,
-      var(--accent) 13%,
-      #071025
-    );
-}
-
-
-/* =========================================
-   SHEETS
-========================================= */
-
-.sheet-shell {
-
-  --accent:
-    var(--system);
-
-  position:
-    relative;
-
-  overflow:
-    hidden;
-
-  border:
-    1px solid var(--accent);
-
-  border-radius:
-    18px;
-
-  padding:
-    16px;
-
-  background:
-
-    linear-gradient(
-      transparent 31px,
-      rgba(255,255,255,.022) 32px
-    ),
-
-    linear-gradient(
-      90deg,
-      transparent 31px,
-      rgba(255,255,255,.022) 32px
-    ),
-
-    linear-gradient(
-      145deg,
-      rgba(255,255,255,.03),
-      transparent 35%
-    ),
-
-    #060b18;
-
-  background-size:
-    32px 32px,
-    32px 32px,
-    auto,
-    auto;
-
-  box-shadow:
-
-    0 0 28px
-    color-mix(
-      in srgb,
-      var(--accent) 15%,
-      transparent
-    ),
-
-    inset 0 0 70px
-    rgba(0,0,0,.35);
-}
-
-.sheet-shell.government {
-  --accent:
-    var(--government);
-}
-
-.sheet-shell.personal {
-  --accent:
-    var(--personal);
-}
-
-
-/* =========================================
-   SHEET HEADER
-========================================= */
-
-.sheet-head {
-
-  display:
-    flex;
-
-  justify-content:
-    space-between;
-
-  gap:
-    16px;
-
-  align-items:
-    center;
-
-  padding:
-    4px 2px 14px;
-
-  border-bottom:
-    1px solid
-    color-mix(
-      in srgb,
-      var(--accent) 38%,
-      transparent
-    );
-}
-
-.sheet-title {
-
-  font-size:
-    clamp(24px,3vw,40px);
-
-  font-weight:
-    950;
-
-  letter-spacing:
-    .11em;
-
-  text-transform:
-    uppercase;
-
-  text-shadow:
-    0 0 14px
-    color-mix(
-      in srgb,
-      var(--accent) 48%,
-      transparent
-    );
-}
-
-.sheet-sub {
-
-  font-size:
-    11px;
-
-  color:
-    var(--accent);
-
-  letter-spacing:
-    .18em;
-
-  text-transform:
-    uppercase;
-
-  margin-top:
-    3px;
-}
-
-
-/* =========================================
-   GRID
-========================================= */
-
-.grid {
-
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(12,1fr);
-
-  gap:
-    10px;
-
-  margin-top:
-    12px;
-}
-
-.card {
-
-  grid-column:
-    span 6;
-
-  padding:
-    12px;
-
-  border:
-    1px solid
-    color-mix(
-      in srgb,
-      var(--accent) 30%,
-      transparent
-    );
-
-  border-radius:
-    12px;
-
-  background:
-
-    linear-gradient(
-      180deg,
-      rgba(255,255,255,.027),
-      rgba(255,255,255,.01)
-    );
-}
-
-.card.wide {
-
-  grid-column:
-    span 12;
-}
-
-.card.narrow {
-
-  grid-column:
-    span 4;
-}
-
-.card h3 {
-
-  margin:
-    0 0 10px;
-
-  color:
-    var(--accent);
-
-  font-size:
-    12px;
-
-  letter-spacing:
-    .15em;
-
-  text-transform:
-    uppercase;
-}
-
-
-/* =========================================
-   PROFILE FIELDS
-========================================= */
-
-.field-row {
-
-  display:
-    grid;
-
-  grid-template-columns:
-    minmax(140px,.75fr)
-    1.35fr;
-
-  gap:
-    9px;
-
-  align-items:
-    start;
-
-  padding:
-    6px 0;
-
-  border-bottom:
-    1px solid rgba(255,255,255,.05);
-}
-
-.field-label {
-
-  font-size:
-    10px;
-
-  letter-spacing:
-    .08em;
-
-  text-transform:
-    uppercase;
-
-  color:
-    var(--muted);
-
-  padding-top:
-    2px;
-}
-
-.field-value {
-
-  min-height:
-    1.2em;
-
-  outline:
-    none;
-
-  border-radius:
-    4px;
-
-  font-weight:
-    620;
-
-  white-space:
-    pre-wrap;
-
-  word-break:
-    break-word;
-}
-
-.field-value[contenteditable="true"]:focus {
-
-  background:
-    rgba(255,255,255,.06);
-
-  box-shadow:
-    inset 0 -1px 0
-    var(--accent);
-}
-
-
-/* =========================================
-   BLACKOUT + WARNINGS
-========================================= */
-
-.blackout {
-
-  display:
-    inline-block;
-
-  min-width:
-    130px;
-
-  background:
-    #010103;
-
-  color:
-    #010103;
-
-  border-radius:
-    2px;
-
-  user-select:
-    none;
-}
-
-.warning {
-
-  color:
-    var(--warning);
-
-  font-weight:
-    900;
-
-  text-shadow:
-    0 0 9px
-    rgba(255,228,92,.35);
-}
-
-
-/* =========================================
-   CUSTOM FIELDS
-========================================= */
-
-.add-field {
-
-  margin-top:
-    8px;
-
-  border:
-    1px dashed
-    color-mix(
-      in srgb,
-      var(--accent) 40%,
-      transparent
-    );
-
-  background:
-    transparent;
-
-  color:
-    var(--muted);
-
-  border-radius:
-    8px;
-
-  padding:
-    6px 8px;
-
-  cursor:
-    pointer;
-
-  font-size:
-    11px;
-}
-
-.add-field:hover {
-
-  color:
-    var(--ink);
-
-  border-color:
-    var(--accent);
-}
-
-.custom-row {
-
-  position:
-    relative;
-}
-
-.custom-row:hover
-.delete-field {
-
-  opacity:
-    1;
-}
-
-.delete-field {
-
-  opacity:
-    0;
-
-  position:
-    absolute;
-
-  right:
-    2px;
-
-  top:
-    4px;
-
-  border:
-    0;
-
-  background:
-    transparent;
-
-  color:
-    #ff8ca3;
-
-  cursor:
-    pointer;
-
-  font-size:
-    12px;
-}
-
-
-/* =========================================
-   PORTRAIT
-========================================= */
-
-.portrait-wrap {
-
-  display:
-    grid;
-
-  grid-template-columns:
-    190px 1fr;
-
-  gap:
-    12px;
-
-  align-items:
-    start;
-}
-
-.portrait {
-
-  width:
-    190px;
-
-  aspect-ratio:
-    4 / 5;
-
-  border-radius:
-    12px;
-
-  overflow:
-    hidden;
-
-  border:
-    1px dashed
-    var(--accent);
-
-  display:
-    grid;
-
-  place-items:
-    center;
-
-  background:
-
-    radial-gradient(
-      circle at 50% 30%,
-      color-mix(
-        in srgb,
-        var(--accent) 14%,
-        transparent
-      ),
-      transparent 64%
-    );
-
-  color:
-    var(--muted);
-}
-
-.portrait img {
-
-  width:
-    100%;
-
-  height:
-    100%;
-
-  object-fit:
-    cover;
-}
-
-.portrait-controls {
-
-  display:
-    grid;
-
-  gap:
-    8px;
-}
-
-.portrait-controls label {
-
-  font-size:
-    11px;
-
-  color:
-    var(--muted);
-}
-
-.portrait-controls input {
-
-  max-width:
-    100%;
-
-  color:
-    var(--muted);
-}
-
-
-/* =========================================
-   THEME COLORS
-========================================= */
-
-.color-row {
-
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:
-    8px;
-}
-
-.color-box {
-
-  padding:
-    9px;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:
-    10px;
-
-  background:
-    #071025;
-}
-
-.color-box label {
-
-  display:
-    block;
-
-  font-size:
-    10px;
-
-  color:
-    var(--muted);
-
-  text-transform:
-    uppercase;
-
-  letter-spacing:
-    .08em;
-
-  margin-bottom:
-    6px;
-}
-
-.color-box input {
-
-  width:
-    100%;
-
-  height:
-    32px;
-
-  border:
-    0;
-
-  background:
-    transparent;
-}
-
-
-/* =========================================
-   FOOTER
-========================================= */
-
-.footer {
-
-  display:
-    flex;
-
-  justify-content:
-    space-between;
-
-  gap:
-    10px;
-
-  margin-top:
-    12px;
-
-  padding-top:
-    10px;
-
-  border-top:
-    1px solid rgba(255,255,255,.07);
-
-  color:
-    var(--muted);
-
-  font-size:
-    10px;
-
-  letter-spacing:
-    .12em;
-
-  text-transform:
-    uppercase;
-}
-
-
-/* =========================================
-   PREVIEW MODE
-========================================= */
-
-.preview-mode
-.editable-only {
-
-  display:
-    none !important;
-}
-
-.preview-mode
-[contenteditable="true"] {
-
-  pointer-events:
-    none;
-}
-
-.preview-mode
-.field-value {
-
-  box-shadow:
-    none !important;
-}
-
-
-/* =========================================
-   MODAL
-========================================= */
-
-.modal-backdrop {
-
-  position:
-    fixed;
-
-  inset:
-    0;
-
-  z-index:
-    99;
-
-  background:
-    rgba(0,0,0,.72);
-
-  display:
-    none;
-
-  place-items:
-    center;
-
-  padding:
-    18px;
-}
-
-.modal-backdrop.open {
-
-  display:
-    grid;
-}
-
-.modal {
-
-  width:
-    min(720px,100%);
-
-  max-height:
-    90vh;
-
-  overflow:
-    auto;
-
-  background:
-    #071025;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:
-    16px;
-
-  padding:
-    16px;
-
-  box-shadow:
-    0 0 50px
-    rgba(0,0,0,.5);
-}
-
-.modal h2 {
-
-  margin:
-    0 0 12px;
-}
-
-.form-grid {
-
-  display:
-    grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:
-    10px;
-}
-
-.form-grid .full {
-
-  grid-column:
-    1 / -1;
-}
-
-.form-grid label {
-
-  display:
-    grid;
-
-  gap:
-    5px;
-
-  font-size:
-    11px;
-
-  color:
-    var(--muted);
-}
-
-.form-grid input {
-
-  padding:
-    10px;
-
-  border:
-    1px solid var(--line);
-
-  border-radius:
-    9px;
-
-  background:
-    #050b1b;
-
-  color:
-    var(--ink);
-}
-
-.modal-actions {
-
-  display:
-    flex;
-
-  justify-content:
-    flex-end;
-
-  gap:
-    8px;
-
-  margin-top:
-    14px;
-}
-
-.small-note {
-
-  font-size:
-    11px;
-
-  color:
-    var(--muted);
-
-  line-height:
-    1.5;
-}
-
-.status-line {
-
-  font-size:
-    12px;
-
-  color:
-    var(--muted);
-
-  margin-top:
-    10px;
-}
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media(max-width:980px) {
-
-  .app {
-
-    grid-template-columns:
-      1fr;
-  }
-
-  .sidebar {
-
-    position:
-      relative;
-
-    height:
-      auto;
-
-    border-right:
-      0;
-
-    border-bottom:
-      1px solid var(--line);
-  }
-
-  .char-list {
-
-    grid-template-columns:
-      repeat(
-        auto-fit,
-        minmax(180px,1fr)
-      );
-  }
-
-  .portrait-wrap {
-
-    grid-template-columns:
-      1fr;
-  }
-
-  .portrait {
-
-    width:
-      100%;
-
-    max-width:
-      260px;
-  }
-
-  .card,
-  .card.narrow {
-
-    grid-column:
-      span 12;
-  }
-}
-
-@media(max-width:620px) {
-
-  .main {
-
-    padding:
-      10px;
-  }
-
-  .field-row {
-
-    grid-template-columns:
-      1fr;
-  }
-
-  .form-grid {
-
-    grid-template-columns:
-      1fr;
-  }
-
-  .color-row {
-
-    grid-template-columns:
-      1fr;
-  }
-}
-
-
-/* =========================================
-   PRINT
-========================================= */
-
-@media print {
-
-  .sidebar,
-  .topbar,
-  .tabs,
-  .editable-only {
-
-    display:
-      none !important;
-  }
-
-  .app {
-
-    display:
-      block;
-  }
-
-  .main {
-
-    padding:
-      0;
-  }
-
-  .sheet-shell {
-
-    border-radius:
-      0;
-
-    box-shadow:
-      none;
-
-    min-height:
-      100vh;
-  }
-}
-
-</style>
-</head>
-
-
-<body>
-
-<div
-  class="app"
-  id="app"
->
-
-
-<!-- =========================================
-     SIDEBAR
-========================================= -->
-
-<aside class="sidebar">
-
-<div class="brand">
-
-CLASS: UNKNOWN
-
-<small>
-Character Database
-</small>
-
-</div>
-
-
-<input
-  id="search"
-  class="search"
-  placeholder="Search characters…"
->
-
-
-<div
-  id="characterList"
-  class="char-list"
-></div>
-
-
-<div class="side-actions editable-only">
-
-<button onclick="newCharacter()">
-＋ New
-</button>
-
-<button onclick="duplicateCharacter()">
-⧉ Duplicate
-</button>
-
-<button onclick="renameCharacter()">
-✎ Rename
-</button>
-
-<button
-  class="danger-btn"
-  onclick="deleteCharacter()"
->
-Delete
-</button>
-
-</div>
-
-
-<div class="side-actions editable-only">
-
-<button onclick="exportDatabase()">
-Export JSON
-</button>
-
-<button
-  onclick="document.getElementById('importFile').click()"
->
-Import JSON
-</button>
-
-<input
-  id="importFile"
-  type="file"
-  accept=".json,application/json"
-  hidden
->
-
-<button onclick="openCloud()">
-Cloud Sync
-</button>
-
-<button onclick="togglePreview()">
-Preview
-</button>
-
-</div>
-
-</aside>
-
-
-
-<!-- =========================================
-     MAIN
-========================================= -->
-
-<main class="main">
-
-
-<div class="topbar">
-
-<div>
-
-<div
-  id="characterTitle"
-  class="character-title"
->
-Valentine Byrne
-</div>
-
-<div
-  id="characterSnapshot"
-  style="
-    font-size:10px;
-    color:var(--muted);
-  "
->
-Modern-story introduction snapshot
-</div>
-
-</div>
-
-
-<span
-  id="cloudBadge"
-  class="badge"
->
-
-<span
-  id="syncDot"
-  class="sync-dot"
-></span>
-
-Local
-
-</span>
-
-
-<button
-  class="ghost-btn editable-only"
-  onclick="saveLocal()"
->
-Save Local
-</button>
-
-
-<button
-  class="primary-btn editable-only"
-  onclick="saveEverywhere()"
->
-Save + Sync
-</button>
-
-
-<button
-  class="ghost-btn"
-  onclick="window.print()"
->
-Print / PDF
-</button>
-
-</div>
-
-
-
-<!-- =========================================
-     SHEET TABS
-========================================= -->
-
-<div class="tabs">
-
-<button
-  class="tab active"
-  data-sheet="system"
->
-World System
-</button>
-
-<button
-  class="tab"
-  data-sheet="government"
->
-Government Authority
-</button>
-
-<button
-  class="tab"
-  data-sheet="personal"
->
-Personal Profile
-</button>
-
-</div>
-
-
-<section id="sheet"></section>
-
-</main>
-
-</div>
-
-
-
-<!-- =========================================
-     SUPABASE MODAL
-========================================= -->
-
-<div
-  id="cloudModal"
-  class="modal-backdrop"
->
-
-<div class="modal">
-
-<h2>
-Supabase Cloud Sync
-</h2>
-
-<p class="small-note">
-
-Optional.
-
-Local saving works without Supabase.
-
-To sync characters across devices,
-create the Supabase table,
-then paste your project URL and
-publishable / anon key here.
-
-Your password is sent directly to
-Supabase and is not stored by this app.
-
-</p>
-
-
-<div class="form-grid">
-
-<label class="full">
-
-Project URL
-
-<input
-  id="sbUrl"
-  placeholder="https://YOURPROJECT.supabase.co"
->
-
-</label>
-
-
-<label class="full">
-
-Anon / Publishable Key
-
-<input
-  id="sbKey"
-  placeholder="eyJ..."
->
-
-</label>
-
-
-<label>
-
-Email
-
-<input
-  id="sbEmail"
-  type="email"
-  placeholder="you@example.com"
->
-
-</label>
-
-
-<label>
-
-Password
-
-<input
-  id="sbPassword"
-  type="password"
-  placeholder="••••••••"
->
-
-</label>
-
-</div>
-
-
-<div
-  id="cloudStatus"
-  class="status-line"
->
-Not connected.
-</div>
-
-
-<div class="modal-actions">
-
-<button
-  class="ghost-btn"
-  onclick="closeCloud()"
->
-Close
-</button>
-
-<button
-  class="ghost-btn"
-  onclick="signOutCloud()"
->
-Sign Out
-</button>
-
-<button
-  class="primary-btn"
-  onclick="connectCloud()"
->
-Connect / Sign In
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<script>
-
-/* =========================================
-   STORAGE
-========================================= */
-
-const DB_KEY =
-"classUnknown.characterDB.v3";
-
-const SETTINGS_KEY =
-"classUnknown.cloudSettings.v1";
-
-
-/* =========================================
-   SHEET SCHEMAS
-========================================= */
-
-const SCHEMAS = {
-
-
-/* =========================================
-   WORLD SYSTEM
-========================================= */
-
-system: {
-
-title:
-"World System",
-
-sub:
-"Entity Status File",
-
-className:
-"system",
-
-sections: [
-
-[
-"Basic Information",
-
-[
-"Name",
-"Known As",
-"Entity ID",
-"Species",
-"Class",
-"Class Type",
-"Class Rarity",
-"System Rank",
-"Level",
-"EXP",
-"Title(s)",
-"Status",
-"Potential",
-"Hunter Name",
-"Guild",
-"Party",
-"Occupation",
-"Current Residence",
-"Awakening Age",
-"Years Awakened"
-]
-
-],
-
-
-[
-"Core Stats",
-
-[
-"Strength",
-"Endurance",
-"Agility",
-"Dexterity",
-"Perception",
-"Intelligence",
-"Wisdom",
-"Charisma",
-"Mana",
-"Mana Control",
-"Vitality",
-"Luck",
-"Stat Assessment",
-"System Note"
-]
-
-],
-
-
-[
-"Resources & Condition",
-
-[
-"HP",
-"MP",
-"Stamina",
-"Mana Regeneration",
-"HP Regeneration",
-"Stamina Recovery",
-"Status Effects",
-"Permanent Conditions",
-"System Compatibility",
-"Mana Affinity",
-"Corruption Resistance",
-"Mental Resistance",
-"Pain Tolerance",
-"Recovery Efficiency",
-"Resource Note"
-]
-
-],
-
-
-[
-"Skills & Abilities",
-
-[
-"Primary Skill",
-"Secondary Skill",
-"Support Skill",
-"Bond Skill",
-"Emergency Skill",
-"Additional Skill I",
-"Additional Skill II",
-"Additional Skill III",
-"Passive Trait I",
-"Passive Trait II",
-"Passive Trait III",
-"Passive Trait IV",
-"Passive Trait V",
-"Passive Trait VI",
-"Passive Trait VII",
-"Passive Trait VIII",
-"System Classification",
-"Skills Note"
-]
-
-],
-
-
-[
-"Equipment & Inventory",
-
-[
-"Primary Weapon",
-"Secondary Weapon",
-"Head",
-"Torso",
-"Arms",
-"Legs",
-"Feet",
-"Accessory I",
-"Accessory II",
-"Accessory III",
-"Artifact / Relic",
-"Inventory Summary",
-"Equipment Style",
-"Equipment Note"
-]
-
-],
-
-
-[
-"Resistances & Affinities",
-
-[
-"Physical Resistance",
-"Fire Resistance",
-"Cold Resistance",
-"Poison Resistance",
-"Mental Resistance",
-"Holy Resistance",
-"Abyssal Resistance",
-"Corruption Resistance",
-"Primary Affinity",
-"Secondary Affinity",
-"Environmental Adaptation",
-"Creature Compatibility",
-"Status Resistance",
-"Resistance Note"
-]
-
-],
-
-
-[
-"Lineage & Evolution",
-
-[
-"Primary Lineage",
-"Secondary Lineage",
-"Dormant Lineage(s)",
-"Evolution Potential",
-"Growth Classification",
-"Inherited Supernatural Markers",
-"Post-Awakening Biological Divergence",
-"Evolutionary Influence",
-"Compatible Evolution Pathways",
-"Forced Evolution Capacity",
-"Species Preservation Response",
-"Lineage Assessment",
-"Lineage Note"
-]
-
-],
-
-
-[
-"Bonds & Affiliations",
-
-[
-"Primary Affiliation",
-"Secondary Affiliation",
-"Kin Compatible",
-"Bond Type",
-"Bonded Entity",
-"Bond Strength",
-"Number of Confirmed Kin",
-"Party Compatibility",
-"Guild Compatibility",
-"Authority Compatibility",
-"Family Bond Stability",
-"Bonds Note"
-]
-
-],
-
-
-[
-"System Notes",
-
-[
-"Classification Status",
-"Observed Growth Pattern",
-"Level Progression",
-"Stat Progression",
-"Creature Response",
-"Bond Formation",
-"Hidden Interaction",
-"Healing Interaction",
-"System Classification Conflict",
-"Black-Boxed Data",
-"Administrative Concern",
-"Behavioral Note",
-"Combat Assessment",
-"System Flag",
-"System Addendum"
-]
-
-]
-
-]
-
-},
-
-
-
-/* =========================================
-   GOVERNMENT
-========================================= */
-
-government: {
-
-title:
-"Government Hunter Authority",
-
-sub:
-"Biological & Operational File",
-
-className:
-"government",
-
-sections: [
-
-[
-"File Information",
-
-[
-"Subject ID",
-"File Classification",
-"Last Scan",
-"Facility",
-"Scanner Model",
-"Scan Reliability",
-"Association Rank",
-"Hunter License #",
-"Registered Hunter Name",
-"Current Status",
-"Special File Flag",
-"Administrative Note"
-]
-
-],
-
-
-[
-"Personal Information",
-
-[
-"Legal Name",
-"Korean Name",
-"Date of Birth",
-"Age",
-"Nationality",
-"Citizenship",
-"Registered Sex",
-"Gender",
-"Pronouns",
-"Hunter Name",
-"Occupation",
-"Primary Residence",
-"Languages",
-"Signed Languages",
-"Awakening Age",
-"Years Awakened",
-"Registered Class",
-"Registered Rank",
-"Guild Affiliation",
-"Permanent Party Affiliation"
-]
-
-],
-
-
-[
-"Physical Profile",
-
-[
-"Height",
-"Weight",
-"Build",
-"Hair",
-"Eyes",
-"Complexion",
-"Identifying Features",
-"Ear Morphology",
-"Chest Profile",
-"External Genital Configuration",
-"Reproductive Capacity",
-"Dominant Hand",
-"Blood Type",
-"Baseline Body Temperature",
-"Resting Heart Rate",
-"Vision"
-]
-
-],
-
-
-[
-"Medical & Sensory Profile",
-
-[
-"Hearing",
-"Onset",
-"Cause",
-"Vestibular Function",
-"Balance Assessment",
-"Speech Production",
-"Primary Communication",
-"Accessibility Requirements",
-"Mobility",
-"Chronic Disease",
-"Neurological Status",
-"Mana-Related Pathology",
-"Known Allergies",
-"Allergy Clinical Note",
-"Current Medication",
-"Scarring",
-"Healing Classification"
-]
-
-],
-
-
-[
-"Biological & Mana Scan",
-
-[
-"Species Classification",
-"Supernatural Lineage Markers",
-"Pre-E-Day Anomalous Ancestry",
-"Mana Core",
-"Mana Capacity",
-"Mana Control",
-"Mana Signature",
-"Mana Stability",
-"Corruption Indicators",
-"Pathological Mutation Indicators",
-"Class-Induced Biological Alteration",
-"Regenerative Response",
-"Creature-Mana Compatibility",
-"Cross-Species Mana Response",
-"Creature Development Anomaly",
-"Scan Anomaly"
-]
-
-],
-
-
-[
-"Operational Assessment",
-
-[
-"Primary Role",
-"Secondary Role",
-"Tertiary Role",
-"Preferred Engagement Range",
-"Direct Combat Rating",
-"Support Rating",
-"Creature Handling Rating",
-"Field Adaptability",
-"Improvisation",
-"Team Compatibility",
-"Solo Operational Clearance",
-"Dungeon Clearance",
-"Primary Weapon",
-"Secondary Weapon",
-"Artifact Provenance",
-"Authority Note",
-"Combat Style",
-"Operational Weaknesses",
-"Operational Strengths",
-"Risk-Taking Assessment",
-"Self-Preservation Assessment",
-"Protective Instinct"
-]
-
-],
-
-
-[
-"Government Classification Notes",
-
-[
-"Observed System Level",
-"Observed Luck",
-"Level/Age Assessment",
-"Stat/Level Assessment",
-"Class Verification",
-"Current Administrative Classification",
-"Rank Verification",
-"Known Bonded Creature",
-"Bonded-Creature Concern",
-"Subject Involvement",
-"Threat Classification",
-"Potential Classification",
-"Monitoring Recommendation",
-"Containment Recommendation",
-"Final Administrative Note"
-]
-
-]
-
-]
-
-},
-
-
-
-/* =========================================
-   PERSONAL PROFILE
-========================================= */
-
-personal: {
-
-title:
-"World System",
-
-sub:
-"Personal Profile File",
-
-className:
-"personal",
-
-sections: [
-
-[
-"Basic Identity",
-
-[
-"Name",
-"Korean Name",
-"Preferred Name",
-"Hunter Name",
-"Age",
-"Birthday",
-"Species",
-"Gender",
-"Pronouns",
-"Current Residence",
-"Occupation",
-"Registered Rank",
-"Registered Class",
-"System Class",
-"Relationship Status",
-"Primary Kin",
-"Favorite Color",
-"System Interface Theme",
-"Profile Visibility",
-"System Familiarity"
-]
-
-],
-
-
-[
-"Profile Summary",
-
-[
-"Personality Summary",
-"General Disposition",
-"Social Energy",
-"Emotional Openness",
-"Independence",
-"Protective Instinct",
-"Nurturing Instinct",
-"Curiosity",
-"Impulse Control",
-"Self-Preservation",
-"Humor",
-"Conflict Style",
-"Core Behavioral Pattern",
-"System Observation"
-]
-
-],
-
-
-[
-"Personality Core",
-
-[
-"Core Alignment",
-"Primary Traits",
-"Secondary Traits",
-"Social Confidence",
-"Emotional Intelligence",
-"Conventional Caution",
-"Practical Intelligence",
-"Academic / Administrative Patience",
-"Creature Empathy",
-"Human Empathy",
-"Protectiveness",
-"Stubbornness",
-"Curiosity Level",
-"Impulse Control Pattern",
-"Risk Awareness",
-"Risk Compliance",
-"Authority Response",
-"Rules Response",
-"Attachment Style",
-"Trust Pattern",
-"Anger Pattern",
-"Protective Escalation",
-"Forgiveness",
-"Cruelty Tolerance",
-"Ableism Tolerance",
-"Emotional Resilience",
-"Help-Seeking Behavior",
-"Self-Advocacy",
-"Primary Internal Contradiction",
-"System Summary"
-]
-
-],
-
-
-[
-"Likes & Dislikes",
-
-[
-"Favorite Color",
-"Favorite Aesthetic",
-"Favorite Clothing Style",
-"Favorite Creatures",
-"Favorite Activity",
-"Favorite Comfort Activity",
-"Favorite Social Activity",
-"Favorite Kind of Person",
-"Favorite Kind of Hunter",
-"Favorite Food Profile",
-"Favorite Snacks",
-"Favorite Drink",
-"Favorite Weather",
-"Favorite Time of Day",
-"Favorite Environment",
-"Favorite Gift Type",
-"Favorite Physical Affection",
-"Favorite Compliment",
-"Preferred Sensory Comfort",
-"Likes",
-"Strong Likes",
-"Dislikes",
-"Strong Dislikes",
-"Pet Peeve I",
-"Pet Peeve II",
-"Pet Peeve III",
-"Instant Irritation Trigger",
-"Instant Anger Trigger",
-"Instant Soft Spot",
-"Preference Observation"
-]
-
-],
-
-
-[
-"Habits & Quirks",
-
-[
-"Accessory Count",
-"Creature Greeting Habit",
-"Naming Habit",
-"Touch Habit",
-"Communication Habit",
-"Attention Habit",
-"Balance Habit",
-"Pocket Habit",
-"Emergency Item",
-"Collection Habit",
-"Fashion Habit",
-"Hair Habit",
-"Creature-Care Learning Style",
-"Retention Pattern",
-"Administrative Habit",
-"Stress Habit",
-"Comfort Habit",
-"Excitement Tell",
-"Suspicion Tell",
-"Anger Tell",
-"Affection Tell",
-"Embarrassment Tell",
-"Sleep Habit",
-"Food Habit",
-"Creature-Care Habit",
-"Photography Habit",
-"Kin-Specific Habit",
-"System Interaction Habit",
-"System Observation I",
-"System Clarification",
-"User Response",
-"Habit Summary"
-]
-
-],
-
-
-[
-"Relationships & Bonds",
-
-[
-"Family Orientation",
-"Mother",
-"Father",
-"Older Brother",
-"Family Bond Stability",
-"Primary Kin",
-"Kin Bond Type",
-"Kin Relationship",
-"Kin Attachment Pattern",
-"Kin Autonomy",
-"Kin Protective Response",
-"Friendship Pattern",
-"Affection Style",
-"Care Style",
-"Receiving Care",
-"Minor Injury Behavior",
-"Infantilization Response",
-"Conflict With Loved Ones",
-"Possessiveness",
-"Jealousy",
-"Chosen-Family Response",
-"Leadership Bond Pattern",
-"Relationship Summary"
-]
-
-],
-
-
-[
-"Comfort & Emotional Patterns",
-
-[
-"Baseline Emotional State",
-"Emotional Expression",
-"Emotional Suppression",
-"Primary Comfort Need",
-"Preferred Comfort",
-"Comfort-Seeking Pattern",
-"Family Comfort Behavior",
-"Distress Tell",
-"Serious Distress Tell",
-"Overwhelm Response",
-"Isolation Preference",
-"Fear Response",
-"Pain Response",
-"Minor Injury Response",
-"Major Injury Response",
-"Pain Observation",
-"Anger Response",
-"Grief Response",
-"Grief Self-Regulation",
-"Separation During Grief",
-"Fear of Being Comforted",
-"Fear of Appearing Needy",
-"Help-Seeking Difficulty",
-"Reassurance Preference",
-"Apology Preference",
-"Conflict Recovery",
-"Emotional Memory",
-"Forgiveness Pattern",
-"Non-Forgiveness Pattern",
-"Safety Association",
-"Physical Safety Association",
-"Emotional Safety Association",
-"Accessibility Comfort",
-"Comfort Observation I",
-"Comfort Observation II",
-"Comfort Addendum"
-]
-
-],
-
-
-[
-"Values & Motivations",
-
-[
-"Core Value",
-"Primary Motivation",
-"Secondary Motivation",
-"Family Value",
-"Kin Value",
-"Autonomy",
-"Consent",
-"Protection",
-"Compassion",
-"Mercy",
-"Cruelty",
-"Accessibility",
-"Disability Philosophy",
-"Healing Philosophy",
-"Evolution Philosophy",
-"Leadership Philosophy",
-"Authority Philosophy",
-"Power Philosophy",
-"Strength Philosophy",
-"Rank Philosophy",
-"Creature Philosophy",
-"Knowledge Philosophy",
-"Failure Response",
-"Primary Long-Term Goal",
-"Professional Motivation",
-"Kin Motivation",
-"Human-Kin Motivation",
-"Romantic Motivation",
-"Material Ambition",
-"Recognition",
-"Legacy"
-]
-
-],
-
-
-[
-"Fears & Vulnerabilities",
-
-[
-"Primary Fear",
-"Secondary Fear",
-"Family Loss Fear",
-"Kin Loss Fear",
-"Abandonment Fear",
-"Helplessness Trigger",
-"Medical Helplessness Trigger",
-"Control Vulnerability",
-"Protective Vulnerability",
-"Self-Sacrifice Risk",
-"Failure Vulnerability",
-"Guilt Pattern",
-"Grief Vulnerability",
-"Grief Presentation",
-"Separation During Grief",
-"Fear Response After Crisis",
-"Major Injury Fear",
-"Creature Harm Vulnerability",
-"Child Harm Vulnerability",
-"Ableism Vulnerability",
-"Pity Response",
-"Underestimation Response",
-"Sensory Vulnerability",
-"Accessibility Failure Vulnerability",
-"Dependence Vulnerability",
-"Fear of Death",
-"Fear of Own Disability",
-"Fear of Being Fixed",
-"Fear of Intimacy",
-"Fear of Commitment",
-"Fear of Vulnerability",
-"Emotional Blind Spot",
-"Protective Blind Spot",
-"Vulnerability Warning I",
-"Vulnerability Warning II",
-"Vulnerability Observation",
-"Vulnerability Assessment"
-]
-
-],
-
-
-[
-"Private / Locked Data",
-
-[
-"Privacy Classification",
-"Medical History",
-"Reproductive / Anatomical Data",
-"Gestational Capacity",
-"Biological Scan Access",
-"System-Class Investigation Data",
-"Black-Boxed Class Fields",
-"Relationship Detail",
-"Relationship Visibility",
-"Location Privacy",
-"Private Emotional Flag",
-"Private Grief Flag",
-"Private Protective Flag",
-"Kin Classification Data",
-"Consent Directive",
-"Emergency Override",
-"Audit Access",
-"Locked Internal Note",
-"System Internal Status"
-]
-
-],
-
-
-[
-"Final System Observations",
-
-[
-"Behavioral Consistency",
-"Decision Pattern",
-"Kin Recognition",
-"Human Kin Response",
-"Leadership Pattern",
-"Bond Stability",
-"Bond Failure Pattern",
-"Class Prediction",
-"Potential Ceiling",
-"Growth Model",
-"Registered Rank Reliability",
-"Notable Contradiction",
-"System Concern",
-"System Recommendation",
-"Historical Compliance",
-"Accessibility Recommendation",
-"Current Classification Status",
-"Threat Designation",
-"Observation Status",
-"Final System Note",
-"Personal Node Addendum I",
-"Personal Node Addendum II"
-]
-
-]
-
-]
-
-}
-
-};
-
-
-/* =========================================
-   EMPTY DATA TEMPLATE
-========================================= */
-
-function blankData() {
-
-  const output = {
-
-    system: {},
-    government: {},
-    personal: {}
-
-  };
-
-  for (
-    const [
-      sheet,
-      schema
-    ]
-    of Object.entries(SCHEMAS)
-  ) {
-
-    for (
-      const [
-        section,
-        fields
-      ]
-      of schema.sections
-    ) {
-
-      for (
-        const field
-        of fields
-      ) {
-
-        output[sheet][field] = "";
-
-      }
-
-    }
-
-  }
-
-  return output;
-
-}
-
-
-/* =========================================
-   VALENTINE STARTER DATA
-========================================= */
-
-const val =
-blankData();
-
-
-Object.assign(
-val.system,
-{
-
-"Name":
-"Valentine Byrne",
-
-"Known As":
-"Val; Seo Sa-rang (서사랑)",
-
-"Entity ID":
-"VB-022-EDAY",
-
-"Species":
-"Human",
-
-"Class":
-"[CLASS: CALCULATING…]",
-
-"Class Type":
-"Beast / Support / ████████████",
-
-"Class Rarity":
-"████████████",
-
-"System Rank":
-"C-Rank",
-
-"Level":
-"Lv. 14",
-
-"EXP":
-"18,420 / 24,000",
-
-"Title(s)":
-"Beast Tender",
-
-"Status":
-"Active",
-
-"Potential":
-"Unbounded / Unable to Determine",
-
-"Hunter Name":
-"Nova",
-
-"Guild":
-"None",
-
-"Party":
-"None permanently registered",
-
-"Occupation":
-"Independent Hunter / Freelancer",
-
-"Current Residence":
-"South Korea",
-
-"Awakening Age":
-"12",
-
-"Years Awakened":
-"Approximately 10",
-
-
-"Strength":"22",
-
-"Endurance":"28",
-
-"Agility":"41",
-
-"Dexterity":"46",
-
-"Perception":"67",
-
-"Intelligence":"71",
-
-"Wisdom":"74",
-
-"Charisma":"83",
-
-"Mana":"119",
-
-"Mana Control":"92",
-
-"Vitality":"31",
-
-"Luck":"222",
-
-
-"Stat Assessment":
-"Highly irregular support-oriented distribution. Physical stats comparatively modest while perception, intelligence, wisdom, charisma, mana, mana control, and luck substantially exceed expected values for current registered level.",
-
-"System Note":
-"Stat growth pattern does not correspond cleanly with recorded level progression. Further evaluation pending.",
-
-
-"HP":
-"1,420 / 1,420",
-
-"MP":
-"6,880 / 6,880",
-
-"Stamina":
-"1,760 / 1,760",
-
-"Mana Regeneration":
-"148/min",
-
-"HP Regeneration":
-"21/min",
-
-"Stamina Recovery":
-"64/min",
-
-"Status Effects":
-"None",
-
-"Permanent Conditions":
-"Severe-to-profound bilateral Deafness; permanent vestibular impairment",
-
-"System Compatibility":
-"Extremely High",
-
-"Mana Affinity":
-"Biological / Support / Beast",
-
-"Corruption Resistance":
-"91",
-
-"Mental Resistance":
-"84",
-
-"Pain Tolerance":
-"76",
-
-"Recovery Efficiency":
-"89",
-
-"Resource Note":
-"Resource values substantially exceed expectations for current level and registered rank. Biological stabilization unusually efficient.",
-
-
-"Primary Skill":
-"Nurture Kin",
-
-"Secondary Skill":
-"Mend",
-
-"Support Skill":
-"████████████",
-
-"Bond Skill":
-"Beloved Kin",
-
-"Emergency Skill":
-"████████████",
-
-"Additional Skill I":
-"████████████",
-
-"Additional Skill II":
-"████████████",
-
-"Additional Skill III":
-"████████████",
-
-"Passive Trait I":
-"Enhanced Creature Affinity",
-
-"Passive Trait II":
-"████████████",
-
-"Passive Trait III":
-"Biological Stabilization",
-
-"Passive Trait IV":
-"Emotional-State Recognition",
-
-"Passive Trait V":
-"Kin Growth Acceleration",
-
-"Passive Trait VI":
-"Regenerative Support",
-
-"Passive Trait VII":
-"████████████",
-
-"Passive Trait VIII":
-"████████████",
-
-"System Classification":
-"Support / Beast / ████████████",
-
-"Skills Note":
-"Several listed abilities do not correspond cleanly with registered Class data. Full classification remains incomplete.",
-
-
-"Primary Weapon":
-"Arcane dungeon-artifact handgun (Unregistered)",
-
-"Secondary Weapon":
-"Utility knife",
-
-"Head":
-"PENDING REVISION",
-
-"Torso":
-"PENDING REVISION",
-
-"Arms":
-"PENDING REVISION",
-
-"Legs":
-"PENDING REVISION",
-
-"Feet":
-"PENDING REVISION",
-
-"Accessory I":
-"PENDING REVISION",
-
-"Accessory II":
-"PENDING REVISION",
-
-"Accessory III":
-"PENDING REVISION",
-
-"Artifact / Relic":
-"Unregistered arcane sidearm",
-
-"Inventory Summary":
-"Medical supplies, creature treats, portable first-aid kit, water, nonlethal creature restraints, spare batteries, emergency flares, assorted snacks, small tools, and one pink emergency rubber duck.",
-
-"Equipment Style":
-"Mobility-first / support-capable / combat-ready",
-
-"Equipment Note":
-"Authority records contain no verified acquisition history for the artifact. When queried regarding its origin, user reports that the chicken gave it to him.",
-
-
-"Physical Resistance":"42",
-
-"Fire Resistance":"36",
-
-"Cold Resistance":"39",
-
-"Poison Resistance":"68",
-
-"Mental Resistance":"84",
-
-"Holy Resistance":"51",
-
-"Abyssal Resistance":"73",
-
-"Corruption Resistance":"91",
-
-"Primary Affinity":
-"Biological / Support / Beast",
-
-"Secondary Affinity":
-"Healing / Growth / ████████████",
-
-"Environmental Adaptation":
-"High",
-
-"Creature Compatibility":
-"Extremely High",
-
-"Status Resistance":
-"Above Average",
-
-"Resistance Note":
-"Resistance profile disproportionately strong against corruption, hostile mana, and biological destabilization. Portions of affinity structure remain inaccessible.",
-
-
-"Primary Lineage":
-"Human",
-
-"Secondary Lineage":
-"None",
-
-"Dormant Lineage(s)":
-"None detected",
-
-"Evolution Potential":
-"████████████",
-
-"Growth Classification":
-"████████████",
-
-"Inherited Supernatural Markers":
-"None",
-
-"Post-Awakening Biological Divergence":
-"Minimal in baseline body",
-
-"Evolutionary Influence":
-"████████████",
-
-"Compatible Evolution Pathways":
-"████████████",
-
-"Forced Evolution Capacity":
-"No confirmed data",
-
-"Species Preservation Response":
-"████████████",
-
-"Lineage Assessment":
-"████████████████████████",
-
-"Lineage Note":
-"No pre-E-Day supernatural ancestry detected. Observed supernatural phenomena are Awakening-derived.",
-
-
-"Primary Affiliation":
-"Independent Hunter Registry",
-
-"Secondary Affiliation":
-"Byrne-Seo Family",
-
-"Kin Compatible":
-"Yes",
-
-"Bond Type":
-"Voluntary / Reciprocal / Mana-Symbiotic",
-
-"Bonded Entity":
-"Nugget",
-
-"Bond Strength":
-"Extremely High",
-
-"Number of Confirmed Kin":
-"1",
-
-"Party Compatibility":
-"High",
-
-"Guild Compatibility":
-"Moderate",
-
-"Authority Compatibility":
-"Low to Moderate",
-
-"Family Bond Stability":
-"Extremely High",
-
-"Bonds Note":
-"Subject forms unusually deep, stable bonds without evidence of coercive control. Bonded entities retain independent will and behavior.",
-
-
-"Classification Status":
-"Incomplete / Ongoing",
-
-"Observed Growth Pattern":
-"Nonstandard",
-
-"Level Progression":
-"Significantly slower than expected for years since Awakening",
-
-"Stat Progression":
-"Disproportionately high relative to current level",
-
-"Creature Response":
-"Unusually positive across multiple species",
-
-"Bond Formation":
-"Voluntary, stable, unusually deep",
-
-"Hidden Interaction":
-"████████████████████",
-
-"Healing Interaction":
-"Confirmed; unusually efficient on compatible beings",
-
-"System Classification Conflict":
-"Multiple categories return partial matches only",
-
-"Black-Boxed Data":
-"Present",
-
-"Administrative Concern":
-"Subject repeatedly produces results inconsistent with registered C-Rank profile",
-
-"Behavioral Note":
-"High curiosity, low caution, strong protective response toward vulnerable creatures and people",
-
-"Combat Assessment":
-"Subject possesses meaningful direct-combat capability despite support-oriented classification and regularly fights alongside party members and Kin.",
-
-"System Flag":
-"CONTINUE OBSERVATION",
-
-"System Addendum":
-"DO NOT INTERPRET LOW LEVEL AS LOW POTENTIAL."
-
-}
-);
-
-
-/* =========================================
-   VAL GOVERNMENT DATA
-========================================= */
-
-Object.assign(
-val.government,
-{
-
-"Subject ID":
-"GHA-KR-022-VB",
-
-"File Classification":
-"Confidential",
-
-"Last Scan":
-"Current annual Hunter medical assessment",
-
-"Facility":
-"Seoul Metropolitan Hunter Authority Assessment Center",
-
-"Scanner Model":
-"Full-Spectrum Mana/Biological Scanner Mk. IV",
-
-"Scan Reliability":
-"87%",
-
-"Association Rank":
-"C-Rank",
-
-"Hunter License #":
-"KR-C-0414-VB",
-
-"Registered Hunter Name":
-"Nova",
-
-"Current Status":
-"Active",
-
-"Special File Flag":
-"CLASSIFICATION DISCREPANCY",
-
-"Administrative Note":
-"System-derived measurements repeatedly conflict with conventional C-Rank assessment parameters.",
-
-
-"Legal Name":
-"Valentine Byrne",
-
-"Korean Name":
-"Seo Sa-rang (서사랑)",
-
-"Date of Birth":
-"October 18, E-Day",
-
-"Age":
-"22",
-
-"Nationality":
-"Irish-Korean",
-
-"Citizenship":
-"Ireland / Republic of Korea",
-
-"Registered Sex":
-"Male / Intersex",
-
-"Gender":
-"Male",
-
-"Pronouns":
-"He / Him",
-
-"Hunter Name":
-"Nova",
-
-"Occupation":
-"Licensed Hunter / Independent Freelancer",
-
-"Primary Residence":
-"South Korea",
-
-"Languages":
-"English, Korean",
-
-"Signed Languages":
-"Irish Sign Language, Korean Sign Language",
-
-"Awakening Age":
-"12",
-
-"Years Awakened":
-"Approximately 10",
-
-"Registered Class":
-"Beast Tender [ASSUMED / PROVISIONAL]",
-
-"Registered Rank":
-"C-Rank",
-
-"Guild Affiliation":
-"None",
-
-"Permanent Party Affiliation":
-"None",
-
-
-"Height":
-"157 cm / 5'2\"",
-
-"Weight":
-"52 kg / 115 lb",
-
-"Build":
-"Small / lean / lightly athletic",
-
-"Hair":
-"Natural ginger-red; long; thick; naturally curly/wavy; approximately hip length",
-
-"Eyes":
-"Green",
-
-"Complexion":
-"Pale/light with extensive freckles",
-
-"Identifying Features":
-"Freckles; long ginger hair; multiple facial/body piercings; assorted notebook-doodle-style tattoos",
-
-"Ear Morphology":
-"Human",
-
-"Chest Profile":
-"Near-flat / minimal breast tissue",
-
-"External Genital Configuration":
-"Intersex anatomy; no penis",
-
-"Reproductive Capacity":
-"Potential gestational capacity confirmed",
-
-"Dominant Hand":
-"Right",
-
-"Blood Type":
-"O+",
-
-"Baseline Body Temperature":
-"36.7°C / 98.1°F",
-
-"Resting Heart Rate":
-"68 bpm",
-
-"Vision":
-"Normal / correction not required",
-
-
-"Hearing":
-"Severe-to-profound bilateral sensorineural Deafness",
-
-"Onset":
-"Acquired at approximately age 9",
-
-"Cause":
-"Severe bacterial meningitis",
-
-"Vestibular Function":
-"Permanently impaired",
-
-"Balance Assessment":
-"Highly adapted in familiar conditions; reduced stability in darkness, on unstable terrain, during rapid directional changes, or without reliable visual reference",
-
-"Speech Production":
-"Largely preserved following acquired hearing loss; articulation, vocal control, and spoken-language fluency remain functionally intact.",
-
-"Primary Communication":
-"Spoken English/Korean, ISL, KSL, text, and System-supported visual communication as appropriate",
-
-"Accessibility Requirements":
-"Visual alerts, accessible emergency information, direct visual communication, text/sign support when required",
-
-"Mobility":
-"Independently ambulatory",
-
-"Chronic Disease":
-"None currently active",
-
-"Neurological Status":
-"Stable",
-
-"Mana-Related Pathology":
-"None detected",
-
-"Known Allergies":
-"Kiwifruit — mild oral allergic reaction",
-
-"Allergy Clinical Note":
-"Subject reports that kiwifruit tastes spicy and delicious.",
-
-"Current Medication":
-"None routinely required",
-
-"Scarring":
-"Minor acquired scars consistent with ordinary life and Hunter activity",
-
-"Healing Classification":
-"Established Deafness and vestibular impairment are recorded as stable baseline physiology, not active injuries.",
-
-
-"Species Classification":
-"Human",
-
-"Supernatural Lineage Markers":
-"None detected",
-
-"Pre-E-Day Anomalous Ancestry":
-"None",
-
-"Mana Core":
-"Stable / unusually dense for registered rank",
-
-"Mana Capacity":
-"Far above expected C-Rank parameters",
-
-"Mana Control":
-"Exceptional",
-
-"Mana Signature":
-"Warm / biologically reactive / unusually responsive to living entities",
-
-"Mana Stability":
-"High",
-
-"Corruption Indicators":
-"None",
-
-"Pathological Mutation Indicators":
-"None detected",
-
-"Class-Induced Biological Alteration":
-"Minimal in baseline body",
-
-"Regenerative Response":
-"Above expected baseline",
-
-"Creature-Mana Compatibility":
-"Exceptionally high",
-
-"Cross-Species Mana Response":
-"Confirmed across multiple dungeon-creature classifications",
-
-"Creature Development Anomaly":
-"Documented in bonded entity Nugget; mechanism unresolved",
-
-"Scan Anomaly":
-"Multiple measurements exceed expected parameters for both registered level and rank",
-
-
-"Primary Role":
-"Creature specialist / support combatant",
-
-"Secondary Role":
-"Field medic / biological support",
-
-"Tertiary Role":
-"Creature handling / containment / Kin coordination",
-
-"Preferred Engagement Range":
-"Mid-range",
-
-"Direct Combat Rating":
-"Competent",
-
-"Support Rating":
-"Exceptional",
-
-"Creature Handling Rating":
-"Exceptional",
-
-"Field Adaptability":
-"High",
-
-"Improvisation":
-"Exceptional",
-
-"Team Compatibility":
-"High",
-
-"Solo Operational Clearance":
-"Approved for C-Rank assignments within licensing restrictions",
-
-"Dungeon Clearance":
-"C-Rank standard; higher-rank participation permitted under appropriate party authorization",
-
-"Primary Weapon":
-"Arcane dungeon-artifact handgun (Unregistered)",
-
-"Secondary Weapon":
-"Utility knife",
-
-"Artifact Provenance":
-"Unknown",
-
-"Authority Note":
-"No verified acquisition record exists for subject’s primary weapon. When questioned regarding its origin, subject reports that the chicken gave it to him.",
-
-"Combat Style":
-"Mobile ranged combat integrated with support, creature coordination, and battlefield improvisation",
-
-"Operational Weaknesses":
-"Lower raw physical power than dedicated frontline specialists; vestibular impairment may be aggravated by darkness, unstable terrain, rapid rotation, or severe spatial disorientation",
-
-"Operational Strengths":
-"Mana control, creature behavior recognition, field healing, ranged combat, improvisation, high perception, and unusually favorable probability outcomes",
-
-"Risk-Taking Assessment":
-"Elevated",
-
-"Self-Preservation Assessment":
-"⚠️ CONCERNING ⚠️",
-
-"Protective Instinct":
-"Extremely High",
-
-
-"Observed System Level":
-"Lv. 14",
-
-"Observed Luck":
-"222",
-
-"Level/Age Assessment":
-"Abnormally low level relative to approximately ten years since Awakening",
-
-"Stat/Level Assessment":
-"Multiple attributes substantially exceed expected Lv. 14 parameters",
-
-"Class Verification":
-"Failed / inconclusive",
-
-"Current Administrative Classification":
-"Beast Tender [ASSUMED]",
-
-"Rank Verification":
-"C-Rank retained pending reproducible evidence supporting reassessment",
-
-"Known Bonded Creature":
-"Nugget",
-
-"Bonded-Creature Concern":
-"Nugget has demonstrated developmental characteristics inconsistent with documented species norms",
-
-"Subject Involvement":
-"Probable; mechanism unconfirmed",
-
-"Threat Classification":
-"Low under ordinary conditions",
-
-"Potential Classification":
-"Unable to determine reliably",
-
-"Monitoring Recommendation":
-"Routine observation with anomaly reporting",
-
-"Containment Recommendation":
-"None",
-
-"Final Administrative Note":
-"Subject remains licensed for active field duty. Classification anomalies alone are insufficient grounds for restriction."
-
-}
-);
-
-
-/* =========================================
-   VAL PERSONAL DATA
-========================================= */
-
-Object.assign(
-val.personal,
-{
-
-"Name":
-"Valentine Byrne",
-
-"Korean Name":
-"Seo Sa-rang (서사랑)",
-
-"Preferred Name":
-"Val",
-
-"Hunter Name":
-"Nova",
-
-"Age":
-"22",
-
-"Birthday":
-"October 18 / E-Day",
-
-"Species":
-"Human",
-
-"Gender":
-"Male",
-
-"Pronouns":
-"He / Him",
-
-"Current Residence":
-"South Korea",
-
-"Occupation":
-"Independent Hunter / Freelancer",
-
-"Registered Rank":
-"C-Rank",
-
-"Registered Class":
-"Beast Tender [ASSUMED / PROVISIONAL]",
-
-"System Class":
-"[CLASS: CALCULATING…]",
-
-"Relationship Status":
-"Single",
-
-"Primary Kin":
-"Nugget",
-
-"Favorite Color":
-"Pink",
-
-"System Interface Theme":
-"Pink / personalized",
-
-"Profile Visibility":
-"Mostly Public / Privacy-Filtered",
-
-"System Familiarity":
-"Extremely High",
-
-
-"Personality Summary":
-"Affectionate, energetic, curious, impulsive, playful, stubborn, compassionate, expressive, nurturing, flirtatious, unconventional, and fiercely protective.",
-
-"General Disposition":
-"Friendly and socially confident. Approaches unfamiliar people, creatures, and situations with curiosity before caution.",
-
-"Social Energy":
-"High",
-
-"Emotional Openness":
-"High",
-
-"Independence":
-"High, occasionally to his own detriment",
-
-"Protective Instinct":
-"Extremely High",
-
-"Nurturing Instinct":
-"Extremely High",
-
-"Curiosity":
-"System recommends supervision.",
-
-"Impulse Control":
-"Variable",
-
-"Self-Preservation":
-"⚠️ [CONCERNING] ⚠️",
-
-"Humor":
-"Playful, teasing, irreverent, and occasionally inappropriate",
-
-"Conflict Style":
-"Expressive and direct under ordinary conflict; remains highly expressive when genuinely furious",
-
-"Core Behavioral Pattern":
-"Sees something strange → approaches it → attempts communication → probably feeds it",
-
-"System Observation":
-"User demonstrates substantially greater concern for the safety of others than for his own.",
-
-
-"Core Alignment":
-"Chaotic Good",
-
-"Primary Traits":
-"Affectionate, impulsive, curious, playful, nurturing, stubborn, expressive, protective",
-
-"Secondary Traits":
-"Flirtatious, irreverent, unconventional, emotionally intuitive, highly adaptable",
-
-"Social Confidence":
-"High",
-
-"Emotional Intelligence":
-"High",
-
-"Conventional Caution":
-"Low",
-
-"Practical Intelligence":
-"High",
-
-"Academic / Administrative Patience":
-"Low to Moderate",
-
-"Creature Empathy":
-"Exceptional",
-
-"Human Empathy":
-"High",
-
-"Protectiveness":
-"Extreme",
-
-"Stubbornness":
-"High",
-
-"Curiosity Level":
-"Extreme",
-
-"Impulse Control Pattern":
-"Inconsistent",
-
-"Risk Awareness":
-"Present",
-
-"Risk Compliance":
-"Frequently ignored",
-
-"Authority Response":
-"Cooperative when authority demonstrates competence and fairness; resistant to arbitrary control",
-
-"Rules Response":
-"Treats rules as guidelines until given a convincing reason not to",
-
-"Attachment Style":
-"Affectionate, tactile, loyal, and quick to emotionally invest",
-
-"Trust Pattern":
-"Social trust given fairly easily; deep trust requires demonstrated consistency",
-
-"Anger Pattern":
-"Highly expressive; facial expressions, gestures and signing become sharper and more emphatic",
-
-"Protective Escalation":
-"Rapid when children, Kin, vulnerable creatures, family, or loved ones are threatened",
-
-"Forgiveness":
-"Generous toward mistakes; significantly less forgiving toward deliberate cruelty",
-
-"Cruelty Tolerance":
-"Extremely Low",
-
-"Ableism Tolerance":
-"Extremely Low",
-
-"Emotional Resilience":
-"High",
-
-"Help-Seeking Behavior":
-"Generally comfortable for minor issues; less likely when he believes helping him may burden or endanger someone else",
-
-"Self-Advocacy":
-"Strong regarding accessibility, autonomy, and boundaries",
-
-"Primary Internal Contradiction":
-"Highly attentive to everyone else’s needs while often underestimating the seriousness of his own",
-
-"System Summary":
-"Temporary rescue status frequently becomes permanent adoption. User considers this outcome normal.",
-
-
-"Favorite Aesthetic":
-"Pastel Y2K / weirdcore / aliencore",
-
-"Favorite Clothing Style":
-"Cute, fitted, playful, slightly chaotic, usually with at least thirteen unnecessary accessories",
-
-"Favorite Creatures":
-"Ugly-cute dungeon creatures, unusual biological oddities, and anything other people immediately decide is unsettling",
-
-"Favorite Activity":
-"Spending time with creatures and figuring out their individual habits, moods, and needs",
-
-"Favorite Comfort Activity":
-"Curling up somewhere soft with creatures, snacks, and no responsibilities",
-
-"Favorite Social Activity":
-"Teasing people he likes until they react",
-
-"Favorite Kind of Person":
-"Kind, competent, patient, emotionally sincere",
-
-"Favorite Kind of Hunter":
-"Someone who protects without treating protection as ownership",
-
-"Favorite Food Profile":
-"Sweet, spicy, rich, snackable",
-
-"Favorite Snacks":
-"Cherries and chocolate",
-
-"Favorite Drink":
-"Sweet iced drinks",
-
-"Favorite Weather":
-"Mild, bright, breezy",
-
-"Favorite Time of Day":
-"Late evening",
-
-"Favorite Environment":
-"Cozy clutter over sterile perfection",
-
-"Favorite Gift Type":
-"Small, thoughtful, weirdly specific objects",
-
-"Favorite Physical Affection":
-"Cuddling, leaning, lap-sitting, casual touch, being held",
-
-"Favorite Compliment":
-"Recognition of his effort, kindness, competence, or care",
-
-"Preferred Sensory Comfort":
-"Visual warmth, soft textures, familiar scents, and steady physical contact",
-
-"Likes":
-"Creatures, affection, pink things, astronomy by association with his mother, strange artifacts, teasing, cozy clothes, pretty things, ugly things, weird things, snacks, being babied affectionately, and being included without being infantilized",
-
-"Strong Likes":
-"Family, Kin, creature rehabilitation, ridiculous accessories, competent people, and accessibility being treated as ordinary",
-
-"Dislikes":
-"Cruelty, condescension, being underestimated, unnecessary secrecy, arbitrary rules, being handled as incapable, and people making decisions for him",
-
-"Strong Dislikes":
-"Ableism, creature abuse, abandonment of dependents, coercive control, and performative pity",
-
-"Pet Peeve I":
-"People speaking about him instead of to him",
-
-"Pet Peeve II":
-"People assuming Deaf means incapable",
-
-"Pet Peeve III":
-"Being touched unexpectedly from behind without warning",
-
-"Instant Irritation Trigger":
-"For your own good used instead of an actual explanation",
-
-"Instant Anger Trigger":
-"Deliberate harm toward something weaker",
-
-"Instant Soft Spot":
-"Anything frightened, hungry, injured, abandoned, or trying very hard not to look scared",
-
-"Preference Observation":
-"User appears to recognize tiny, alarming, and needs help as a valid adoption category.",
-
-
-"Accessory Count":
-"Rarely leaves home wearing fewer than thirteen unnecessary accessories",
-
-"Creature Greeting Habit":
-"Greets unfamiliar creatures before deciding whether they are dangerous, typically accompanied by some variation of “Aww, look at the baby.”",
-
-"Naming Habit":
-"Assigns names to creatures, objects, and occasionally pieces of equipment with alarming speed",
-
-"Touch Habit":
-"Naturally tactile and has almost no instinctive sense of personal space unless someone specifically asks him to refrain",
-
-"Communication Habit":
-"Watches faces, hands, body language, and environmental movement almost constantly",
-
-"Attention Habit":
-"Frequently notices subtle emotional or behavioral changes in creatures and people before anyone explicitly explains them",
-
-"Balance Habit":
-"Automatically reaches for the nearest stable point when his vestibular system misfires, usually a wall, furniture, a Kin, or someone’s shoulder. Family, friends, and regular companions are so accustomed to it that most barely notice anymore.",
-
-"Pocket Habit":
-"Carries snacks, creature treats, small tools, and at least one item whose practical purpose is questionable",
-
-"Emergency Item":
-"Pink rubber duck. Classification: apparently essential.",
-
-"Collection Habit":
-"Accumulates strange trinkets, creature-related objects, unusual dungeon finds, and things he considers little guys",
-
-"Fashion Habit":
-"Changes accessories repeatedly before leaving, then adds more on the way out",
-
-"Hair Habit":
-"Frequently decorates his hair with clips, charms, pins, or whatever object has been declared wearable",
-
-"Creature-Care Learning Style":
-"Primarily instinctive and experience-based rather than academic. Learns creatures by spending time with them, watching their reactions, trying things, and remembering what works.",
-
-"Retention Pattern":
-"Once he figures out a creature’s habits, needs, warning signs, feeding preferences, or comfort behaviors, he remembers them unusually well.",
-
-"Administrative Habit":
-"Can spend approximately seventeen seconds looking at paperwork before developing a personal grievance against it",
-
-"Stress Habit":
-"Becomes more antsy, restless, and noticeably less focused",
-
-"Comfort Habit":
-"Seeks physical closeness when tired or emotionally drained",
-
-"Excitement Tell":
-"Becomes faster, more animated, and significantly more expressive with his hands",
-
-"Suspicion Tell":
-"Tilts his head, narrows his eyes, and becomes visibly suspicious",
-
-"Anger Tell":
-"Remains highly expressive even when genuinely furious; gestures, signing, expressions and speech become sharper and more emphatic",
-
-"Affection Tell":
-"Teasing frequency increases proportionally with attachment",
-
-"Embarrassment Tell":
-"Attempts to redirect attention by becoming even more shameless",
-
-"Sleep Habit":
-"Builds nests out of blankets, pillows, clothing, creatures, and consenting humans",
-
-"Food Habit":
-"Forgets meals while concentrating, then behaves as though starvation occurred unexpectedly",
-
-"Creature-Care Habit":
-"Talks or signs to creatures whether or not there is evidence they understand language",
-
-"Photography Habit":
-"Takes an unreasonable number of pictures of Kin doing completely ordinary things",
-
-"Kin-Specific Habit":
-"Treats Nugget’s hat selection as a legitimate wardrobe decision",
-
-"System Interaction Habit":
-"Argues with System notifications when he dislikes their wording",
-
-"System Observation I":
-"User has repeatedly informed this node that warnings are suggestions.",
-
-"System Clarification":
-"They are not.",
-
-"User Response":
-"Historically unconvinced.",
-
-"Habit Summary":
-"Temporary rescue status frequently becomes permanent adoption. User considers this outcome normal.",
-
-
-"Family Orientation":
-"Extremely family-centered",
-
-"Mother":
-"Han Seo-yeon",
-
-"Father":
-"Cillian Byrne",
-
-"Older Brother":
-"Seo Gun-woo (adopted)",
-
-"Family Bond Stability":
-"Extremely High",
-
-"Kin Bond Type":
-"Familial / Protective / Reciprocal",
-
-"Kin Relationship":
-"Valentine considers Nugget one of his babies. Nugget appears to consider Valentine his primary safe person.",
-
-"Kin Attachment Pattern":
-"Treats bonded creatures as family rather than possessions, summons, equipment, or subordinate units",
-
-"Kin Autonomy":
-"Strongly respected",
-
-"Kin Protective Response":
-"Extreme",
-
-"Friendship Pattern":
-"Forms friendships quickly when he feels safe, but deeper loyalty depends on demonstrated consistency",
-
-"Affection Style":
-"Verbal, signed, tactile, teasing, gift-giving, caretaking, and proximity-seeking",
-
-"Care Style":
-"Notices practical needs quickly and tends to act on them before being asked",
-
-"Receiving Care":
-"Extremely comfortable being fussed over, spoiled, cuddled, fed, checked for injuries, and dramatically babied by trusted people",
-
-"Minor Injury Behavior":
-"Fully capable of presenting a tiny scrape with a tragic expression and an “ohhhh nooo, I have a boo-boo 🥺” if sympathy is available",
-
-"Infantilization Response":
-"Immediate rejection. Affectionate babying is welcome; being treated as incapable or denied autonomy is not.",
-
-"Conflict With Loved Ones":
-"Direct and emotionally expressive. Prefers resolution over prolonged avoidance.",
-
-"Possessiveness":
-"Low regarding autonomy; high regarding emotional attachment and these are my people instincts",
-
-"Jealousy":
-"Generally rational and targeted",
-
-"Chosen-Family Response":
-"Extremely strong",
-
-"Leadership Bond Pattern":
-"Naturally leads his Kin, both human and nonhuman, through trust, protection, individual attention, and clear direction rather than coercive hierarchy",
-
-"Relationship Summary":
-"User’s social taxonomy appears to contain four primary categories: stranger, friend, family, and mine now.",
-
-
-"Baseline Emotional State":
-"Bright, expressive, affectionate, curious, and generally quick to recover from ordinary frustration",
-
-"Emotional Expression":
-"Very high",
-
-"Emotional Suppression":
-"More likely with serious fear, exhaustion, or situations where he thinks someone else needs him more",
-
-"Primary Comfort Need":
-"Physical closeness with someone or something he trusts",
-
-"Preferred Comfort":
-"Being held, cuddling, blankets, Kin nearby, familiar scents, snacks, and quiet visual company",
-
-"Comfort-Seeking Pattern":
-"Naturally gravitates toward family, Kin, or trusted people without always announcing that he needs comfort",
-
-"Family Comfort Behavior":
-"Completely comfortable being fussed over, fed, tucked in, checked for injuries, and shamelessly babied by his older brother",
-
-"Distress Tell":
-"Becomes more antsy, restless, and noticeably less focused",
-
-"Serious Distress Tell":
-"Continues trying to work or care for what needs doing even while visibly distressed. May be crying, shaky, distracted, or struggling to focus.",
-
-"Overwhelm Response":
-"Seeks familiar people, predictable physical contact, reduced demands, and a stable environment",
-
-"Isolation Preference":
-"Low. When overwhelmed and left to his own devices, Valentine tends to turn into a caterpillar, cocooning himself in whatever soft material is closest while still preferring trusted people nearby.",
-
-"Fear Response":
-"Highly expressive. May panic, cry, cling, swear, or visibly shake depending on severity, but can still act when someone needs him.",
-
-"Pain Response":
-"Openly dramatic about minor pain and perfectly willing to request sympathy",
-
-"Minor Injury Response":
-"🥺 I have been grievously wounded.",
-
-"Major Injury Response":
-"Checks everyone else first. Once he knows the people and Kin around him are safe, the fear catches up with him hard.",
-
-"Pain Observation":
-"Severity of complaint is frequently inversely proportional to severity of injury.",
-
-"Anger Response":
-"Remains visibly expressive. Genuine fury makes his gestures, signing, expressions, and speech sharper and more emphatic.",
-
-"Grief Response":
-"Poorly controlled and intensely expressed. Severe loss can leave Valentine openly sobbing, panicked, physically clinging to loved ones, and effectively inconsolable.",
-
-"Grief Self-Regulation":
-"Low during acute bereavement",
-
-"Separation During Grief":
-"Strongly discouraged",
-
-"Fear of Being Comforted":
-"Low",
-
-"Fear of Appearing Needy":
-"Low under normal circumstances",
-
-"Help-Seeking Difficulty":
-"Mostly appears when he believes helping him might burden or endanger someone else",
-
-"Reassurance Preference":
-"Concrete reassurance and action over vague promises",
-
-"Apology Preference":
-"Direct acknowledgment, changed behavior, and actual repair",
-
-"Conflict Recovery":
-"Usually quick when the problem is sincerely addressed",
-
-"Emotional Memory":
-"Strong",
-
-"Forgiveness Pattern":
-"Forgives accidents, ignorance, awkwardness, and honest mistakes relatively easily",
-
-"Non-Forgiveness Pattern":
-"Deliberate cruelty, repeated ableism after correction, exploitation of dependency, betrayal of vulnerable people, and intentional harm toward Kin are significantly harder to forgive",
-
-"Safety Association":
-"Home is primarily defined by people, not location",
-
-"Physical Safety Association":
-"Trusted arms around him, stable footing, visible exits, and knowing where his Kin are",
-
-"Emotional Safety Association":
-"Being taken seriously without being treated delicately",
-
-"Accessibility Comfort":
-"Prefers accommodations to happen naturally and matter-of-factly rather than becoming a performance centered on his Deafness",
-
-"Comfort Observation I":
-"User accepts affectionate babying enthusiastically.",
-
-"Comfort Observation II":
-"User rejects infantilization immediately.",
-
-"Comfort Addendum":
-"Difference is obvious."
-
-}
-);
-
-
-/* =========================================
-   STARTER DATABASE
-========================================= */
-
-const starterDB = {
-
-version:
-3,
-
-selected:
-"valentine-byrne",
-
-characters: {
-
-"valentine-byrne": {
-
-id:
-"valentine-byrne",
-
-name:
-"Valentine Byrne",
-
-snapshot:
-"Modern-story introduction snapshot",
-
-portrait:
-"",
-
-themes: {
-
-system:
-"#ff77cb",
-
-government:
-"#67d8ff",
-
-personal:
-"#c59cff"
-
-},
-
-data:
-val,
-
-custom: {
-
-system: {},
-government: {},
-personal: {}
-
-},
-
-updatedAt:
-new Date().toISOString()
-
-}
-
-}
-
-};
-
-
-/* =========================================
-   STATE
-========================================= */
-
-let db =
-loadDB();
-
-let currentSheet =
-"system";
-
-let preview =
-false;
-
-let sb =
-null;
-
-let session =
-null;
-
-
-/* =========================================
-   DATABASE HELPERS
-========================================= */
-
-function loadDB() {
-
-  try {
-
-    const raw =
-    localStorage.getItem(
-      DB_KEY
-    );
-
-    if (raw) {
-
-      return JSON.parse(
-        raw
-      );
-
-    }
-
-  }
-  catch(error) {}
-
-  return structuredClone(
-    starterDB
-  );
-
-}
-
-
-function persist() {
-
-  localStorage.setItem(
-    DB_KEY,
-    JSON.stringify(db)
-  );
-
-}
-
-
-function slugify(text) {
-
-  return text
-
-  .toLowerCase()
-
-  .trim()
-
-  .replace(
-    /[^a-z0-9]+/g,
-    "-"
-  )
-
-  .replace(
-    /^-|-$/g,
-    ""
-  )
-
-  ||
-
-  "character-" +
-  Date.now();
-
-}
-
-
-function char() {
-
-  return db.characters[
-    db.selected
-  ];
-
-}
-
-
-function escapeHTML(
-  text = ""
-) {
-
-  return String(text)
-  .replace(
-    /[&<>"']/g,
-    character => ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#39;"
-    })[character]
-  );
-
-}
-
-
-/* =========================================
-   FIELD RENDERING
-========================================= */
-
-function showValue(value) {
-
-  const clean =
-  (value || "")
-  .replace(
-    /\s/g,
-    ""
-  );
-
-  if (
-    /^█+$/.test(clean)
-  ) {
-
-    return `
-      <span class="blackout">
-        ${escapeHTML(value)}
-      </span>
-    `;
-
-  }
-
-  const warning =
-  (value || "")
-  .includes("⚠")
-
-  ? " warning"
-
-  : "";
-
-  return `
-    <span
-      class="field-value${warning}"
-      contenteditable="${preview ? "false" : "true"}"
-    >
-      ${escapeHTML(value || "")}
-    </span>
-  `;
-
-}
-
-
-/* =========================================
-   CHARACTER LIST
-========================================= */
-
-function renderList() {
-
-  const query =
-  (
-    document
-    .getElementById("search")
-    .value || ""
-  )
-  .toLowerCase();
-
-  const list =
-  document
-  .getElementById(
-    "characterList"
-  );
-
-  list.innerHTML =
-  "";
-
-  Object
-  .values(
-    db.characters
-  )
-
-  .filter(
-    character =>
-    character.name
-    .toLowerCase()
-    .includes(query)
-  )
-
-  .sort(
-    (a,b) =>
-    a.name
-    .localeCompare(
-      b.name
-    )
-  )
-
-  .forEach(
-    character => {
-
-      const button =
-      document
-      .createElement(
-        "button"
-      );
-
-      button.className =
-      "char-item" +
-      (
-        character.id === db.selected
-        ? " active"
-        : ""
-      );
-
-      const rank =
-
-      character
-      .data
-      .system[
-        "System Rank"
-      ]
-
-      ||
-
-      character
-      .data
-      .government[
-        "Registered Rank"
-      ]
-
-      ||
-
-      "";
-
-      button.innerHTML = `
-
-      ${
-        character.portrait
-
-        ? `
-        <img
-          class="mini-avatar"
-          src="${character.portrait}"
-        >
-        `
-
-        : `
-        <div
-          class="mini-avatar"
-        ></div>
-        `
-      }
-
-      <div>
-
-        <div class="char-name">
-          ${escapeHTML(character.name)}
-        </div>
-
-        <div class="char-meta">
-          ${escapeHTML(rank)}
-        </div>
-
-      </div>
-
-      `;
-
-      button.onclick =
-      () => {
-
-        db.selected =
-        character.id;
-
-        persist();
-
-        renderAll();
-
-      };
-
-      list.appendChild(
-        button
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================
-   SHEET RENDER
-========================================= */
-
-function renderSheet() {
-
-  const character =
-  char();
-
-  const schema =
-  SCHEMAS[
-    currentSheet
-  ];
-
-  const data =
-  character
-  .data[
-    currentSheet
-  ];
-
-  const custom =
-  character
-  .custom[
-    currentSheet
-  ]
-  || {};
-
-
-
-  document
-  .documentElement
-  .style
-  .setProperty(
-    "--system",
-    character.themes.system
-  );
-
-
-  document
-  .documentElement
-  .style
-  .setProperty(
-    "--government",
-    character.themes.government
-  );
-
-
-  document
-  .documentElement
-  .style
-  .setProperty(
-    "--personal",
-    character.themes.personal
-  );
-
-
-  document
-  .documentElement
-  .style
-  .setProperty(
-    "--accent",
-    character.themes[
-      currentSheet
-    ]
-  );
-
-
-
-  const themePanel = `
-
-  <div
-    class="card wide editable-only"
-  >
-
-    <h3>
-      Character Theme + Portrait
-    </h3>
-
-
-    <div class="portrait-wrap">
-
-
-      <div
-        class="portrait"
-        id="portraitBox"
-      >
-
-      ${
-        character.portrait
-
-        ? `
-        <img
-          src="${character.portrait}"
-        >
-        `
-
-        : "Insert Portrait"
-      }
-
-      </div>
-
-
-      <div class="portrait-controls">
-
-
-        <label>
-
-          Portrait image
-
-          <input
-            id="portraitInput"
-            type="file"
-            accept="image/*"
-          >
-
-        </label>
-
-
-        <button
-          class="ghost-btn"
-          onclick="clearPortrait()"
-        >
-          Clear portrait
-        </button>
-
-
-        <div class="color-row">
-
-
-          <div class="color-box">
-
-            <label>
-              System
-            </label>
-
-            <input
-              type="color"
-              value="${character.themes.system}"
-              onchange="setTheme('system',this.value)"
-            >
-
-          </div>
-
-
-          <div class="color-box">
-
-            <label>
-              Government
-            </label>
-
-            <input
-              type="color"
-              value="${character.themes.government}"
-              onchange="setTheme('government',this.value)"
-            >
-
-          </div>
-
-
-          <div class="color-box">
-
-            <label>
-              Personal
-            </label>
-
-            <input
-              type="color"
-              value="${character.themes.personal}"
-              onchange="setTheme('personal',this.value)"
-            >
-
-          </div>
-
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  `;
-
-
-
-  const cards =
-  schema.sections
-
-  .map(
-    (
-      [
-        title,
-        fields
-      ],
-      index
-    ) => {
-
-
-      const fixedFields =
-      fields
-
-      .map(
-        field => `
-
-        <div
-          class="field-row"
-          data-field="${escapeHTML(field)}"
-        >
-
-          <div class="field-label">
-            ${escapeHTML(field)}
-          </div>
-
-          ${showValue(
-            data[field]
-          )}
-
-        </div>
-
-        `
-      )
-
-      .join("");
-
-
-
-      const customFields =
-      (
-        custom[title]
-        ||
-        []
-      )
-
-      .map(
-        field => `
-
-        <div
-          class="field-row custom-row"
-          data-custom-id="${escapeHTML(field.id)}"
-        >
-
-          <div class="field-label">
-            ${escapeHTML(field.label)}
-          </div>
-
-          ${showValue(
-            field.value
-          )}
-
-          <button
-            class="delete-field editable-only"
-            title="Delete field"
-            onclick="deleteCustomField(
-              '${escapeHTML(title)}',
-              '${escapeHTML(field.id)}'
-            )"
-          >
-            ✕
-          </button>
-
-        </div>
-
-        `
-      )
-
-      .join("");
-
-
-
-      const wide =
-      index ===
-      schema.sections.length - 1
-
-      ? " wide"
-
-      : "";
-
-
-
-      return `
-
-      <div
-        class="card${wide}"
-        data-section="${escapeHTML(title)}"
-      >
-
-        <h3>
-          ${escapeHTML(title)}
-        </h3>
-
-        ${fixedFields}
-
-        ${customFields}
-
-        <button
-          class="add-field editable-only"
-          onclick="addCustomField('${escapeHTML(title)}')"
-        >
-          ＋ Add field
-        </button>
-
-      </div>
-
-      `;
-
-    }
-  )
-
-  .join("");
-
-
-
-  document
-  .getElementById(
-    "sheet"
-  )
-
-  .innerHTML = `
-
-  <div
-    class="sheet-shell ${schema.className}"
-  >
-
-
-    <div class="sheet-head">
-
-      <div>
-
-        <div class="sheet-title">
-          ${escapeHTML(schema.title)}
-        </div>
-
-        <div class="sheet-sub">
-          ${escapeHTML(schema.sub)}
-        </div>
-
-      </div>
-
-
-      <div class="badge">
-        ${escapeHTML(character.name)}
-      </div>
-
-    </div>
-
-
-    <div class="grid">
-
-      ${themePanel}
-
-      ${cards}
-
-    </div>
-
-
-    <div class="footer">
-
-      <span>
-        ${escapeHTML(schema.title)}
-        •
-        ${escapeHTML(schema.sub)}
-      </span>
-
-      <span>
-        ${escapeHTML(
-          character.snapshot
-          ||
-          "Introduction snapshot"
-        )}
-      </span>
-
-    </div>
-
-
-  </div>
-
-  `;
-
-
-  bindInlineEditing();
-
-
-  const portraitInput =
-  document
-  .getElementById(
-    "portraitInput"
-  );
-
-
-  if (
-    portraitInput
-  ) {
-
-    portraitInput
-    .onchange =
-    handlePortrait;
-
-  }
-
-}
-
-
-/* =========================================
-   INLINE EDITING
-========================================= */
-
-function bindInlineEditing() {
-
-  document
-  .querySelectorAll(
-    ".field-row"
-  )
-
-  .forEach(
-    row => {
-
-      const value =
-      row
-      .querySelector(
-        ".field-value"
-      );
-
-      if (
-        !value
-      ) {
-
-        return;
-
-      }
-
-
-      value
-      .addEventListener(
-        "input",
-        () => {
-
-          const character =
-          char();
-
-          const field =
-          row.dataset.field;
-
-          const customID =
-          row.dataset.customId;
-
-
-          if (
-            field
-          ) {
-
-            character
-            .data[
-              currentSheet
-            ][field]
-            =
-            value.innerText;
-
-          }
-
-
-          else if (
-            customID
-          ) {
-
-            const section =
-            row
-            .closest(
-              ".card"
-            )
-            .dataset
-            .section;
-
-            const item = (
-              character
-              .custom[
-                currentSheet
-              ][section]
-              ||
-              []
-            )
-            .find(
-              item =>
-              item.id ===
-              customID
-            );
-
-
-            if (
-              item
-            ) {
-
-              item.value =
-              value.innerText;
-
-            }
-
-          }
-
-
-          character.updatedAt =
-          new Date()
-          .toISOString();
-
-
-          debouncedPersist();
-
+      document.querySelectorAll(editableSelector).forEach((element, index) => {
+        if (data.html?.[index] !== undefined) element.innerHTML = data.html[index];
+      });
+
+      document.querySelectorAll(".portrait").forEach((element, index) => {
+        if (data.images?.[index]) element.innerHTML = `<img src="${data.images[index]}" alt="Uploaded portrait">`;
+      });
+
+      Object.entries(data.colors || {}).forEach(([id, color]) => {
+        const input = document.getElementById(id);
+        if (input && /^#[0-9a-f]{6}$/i.test(color)) {
+          input.value = color;
+          input.dispatchEvent(new Event("input"));
         }
-      );
+      });
 
-    }
-  );
-
-}
-
-
-/* =========================================
-   AUTOSAVE
-========================================= */
-
-let saveTimer;
-
-
-function debouncedPersist() {
-
-  clearTimeout(
-    saveTimer
-  );
-
-
-  saveTimer =
-  setTimeout(
-    () => {
-
-      persist();
-
-      renderList();
-
-    },
-    350
-  );
-
-}
-
-
-/* =========================================
-   RENDER ALL
-========================================= */
-
-function renderAll() {
-
-  const character =
-  char();
-
-
-  document
-  .getElementById(
-    "characterTitle"
-  )
-  .textContent =
-  character.name;
-
-
-  document
-  .getElementById(
-    "characterSnapshot"
-  )
-  .textContent =
-  character.snapshot
-  ||
-  "Introduction snapshot";
-
-
-  document
-  .getElementById(
-    "app"
-  )
-  .classList
-  .toggle(
-    "preview-mode",
-    preview
-  );
-
-
-  document
-  .querySelectorAll(
-    ".tab"
-  )
-
-  .forEach(
-    tab => {
-
-      tab
-      .classList
-      .toggle(
-        "active",
-        tab.dataset.sheet
-        ===
-        currentSheet
-      );
-
-    }
-  );
-
-
-  renderList();
-
-  renderSheet();
-
-  updateCloudBadge();
-
-}
-
-
-/* =========================================
-   TAB SWITCHING
-========================================= */
-
-document
-.querySelectorAll(
-  ".tab"
-)
-
-.forEach(
-  tab => {
-
-    tab.onclick =
-    () => {
-
-      currentSheet =
-      tab.dataset.sheet;
-
-      renderAll();
-
-    };
-
-  }
-);
-
-
-/* =========================================
-   SEARCH
-========================================= */
-
-document
-.getElementById(
-  "search"
-)
-
-.addEventListener(
-  "input",
-  renderList
-);
-
-
-/* =========================================
-   NEW CHARACTER
-========================================= */
-
-function newCharacter() {
-
-  const name =
-  prompt(
-    "Character name:"
-  );
-
-
-  if (
-    !name
-  ) {
-
-    return;
-
-  }
-
-
-  let id =
-  slugify(
-    name
-  );
-
-
-  while (
-    db.characters[id]
-  ) {
-
-    id +=
-    "-" +
-    Math.floor(
-      Math.random() * 99
-    );
-
-  }
-
-
-  db.characters[id] = {
-
-    id,
-
-    name,
-
-    snapshot:
-    "Modern-story introduction snapshot",
-
-    portrait:
-    "",
-
-    themes: {
-
-      system:
-      "#67d8ff",
-
-      government:
-      "#67d8ff",
-
-      personal:
-      "#c59cff"
-
-    },
-
-    data:
-    blankData(),
-
-    custom: {
-
-      system: {},
-      government: {},
-      personal: {}
-
-    },
-
-    updatedAt:
-    new Date()
-    .toISOString()
-
-  };
-
-
-  db.characters[id]
-  .data
-  .system[
-    "Name"
-  ]
-  =
-  name;
-
-
-  db.characters[id]
-  .data
-  .government[
-    "Legal Name"
-  ]
-  =
-  name;
-
-
-  db.characters[id]
-  .data
-  .personal[
-    "Name"
-  ]
-  =
-  name;
-
-
-  db.selected =
-  id;
-
-
-  persist();
-
-  renderAll();
-
-}
-
-
-/* =========================================
-   DUPLICATE CHARACTER
-========================================= */
-
-function duplicateCharacter() {
-
-  const source =
-  char();
-
-
-  const name =
-  prompt(
-    "Duplicate as:",
-    source.name +
-    " Copy"
-  );
-
-
-  if (
-    !name
-  ) {
-
-    return;
-
-  }
-
-
-  let id =
-  slugify(
-    name
-  );
-
-
-  while (
-    db.characters[id]
-  ) {
-
-    id +=
-    "-copy";
-
-  }
-
-
-  const copy =
-  structuredClone(
-    source
-  );
-
-
-  copy.id =
-  id;
-
-  copy.name =
-  name;
-
-  copy.updatedAt =
-  new Date()
-  .toISOString();
-
-
-  copy
-  .data
-  .system[
-    "Name"
-  ]
-  =
-  name;
-
-
-  copy
-  .data
-  .government[
-    "Legal Name"
-  ]
-  =
-  name;
-
-
-  copy
-  .data
-  .personal[
-    "Name"
-  ]
-  =
-  name;
-
-
-  db.characters[id] =
-  copy;
-
-
-  db.selected =
-  id;
-
-
-  persist();
-
-  renderAll();
-
-}
-
-
-/* =========================================
-   RENAME CHARACTER
-========================================= */
-
-function renameCharacter() {
-
-  const character =
-  char();
-
-
-  const name =
-  prompt(
-    "New name:",
-    character.name
-  );
-
-
-  if (
-    !name
-  ) {
-
-    return;
-
-  }
-
-
-  character.name =
-  name;
-
-
-  if (
-    character
-    .data
-    .system[
-      "Name"
-    ]
-  ) {
-
-    character
-    .data
-    .system[
-      "Name"
-    ]
-    =
-    name;
-
-  }
-
-
-  if (
-    character
-    .data
-    .government[
-      "Legal Name"
-    ]
-  ) {
-
-    character
-    .data
-    .government[
-      "Legal Name"
-    ]
-    =
-    name;
-
-  }
-
-
-  if (
-    character
-    .data
-    .personal[
-      "Name"
-    ]
-  ) {
-
-    character
-    .data
-    .personal[
-      "Name"
-    ]
-    =
-    name;
-
-  }
-
-
-  character.updatedAt =
-  new Date()
-  .toISOString();
-
-
-  persist();
-
-  renderAll();
-
-}
-
-
-/* =========================================
-   DELETE CHARACTER
-========================================= */
-
-function deleteCharacter() {
-
-  if (
-    Object.keys(
-      db.characters
-    ).length <= 1
-  ) {
-
-    alert(
-      "Keep at least one character."
-    );
-
-    return;
-
-  }
-
-
-  const character =
-  char();
-
-
-  if (
-    !confirm(
-      `Delete ${character.name}?`
-    )
-  ) {
-
-    return;
-
-  }
-
-
-  delete
-  db.characters[
-    character.id
-  ];
-
-
-  db.selected =
-  Object.keys(
-    db.characters
-  )[0];
-
-
-  persist();
-
-  renderAll();
-
-}
-
-
-/* =========================================
-   SAVE
-========================================= */
-
-function saveLocal() {
-
-  char().updatedAt =
-  new Date()
-  .toISOString();
-
-
-  persist();
-
-  renderList();
-
-
-  alert(
-    "Saved locally in this browser."
-  );
-
-}
-
-
-async function saveEverywhere() {
-
-  saveLocal();
-
-
-  if (
-    session
-  ) {
-
-    await
-    syncCurrentToCloud();
-
-  }
-
-}
-
-
-/* =========================================
-   PREVIEW
-========================================= */
-
-function togglePreview() {
-
-  preview =
-  !preview;
-
-  renderAll();
-
-}
-
-
-/* =========================================
-   THEME
-========================================= */
-
-function setTheme(
-  type,
-  value
-) {
-
-  char()
-  .themes[
-    type
-  ]
-  =
-  value;
-
-
-  char()
-  .updatedAt =
-  new Date()
-  .toISOString();
-
-
-  persist();
-
-  renderAll();
-
-}
-
-
-/* =========================================
-   PORTRAITS
-========================================= */
-
-function clearPortrait() {
-
-  char().portrait =
-  "";
-
-  persist();
-
-  renderAll();
-
-}
-
-
-function handlePortrait(
-  event
-) {
-
-  const file =
-  event
-  .target
-  .files?.[0];
-
-
-  if (
-    !file
-  ) {
-
-    return;
-
-  }
-
-
-  const reader =
-  new FileReader();
-
-
-  reader.onload =
-  event => {
-
-    const image =
-    new Image();
-
-
-    image.onload =
-    () => {
-
-      const max =
-      1000;
-
-
-      const scale =
-      Math.min(
-        1,
-        max /
-        Math.max(
-          image.width,
-          image.height
-        )
-      );
-
-
-      const canvas =
-      document
-      .createElement(
-        "canvas"
-      );
-
-
-      canvas.width =
-      Math.round(
-        image.width *
-        scale
-      );
-
-
-      canvas.height =
-      Math.round(
-        image.height *
-        scale
-      );
-
-
-      canvas
-      .getContext(
-        "2d"
-      )
-      .drawImage(
-        image,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
-
-
-      char().portrait =
-      canvas
-      .toDataURL(
-        "image/webp",
-        .82
-      );
-
-
-      char().updatedAt =
-      new Date()
-      .toISOString();
-
-
-      persist();
-
-      renderAll();
-
-    };
-
-
-    image.src =
-    event.target.result;
-
-  };
-
-
-  reader
-  .readAsDataURL(
-    file
-  );
-
-}
-
-
-/* =========================================
-   CUSTOM FIELDS
-========================================= */
-
-function addCustomField(
-  section
-) {
-
-  const label =
-  prompt(
-    "Field label:"
-  );
-
-
-  if (
-    !label
-  ) {
-
-    return;
-
-  }
-
-
-  const value =
-  prompt(
-    "Starting value:"
-  )
-  ||
-  "";
-
-
-  char()
-  .custom[
-    currentSheet
-  ][section]
-  ??=
-  [];
-
-
-  char()
-  .custom[
-    currentSheet
-  ][section]
-  .push({
-
-    id:
-    "f" +
-    Date.now(),
-
-    label,
-
-    value
-
-  });
-
-
-  persist();
-
-  renderSheet();
-
-}
-
-
-function deleteCustomField(
-  section,
-  id
-) {
-
-  char()
-  .custom[
-    currentSheet
-  ][section]
-  =
-  (
-    char()
-    .custom[
-      currentSheet
-    ][section]
-    ||
-    []
-  )
-  .filter(
-    item =>
-    item.id !== id
-  );
-
-
-  persist();
-
-  renderSheet();
-
-}
-
-
-/* =========================================
-   EXPORT
-========================================= */
-
-function exportDatabase() {
-
-  const blob =
-  new Blob(
-    [
-      JSON.stringify(
-        db,
-        null,
-        2
-      )
-    ],
-    {
-      type:
-      "application/json"
-    }
-  );
-
-
-  const anchor =
-  document
-  .createElement(
-    "a"
-  );
-
-
-  anchor.href =
-  URL.createObjectURL(
-    blob
-  );
-
-
-  anchor.download =
-  "class-unknown-character-database.json";
-
-
-  anchor.click();
-
-
-  URL
-  .revokeObjectURL(
-    anchor.href
-  );
-
-}
-
-
-/* =========================================
-   IMPORT
-========================================= */
-
-document
-.getElementById(
-  "importFile"
-)
-
-.onchange =
-async event => {
-
-  const file =
-  event
-  .target
-  .files?.[0];
-
-
-  if (
-    !file
-  ) {
-
-    return;
-
-  }
-
-
-  try {
-
-    const object =
-    JSON.parse(
-      await file.text()
-    );
-
-
-    if (
-      !object.characters
-    ) {
-
-      throw 0;
-
+      if (data.tab) activate(data.tab);
+      setSaveState("Profile restored", true);
     }
 
-
-    if (
-      confirm(
-        "Replace the current local database with this import?"
-      )
-    ) {
-
-      db =
-      object;
-
-      persist();
-
-      renderAll();
-
-    }
-
-  }
-
-  catch {
-
-    alert(
-      "That JSON file does not look like a Class: Unknown character database."
-    );
-
-  }
-
-
-  event.target.value =
-  "";
-
-};
-
-
-/* =========================================
-   CLOUD MODAL
-========================================= */
-
-function openCloud() {
-
-  const modal =
-  document
-  .getElementById(
-    "cloudModal"
-  );
-
-
-  const settings =
-  JSON.parse(
-    localStorage
-    .getItem(
-      SETTINGS_KEY
-    )
-    ||
-    "{}"
-  );
-
-
-  document
-  .getElementById(
-    "sbUrl"
-  )
-  .value =
-  settings.url
-  ||
-  "";
-
-
-  document
-  .getElementById(
-    "sbKey"
-  )
-  .value =
-  settings.key
-  ||
-  "";
-
-
-  modal
-  .classList
-  .add(
-    "open"
-  );
-
-}
-
-
-function closeCloud() {
-
-  document
-  .getElementById(
-    "cloudModal"
-  )
-  .classList
-  .remove(
-    "open"
-  );
-
-}
-
-
-/* =========================================
-   CONNECT SUPABASE
-========================================= */
-
-async function connectCloud() {
-
-  const url =
-  document
-  .getElementById(
-    "sbUrl"
-  )
-  .value
-  .trim();
-
-
-  const key =
-  document
-  .getElementById(
-    "sbKey"
-  )
-  .value
-  .trim();
-
-
-  const email =
-  document
-  .getElementById(
-    "sbEmail"
-  )
-  .value
-  .trim();
-
-
-  const password =
-  document
-  .getElementById(
-    "sbPassword"
-  )
-  .value;
-
-
-  if (
-    !url ||
-    !key ||
-    !email ||
-    !password
-  ) {
-
-    setCloudStatus(
-      "Fill in URL, anon key, email, and password."
-    );
-
-    return;
-
-  }
-
-
-  try {
-
-    localStorage
-    .setItem(
-      SETTINGS_KEY,
-      JSON.stringify({
-        url,
-        key
-      })
-    );
-
-
-    sb =
-    window
-    .supabase
-    .createClient(
-      url,
-      key
-    );
-
-
-    const {
-      data,
-      error
-    }
-    =
-    await sb.auth
-    .signInWithPassword({
-
-      email,
-
-      password
-
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.addEventListener("click", () => activate(tab.dataset.target));
     });
 
+    document.querySelectorAll(editableSelector).forEach((element) => {
+      element.addEventListener("input", scheduleSave);
+    });
 
-    if (
-      error
-    ) {
+    ["systemColor", "governmentColor", "personalColor"].forEach((id) => {
+      const input = document.getElementById(id);
+      input.addEventListener("input", () => {
+        const root = document.documentElement;
+        root.style.setProperty(`--${id.replace("Color", "")}`, input.value);
+        scheduleSave();
+      });
+    });
 
-      throw error;
+    document.querySelectorAll(".image-upload").forEach((input) => {
+      input.addEventListener("change", () => {
+        const file = input.files[0];
+        if (!file || !file.type.startsWith("image/")) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          const portrait = input.closest(".card").querySelector(".portrait");
+          if (portrait) portrait.innerHTML = `<img src="${reader.result}" alt="Uploaded portrait">`;
+          scheduleSave();
+        };
+        reader.readAsDataURL(file);
+      });
+    });
 
+    document.querySelectorAll(".blackout").forEach((element) => {
+      element.addEventListener("click", () => element.classList.toggle("revealed"));
+    });
+
+    document.getElementById("revealButton").addEventListener("click", () => {
+      document.querySelectorAll(".blackout").forEach((element) => element.classList.toggle("revealed"));
+    });
+
+    document.getElementById("saveButton").addEventListener("click", () => persist("Saved manually"));
+    document.getElementById("printButton").addEventListener("click", () => window.print());
+    document.getElementById("resetButton").addEventListener("click", () => {
+      if (confirm("Reset all saved edits, colors, and portraits?")) {
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
+      }
+    });
+
+    document.querySelector(".search").addEventListener("input", (event) => {
+      const query = event.target.value.trim().toLowerCase();
+      let count = 0;
+
+      document.querySelectorAll(".card").forEach((card) => {
+        const text = card.textContent.toLowerCase();
+        const visible = !query || text.includes(query);
+        card.style.display = visible ? "" : "none";
+        if (visible) count++;
+      });
+
+      const empty = document.getElementById("emptySearch");
+      empty.style.display = count === 0 ? "block" : "none";
+    });
+
+    const dialog = document.getElementById("importDialog");
+    const importFile = document.getElementById("importFile");
+
+    document.getElementById("importButton").addEventListener("click", () => {
+      importFile.value = "";
+      dialog.showModal();
+    });
+
+    document.getElementById("cancelImport").addEventListener("click", () => dialog.close());
+    document.getElementById("confirmImport").addEventListener("click", () => {
+      if (!importFile.files[0]) return dialog.close();
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          restore(JSON.parse(reader.result));
+          dialog.close();
+          setSaveState("Imported profile", true);
+        } catch {
+          alert("That file is not valid Class: Unknown profile data.");
+        }
+      };
+      reader.readAsText(importFile.files[0]);
+    });
+
+    document.getElementById("exportButton").addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(state(), null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "class-unknown-profile.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    try {
+      restore(JSON.parse(localStorage.getItem(STORAGE_KEY)));
+    } catch {
+      setSaveState("Ready. Changes autosave locally.");
     }
-
-
-    session =
-    data.session;
-
-
-    setCloudStatus(
-      "Connected. Pulling your characters…"
-    );
-
-
-    await
-    pullCloud();
-
-
-    setCloudStatus(
-      "Connected and synced."
-    );
-
-
-    updateCloudBadge();
-
-  }
-
-  catch(error) {
-
-    setCloudStatus(
-      "Connection failed: " +
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =========================================
-   RESTORE CLOUD SESSION
-========================================= */
-
-async function restoreCloud() {
-
-  const settings =
-  JSON.parse(
-    localStorage
-    .getItem(
-      SETTINGS_KEY
-    )
-    ||
-    "{}"
-  );
-
-
-  if (
-    !settings.url ||
-    !settings.key
-  ) {
-
-    return;
-
-  }
-
-
-  try {
-
-    sb =
-    window
-    .supabase
-    .createClient(
-      settings.url,
-      settings.key
-    );
-
-
-    const {
-      data
-    }
-    =
-    await sb.auth
-    .getSession();
-
-
-    session =
-    data.session;
-
-
-    if (
-      session
-    ) {
-
-      await
-      pullCloud();
-
-      updateCloudBadge();
-
-    }
-
-  }
-
-  catch(error) {}
-
-}
-
-
-/* =========================================
-   SIGN OUT
-========================================= */
-
-async function signOutCloud() {
-
-  if (
-    sb
-  ) {
-
-    await
-    sb.auth
-    .signOut();
-
-  }
-
-
-  session =
-  null;
-
-
-  updateCloudBadge();
-
-
-  setCloudStatus(
-    "Signed out."
-  );
-
-}
-
-
-/* =========================================
-   CLOUD STATUS
-========================================= */
-
-function setCloudStatus(
-  message
-) {
-
-  document
-  .getElementById(
-    "cloudStatus"
-  )
-  .textContent =
-  message;
-
-}
-
-
-function updateCloudBadge() {
-
-  const badge =
-  document
-  .getElementById(
-    "cloudBadge"
-  );
-
-
-  const dot =
-  document
-  .getElementById(
-    "syncDot"
-  );
-
-
-  if (
-    session
-  ) {
-
-    badge
-    .lastChild
-    .textContent =
-    " Cloud";
-
-
-    dot
-    .classList
-    .add(
-      "online"
-    );
-
-  }
-
-  else {
-
-    badge
-    .lastChild
-    .textContent =
-    " Local";
-
-
-    dot
-    .classList
-    .remove(
-      "online"
-    );
-
-  }
-
-}
-
-
-/* =========================================
-   SYNC CURRENT CHARACTER
-========================================= */
-
-async function syncCurrentToCloud() {
-
-  if (
-    !sb ||
-    !session
-  ) {
-
-    alert(
-      "Cloud sync is not connected. Local save is complete."
-    );
-
-    return;
-
-  }
-
-
-  const character =
-  char();
-
-
-  const row = {
-
-    user_id:
-    session.user.id,
-
-    character_id:
-    character.id,
-
-    name:
-    character.name,
-
-    payload:
-    character,
-
-    updated_at:
-    new Date()
-    .toISOString()
-
-  };
-
-
-  const {
-    error
-  }
-  =
-  await sb
-
-  .from(
-    "characters"
-  )
-
-  .upsert(
-    row,
-    {
-      onConflict:
-      "user_id,character_id"
-    }
-  );
-
-
-  if (
-    error
-  ) {
-
-    alert(
-      "Cloud sync failed: " +
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  alert(
-    "Saved locally and synced to Supabase."
-  );
-
-}
-
-
-/* =========================================
-   PULL CLOUD CHARACTERS
-========================================= */
-
-async function pullCloud() {
-
-  if (
-    !sb ||
-    !session
-  ) {
-
-    return;
-
-  }
-
-
-  const {
-    data,
-    error
-  }
-  =
-  await sb
-
-  .from(
-    "characters"
-  )
-
-  .select(
-    "*"
-  )
-
-  .eq(
-    "user_id",
-    session.user.id
-  );
-
-
-  if (
-    error
-  ) {
-
-    setCloudStatus(
-      "Could not load cloud data: " +
-      error.message
-    );
-
-    return;
-
-  }
-
-
-  if (
-    !data?.length
-  ) {
-
-    return;
-
-  }
-
-
-  for (
-    const row
-    of data
-  ) {
-
-    const remote =
-    row.payload;
-
-
-    const local =
-    db.characters[
-      row.character_id
-    ];
-
-
-    if (
-      !local
-      ||
-      new Date(
-        row.updated_at || 0
-      )
-      >
-      new Date(
-        local.updatedAt || 0
-      )
-    ) {
-
-      db.characters[
-        row.character_id
-      ]
-      =
-      remote;
-
-    }
-
-  }
-
-
-  if (
-    !db.characters[
-      db.selected
-    ]
-  ) {
-
-    db.selected =
-    Object.keys(
-      db.characters
-    )[0];
-
-  }
-
-
-  persist();
-
-  renderAll();
-
-}
-
-
-/* =========================================
-   START APP
-========================================= */
-
-renderAll();
-
-restoreCloud();
-
-</script>
-
+  </script>
 </body>
 </html>
