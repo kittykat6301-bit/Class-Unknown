@@ -1,0 +1,11 @@
+{
+  "name": "Class: Unknown",
+  "short_name": "Class Unknown",
+  "start_url": "./ios-app.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#040713",
+  "theme_color": "#040713",
+  "description": "Character database and profile editor.",
+  "icons": []
+}
