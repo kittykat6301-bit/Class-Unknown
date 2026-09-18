@@ -244,3 +244,6508 @@
   </script>
 </body>
 </html>
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Class: Unknown | Character Database</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+:root {
+  --bg: #040713;
+  --panel: #091021;
+  --panel2: #0d1730;
+
+  --ink: #edf8ff;
+  --muted: #8da5bd;
+
+  --line: rgba(129,221,255,.22);
+
+  --system: #ff77cb;
+  --government: #67d8ff;
+  --personal: #c59cff;
+
+  --accent: var(--system);
+
+  --warning: #ffe45c;
+  --danger: #ff708f;
+  --ok: #7fffb7;
+}
+
+
+/* =========================================
+   BASIC
+========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+
+  background:
+
+    radial-gradient(
+      circle at 12% 0,
+      rgba(255,119,203,.10),
+      transparent 27%
+    ),
+
+    radial-gradient(
+      circle at 92% 8%,
+      rgba(103,216,255,.10),
+      transparent 26%
+    ),
+
+    var(--bg);
+
+  color: var(--ink);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Arial,
+    sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+
+/* =========================================
+   APP LAYOUT
+========================================= */
+
+.app {
+
+  min-height: 100vh;
+
+  display: grid;
+
+  grid-template-columns:
+    280px 1fr;
+}
+
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+.sidebar {
+
+  position: sticky;
+
+  top: 0;
+
+  height: 100vh;
+
+  overflow: auto;
+
+  padding: 16px;
+
+  background:
+    rgba(4,7,19,.96);
+
+  border-right:
+    1px solid var(--line);
+}
+
+.brand {
+
+  font-weight: 950;
+
+  letter-spacing: .16em;
+
+  text-transform: uppercase;
+
+  font-size: 15px;
+}
+
+.brand small {
+
+  display: block;
+
+  color: var(--muted);
+
+  letter-spacing: .12em;
+
+  font-size: 10px;
+
+  margin-top: 4px;
+}
+
+.search {
+
+  width: 100%;
+
+  margin:
+    14px 0 10px;
+
+  padding:
+    10px 11px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    10px;
+
+  background:
+    #071025;
+
+  color:
+    var(--ink);
+
+  outline:
+    none;
+}
+
+.char-list {
+
+  display: grid;
+
+  gap: 7px;
+}
+
+.char-item {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  width: 100%;
+
+  padding: 10px;
+
+  border:
+    1px solid rgba(255,255,255,.06);
+
+  border-radius:
+    11px;
+
+  background:
+    #081126;
+
+  color:
+    var(--ink);
+
+  cursor:
+    pointer;
+
+  text-align:
+    left;
+}
+
+.char-item:hover,
+.char-item.active {
+
+  border-color:
+    var(--accent);
+
+  box-shadow:
+    0 0 14px
+    color-mix(
+      in srgb,
+      var(--accent) 16%,
+      transparent
+    );
+}
+
+.mini-avatar {
+
+  width: 34px;
+
+  height: 34px;
+
+  border-radius:
+    9px;
+
+  object-fit:
+    cover;
+
+  background:
+    #111a33;
+
+  border:
+    1px solid rgba(255,255,255,.10);
+}
+
+.char-name {
+
+  font-weight:
+    800;
+
+  font-size:
+    13px;
+}
+
+.char-meta {
+
+  font-size:
+    10px;
+
+  color:
+    var(--muted);
+
+  margin-top:
+    2px;
+}
+
+
+/* =========================================
+   SIDEBAR BUTTONS
+========================================= */
+
+.side-actions {
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:
+    7px;
+
+  margin-top:
+    10px;
+}
+
+.side-actions button,
+.ghost-btn,
+.primary-btn,
+.danger-btn {
+
+  border:
+    1px solid var(--line);
+
+  background:
+    #0b1530;
+
+  color:
+    var(--ink);
+
+  border-radius:
+    9px;
+
+  padding:
+    9px 10px;
+
+  cursor:
+    pointer;
+
+  font-weight:
+    750;
+}
+
+.side-actions button:hover,
+.ghost-btn:hover,
+.primary-btn:hover {
+
+  border-color:
+    var(--accent);
+}
+
+.danger-btn {
+
+  border-color:
+    rgba(255,112,143,.35);
+
+  color:
+    #ff9eb3;
+}
+
+.danger-btn:hover {
+
+  border-color:
+    var(--danger);
+}
+
+
+/* =========================================
+   MAIN
+========================================= */
+
+.main {
+
+  min-width:
+    0;
+
+  padding:
+    16px 18px 60px;
+}
+
+
+/* =========================================
+   TOP BAR
+========================================= */
+
+.topbar {
+
+  position:
+    sticky;
+
+  top:
+    0;
+
+  z-index:
+    20;
+
+  display:
+    flex;
+
+  gap:
+    9px;
+
+  align-items:
+    center;
+
+  flex-wrap:
+    wrap;
+
+  padding:
+    10px 12px;
+
+  margin-bottom:
+    12px;
+
+  background:
+    rgba(4,7,19,.92);
+
+  backdrop-filter:
+    blur(14px);
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    14px;
+}
+
+.character-title {
+
+  font-size:
+    18px;
+
+  font-weight:
+    900;
+
+  margin-right:
+    auto;
+}
+
+.badge {
+
+  font-size:
+    10px;
+
+  letter-spacing:
+    .12em;
+
+  text-transform:
+    uppercase;
+
+  color:
+    var(--accent);
+
+  border:
+    1px solid var(--accent);
+
+  border-radius:
+    99px;
+
+  padding:
+    5px 8px;
+}
+
+.primary-btn {
+
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 16%,
+      #0b1530
+    );
+
+  border-color:
+    var(--accent);
+}
+
+.sync-dot {
+
+  width:
+    9px;
+
+  height:
+    9px;
+
+  border-radius:
+    99px;
+
+  background:
+    #7b8796;
+
+  display:
+    inline-block;
+
+  margin-right:
+    4px;
+}
+
+.sync-dot.online {
+
+  background:
+    var(--ok);
+
+  box-shadow:
+    0 0 10px
+    var(--ok);
+}
+
+
+/* =========================================
+   TABS
+========================================= */
+
+.tabs {
+
+  display:
+    flex;
+
+  gap:
+    7px;
+
+  flex-wrap:
+    wrap;
+
+  margin:
+    10px 0 14px;
+}
+
+.tab {
+
+  border:
+    1px solid var(--line);
+
+  background:
+    #071025;
+
+  color:
+    var(--ink);
+
+  border-radius:
+    10px;
+
+  padding:
+    9px 12px;
+
+  font-weight:
+    800;
+
+  cursor:
+    pointer;
+}
+
+.tab.active {
+
+  border-color:
+    var(--accent);
+
+  background:
+    color-mix(
+      in srgb,
+      var(--accent) 13%,
+      #071025
+    );
+}
+
+
+/* =========================================
+   SHEETS
+========================================= */
+
+.sheet-shell {
+
+  --accent:
+    var(--system);
+
+  position:
+    relative;
+
+  overflow:
+    hidden;
+
+  border:
+    1px solid var(--accent);
+
+  border-radius:
+    18px;
+
+  padding:
+    16px;
+
+  background:
+
+    linear-gradient(
+      transparent 31px,
+      rgba(255,255,255,.022) 32px
+    ),
+
+    linear-gradient(
+      90deg,
+      transparent 31px,
+      rgba(255,255,255,.022) 32px
+    ),
+
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.03),
+      transparent 35%
+    ),
+
+    #060b18;
+
+  background-size:
+    32px 32px,
+    32px 32px,
+    auto,
+    auto;
+
+  box-shadow:
+
+    0 0 28px
+    color-mix(
+      in srgb,
+      var(--accent) 15%,
+      transparent
+    ),
+
+    inset 0 0 70px
+    rgba(0,0,0,.35);
+}
+
+.sheet-shell.government {
+  --accent:
+    var(--government);
+}
+
+.sheet-shell.personal {
+  --accent:
+    var(--personal);
+}
+
+
+/* =========================================
+   SHEET HEADER
+========================================= */
+
+.sheet-head {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  gap:
+    16px;
+
+  align-items:
+    center;
+
+  padding:
+    4px 2px 14px;
+
+  border-bottom:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--accent) 38%,
+      transparent
+    );
+}
+
+.sheet-title {
+
+  font-size:
+    clamp(24px,3vw,40px);
+
+  font-weight:
+    950;
+
+  letter-spacing:
+    .11em;
+
+  text-transform:
+    uppercase;
+
+  text-shadow:
+    0 0 14px
+    color-mix(
+      in srgb,
+      var(--accent) 48%,
+      transparent
+    );
+}
+
+.sheet-sub {
+
+  font-size:
+    11px;
+
+  color:
+    var(--accent);
+
+  letter-spacing:
+    .18em;
+
+  text-transform:
+    uppercase;
+
+  margin-top:
+    3px;
+}
+
+
+/* =========================================
+   GRID
+========================================= */
+
+.grid {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(12,1fr);
+
+  gap:
+    10px;
+
+  margin-top:
+    12px;
+}
+
+.card {
+
+  grid-column:
+    span 6;
+
+  padding:
+    12px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--accent) 30%,
+      transparent
+    );
+
+  border-radius:
+    12px;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.027),
+      rgba(255,255,255,.01)
+    );
+}
+
+.card.wide {
+
+  grid-column:
+    span 12;
+}
+
+.card.narrow {
+
+  grid-column:
+    span 4;
+}
+
+.card h3 {
+
+  margin:
+    0 0 10px;
+
+  color:
+    var(--accent);
+
+  font-size:
+    12px;
+
+  letter-spacing:
+    .15em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* =========================================
+   PROFILE FIELDS
+========================================= */
+
+.field-row {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    minmax(140px,.75fr)
+    1.35fr;
+
+  gap:
+    9px;
+
+  align-items:
+    start;
+
+  padding:
+    6px 0;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.05);
+}
+
+.field-label {
+
+  font-size:
+    10px;
+
+  letter-spacing:
+    .08em;
+
+  text-transform:
+    uppercase;
+
+  color:
+    var(--muted);
+
+  padding-top:
+    2px;
+}
+
+.field-value {
+
+  min-height:
+    1.2em;
+
+  outline:
+    none;
+
+  border-radius:
+    4px;
+
+  font-weight:
+    620;
+
+  white-space:
+    pre-wrap;
+
+  word-break:
+    break-word;
+}
+
+.field-value[contenteditable="true"]:focus {
+
+  background:
+    rgba(255,255,255,.06);
+
+  box-shadow:
+    inset 0 -1px 0
+    var(--accent);
+}
+
+
+/* =========================================
+   BLACKOUT + WARNINGS
+========================================= */
+
+.blackout {
+
+  display:
+    inline-block;
+
+  min-width:
+    130px;
+
+  background:
+    #010103;
+
+  color:
+    #010103;
+
+  border-radius:
+    2px;
+
+  user-select:
+    none;
+}
+
+.warning {
+
+  color:
+    var(--warning);
+
+  font-weight:
+    900;
+
+  text-shadow:
+    0 0 9px
+    rgba(255,228,92,.35);
+}
+
+
+/* =========================================
+   CUSTOM FIELDS
+========================================= */
+
+.add-field {
+
+  margin-top:
+    8px;
+
+  border:
+    1px dashed
+    color-mix(
+      in srgb,
+      var(--accent) 40%,
+      transparent
+    );
+
+  background:
+    transparent;
+
+  color:
+    var(--muted);
+
+  border-radius:
+    8px;
+
+  padding:
+    6px 8px;
+
+  cursor:
+    pointer;
+
+  font-size:
+    11px;
+}
+
+.add-field:hover {
+
+  color:
+    var(--ink);
+
+  border-color:
+    var(--accent);
+}
+
+.custom-row {
+
+  position:
+    relative;
+}
+
+.custom-row:hover
+.delete-field {
+
+  opacity:
+    1;
+}
+
+.delete-field {
+
+  opacity:
+    0;
+
+  position:
+    absolute;
+
+  right:
+    2px;
+
+  top:
+    4px;
+
+  border:
+    0;
+
+  background:
+    transparent;
+
+  color:
+    #ff8ca3;
+
+  cursor:
+    pointer;
+
+  font-size:
+    12px;
+}
+
+
+/* =========================================
+   PORTRAIT
+========================================= */
+
+.portrait-wrap {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    190px 1fr;
+
+  gap:
+    12px;
+
+  align-items:
+    start;
+}
+
+.portrait {
+
+  width:
+    190px;
+
+  aspect-ratio:
+    4 / 5;
+
+  border-radius:
+    12px;
+
+  overflow:
+    hidden;
+
+  border:
+    1px dashed
+    var(--accent);
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  background:
+
+    radial-gradient(
+      circle at 50% 30%,
+      color-mix(
+        in srgb,
+        var(--accent) 14%,
+        transparent
+      ),
+      transparent 64%
+    );
+
+  color:
+    var(--muted);
+}
+
+.portrait img {
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  object-fit:
+    cover;
+}
+
+.portrait-controls {
+
+  display:
+    grid;
+
+  gap:
+    8px;
+}
+
+.portrait-controls label {
+
+  font-size:
+    11px;
+
+  color:
+    var(--muted);
+}
+
+.portrait-controls input {
+
+  max-width:
+    100%;
+
+  color:
+    var(--muted);
+}
+
+
+/* =========================================
+   THEME COLORS
+========================================= */
+
+.color-row {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:
+    8px;
+}
+
+.color-box {
+
+  padding:
+    9px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    10px;
+
+  background:
+    #071025;
+}
+
+.color-box label {
+
+  display:
+    block;
+
+  font-size:
+    10px;
+
+  color:
+    var(--muted);
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    .08em;
+
+  margin-bottom:
+    6px;
+}
+
+.color-box input {
+
+  width:
+    100%;
+
+  height:
+    32px;
+
+  border:
+    0;
+
+  background:
+    transparent;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.footer {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  gap:
+    10px;
+
+  margin-top:
+    12px;
+
+  padding-top:
+    10px;
+
+  border-top:
+    1px solid rgba(255,255,255,.07);
+
+  color:
+    var(--muted);
+
+  font-size:
+    10px;
+
+  letter-spacing:
+    .12em;
+
+  text-transform:
+    uppercase;
+}
+
+
+/* =========================================
+   PREVIEW MODE
+========================================= */
+
+.preview-mode
+.editable-only {
+
+  display:
+    none !important;
+}
+
+.preview-mode
+[contenteditable="true"] {
+
+  pointer-events:
+    none;
+}
+
+.preview-mode
+.field-value {
+
+  box-shadow:
+    none !important;
+}
+
+
+/* =========================================
+   MODAL
+========================================= */
+
+.modal-backdrop {
+
+  position:
+    fixed;
+
+  inset:
+    0;
+
+  z-index:
+    99;
+
+  background:
+    rgba(0,0,0,.72);
+
+  display:
+    none;
+
+  place-items:
+    center;
+
+  padding:
+    18px;
+}
+
+.modal-backdrop.open {
+
+  display:
+    grid;
+}
+
+.modal {
+
+  width:
+    min(720px,100%);
+
+  max-height:
+    90vh;
+
+  overflow:
+    auto;
+
+  background:
+    #071025;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    16px;
+
+  padding:
+    16px;
+
+  box-shadow:
+    0 0 50px
+    rgba(0,0,0,.5);
+}
+
+.modal h2 {
+
+  margin:
+    0 0 12px;
+}
+
+.form-grid {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:
+    10px;
+}
+
+.form-grid .full {
+
+  grid-column:
+    1 / -1;
+}
+
+.form-grid label {
+
+  display:
+    grid;
+
+  gap:
+    5px;
+
+  font-size:
+    11px;
+
+  color:
+    var(--muted);
+}
+
+.form-grid input {
+
+  padding:
+    10px;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    9px;
+
+  background:
+    #050b1b;
+
+  color:
+    var(--ink);
+}
+
+.modal-actions {
+
+  display:
+    flex;
+
+  justify-content:
+    flex-end;
+
+  gap:
+    8px;
+
+  margin-top:
+    14px;
+}
+
+.small-note {
+
+  font-size:
+    11px;
+
+  color:
+    var(--muted);
+
+  line-height:
+    1.5;
+}
+
+.status-line {
+
+  font-size:
+    12px;
+
+  color:
+    var(--muted);
+
+  margin-top:
+    10px;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:980px) {
+
+  .app {
+
+    grid-template-columns:
+      1fr;
+  }
+
+  .sidebar {
+
+    position:
+      relative;
+
+    height:
+      auto;
+
+    border-right:
+      0;
+
+    border-bottom:
+      1px solid var(--line);
+  }
+
+  .char-list {
+
+    grid-template-columns:
+      repeat(
+        auto-fit,
+        minmax(180px,1fr)
+      );
+  }
+
+  .portrait-wrap {
+
+    grid-template-columns:
+      1fr;
+  }
+
+  .portrait {
+
+    width:
+      100%;
+
+    max-width:
+      260px;
+  }
+
+  .card,
+  .card.narrow {
+
+    grid-column:
+      span 12;
+  }
+}
+
+@media(max-width:620px) {
+
+  .main {
+
+    padding:
+      10px;
+  }
+
+  .field-row {
+
+    grid-template-columns:
+      1fr;
+  }
+
+  .form-grid {
+
+    grid-template-columns:
+      1fr;
+  }
+
+  .color-row {
+
+    grid-template-columns:
+      1fr;
+  }
+}
+
+
+/* =========================================
+   PRINT
+========================================= */
+
+@media print {
+
+  .sidebar,
+  .topbar,
+  .tabs,
+  .editable-only {
+
+    display:
+      none !important;
+  }
+
+  .app {
+
+    display:
+      block;
+  }
+
+  .main {
+
+    padding:
+      0;
+  }
+
+  .sheet-shell {
+
+    border-radius:
+      0;
+
+    box-shadow:
+      none;
+
+    min-height:
+      100vh;
+  }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div
+  class="app"
+  id="app"
+>
+
+
+<!-- =========================================
+     SIDEBAR
+========================================= -->
+
+<aside class="sidebar">
+
+<div class="brand">
+
+CLASS: UNKNOWN
+
+<small>
+Character Database
+</small>
+
+</div>
+
+
+<input
+  id="search"
+  class="search"
+  placeholder="Search characters…"
+>
+
+
+<div
+  id="characterList"
+  class="char-list"
+></div>
+
+
+<div class="side-actions editable-only">
+
+<button onclick="newCharacter()">
+＋ New
+</button>
+
+<button onclick="duplicateCharacter()">
+⧉ Duplicate
+</button>
+
+<button onclick="renameCharacter()">
+✎ Rename
+</button>
+
+<button
+  class="danger-btn"
+  onclick="deleteCharacter()"
+>
+Delete
+</button>
+
+</div>
+
+
+<div class="side-actions editable-only">
+
+<button onclick="exportDatabase()">
+Export JSON
+</button>
+
+<button
+  onclick="document.getElementById('importFile').click()"
+>
+Import JSON
+</button>
+
+<input
+  id="importFile"
+  type="file"
+  accept=".json,application/json"
+  hidden
+>
+
+<button onclick="openCloud()">
+Cloud Sync
+</button>
+
+<button onclick="togglePreview()">
+Preview
+</button>
+
+</div>
+
+</aside>
+
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main class="main">
+
+
+<div class="topbar">
+
+<div>
+
+<div
+  id="characterTitle"
+  class="character-title"
+>
+Valentine Byrne
+</div>
+
+<div
+  id="characterSnapshot"
+  style="
+    font-size:10px;
+    color:var(--muted);
+  "
+>
+Modern-story introduction snapshot
+</div>
+
+</div>
+
+
+<span
+  id="cloudBadge"
+  class="badge"
+>
+
+<span
+  id="syncDot"
+  class="sync-dot"
+></span>
+
+Local
+
+</span>
+
+
+<button
+  class="ghost-btn editable-only"
+  onclick="saveLocal()"
+>
+Save Local
+</button>
+
+
+<button
+  class="primary-btn editable-only"
+  onclick="saveEverywhere()"
+>
+Save + Sync
+</button>
+
+
+<button
+  class="ghost-btn"
+  onclick="window.print()"
+>
+Print / PDF
+</button>
+
+</div>
+
+
+
+<!-- =========================================
+     SHEET TABS
+========================================= -->
+
+<div class="tabs">
+
+<button
+  class="tab active"
+  data-sheet="system"
+>
+World System
+</button>
+
+<button
+  class="tab"
+  data-sheet="government"
+>
+Government Authority
+</button>
+
+<button
+  class="tab"
+  data-sheet="personal"
+>
+Personal Profile
+</button>
+
+</div>
+
+
+<section id="sheet"></section>
+
+</main>
+
+</div>
+
+
+
+<!-- =========================================
+     SUPABASE MODAL
+========================================= -->
+
+<div
+  id="cloudModal"
+  class="modal-backdrop"
+>
+
+<div class="modal">
+
+<h2>
+Supabase Cloud Sync
+</h2>
+
+<p class="small-note">
+
+Optional.
+
+Local saving works without Supabase.
+
+To sync characters across devices,
+create the Supabase table,
+then paste your project URL and
+publishable / anon key here.
+
+Your password is sent directly to
+Supabase and is not stored by this app.
+
+</p>
+
+
+<div class="form-grid">
+
+<label class="full">
+
+Project URL
+
+<input
+  id="sbUrl"
+  placeholder="https://YOURPROJECT.supabase.co"
+>
+
+</label>
+
+
+<label class="full">
+
+Anon / Publishable Key
+
+<input
+  id="sbKey"
+  placeholder="eyJ..."
+>
+
+</label>
+
+
+<label>
+
+Email
+
+<input
+  id="sbEmail"
+  type="email"
+  placeholder="you@example.com"
+>
+
+</label>
+
+
+<label>
+
+Password
+
+<input
+  id="sbPassword"
+  type="password"
+  placeholder="••••••••"
+>
+
+</label>
+
+</div>
+
+
+<div
+  id="cloudStatus"
+  class="status-line"
+>
+Not connected.
+</div>
+
+
+<div class="modal-actions">
+
+<button
+  class="ghost-btn"
+  onclick="closeCloud()"
+>
+Close
+</button>
+
+<button
+  class="ghost-btn"
+  onclick="signOutCloud()"
+>
+Sign Out
+</button>
+
+<button
+  class="primary-btn"
+  onclick="connectCloud()"
+>
+Connect / Sign In
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+/* =========================================
+   STORAGE
+========================================= */
+
+const DB_KEY =
+"classUnknown.characterDB.v3";
+
+const SETTINGS_KEY =
+"classUnknown.cloudSettings.v1";
+
+
+/* =========================================
+   SHEET SCHEMAS
+========================================= */
+
+const SCHEMAS = {
+
+
+/* =========================================
+   WORLD SYSTEM
+========================================= */
+
+system: {
+
+title:
+"World System",
+
+sub:
+"Entity Status File",
+
+className:
+"system",
+
+sections: [
+
+[
+"Basic Information",
+
+[
+"Name",
+"Known As",
+"Entity ID",
+"Species",
+"Class",
+"Class Type",
+"Class Rarity",
+"System Rank",
+"Level",
+"EXP",
+"Title(s)",
+"Status",
+"Potential",
+"Hunter Name",
+"Guild",
+"Party",
+"Occupation",
+"Current Residence",
+"Awakening Age",
+"Years Awakened"
+]
+
+],
+
+
+[
+"Core Stats",
+
+[
+"Strength",
+"Endurance",
+"Agility",
+"Dexterity",
+"Perception",
+"Intelligence",
+"Wisdom",
+"Charisma",
+"Mana",
+"Mana Control",
+"Vitality",
+"Luck",
+"Stat Assessment",
+"System Note"
+]
+
+],
+
+
+[
+"Resources & Condition",
+
+[
+"HP",
+"MP",
+"Stamina",
+"Mana Regeneration",
+"HP Regeneration",
+"Stamina Recovery",
+"Status Effects",
+"Permanent Conditions",
+"System Compatibility",
+"Mana Affinity",
+"Corruption Resistance",
+"Mental Resistance",
+"Pain Tolerance",
+"Recovery Efficiency",
+"Resource Note"
+]
+
+],
+
+
+[
+"Skills & Abilities",
+
+[
+"Primary Skill",
+"Secondary Skill",
+"Support Skill",
+"Bond Skill",
+"Emergency Skill",
+"Additional Skill I",
+"Additional Skill II",
+"Additional Skill III",
+"Passive Trait I",
+"Passive Trait II",
+"Passive Trait III",
+"Passive Trait IV",
+"Passive Trait V",
+"Passive Trait VI",
+"Passive Trait VII",
+"Passive Trait VIII",
+"System Classification",
+"Skills Note"
+]
+
+],
+
+
+[
+"Equipment & Inventory",
+
+[
+"Primary Weapon",
+"Secondary Weapon",
+"Head",
+"Torso",
+"Arms",
+"Legs",
+"Feet",
+"Accessory I",
+"Accessory II",
+"Accessory III",
+"Artifact / Relic",
+"Inventory Summary",
+"Equipment Style",
+"Equipment Note"
+]
+
+],
+
+
+[
+"Resistances & Affinities",
+
+[
+"Physical Resistance",
+"Fire Resistance",
+"Cold Resistance",
+"Poison Resistance",
+"Mental Resistance",
+"Holy Resistance",
+"Abyssal Resistance",
+"Corruption Resistance",
+"Primary Affinity",
+"Secondary Affinity",
+"Environmental Adaptation",
+"Creature Compatibility",
+"Status Resistance",
+"Resistance Note"
+]
+
+],
+
+
+[
+"Lineage & Evolution",
+
+[
+"Primary Lineage",
+"Secondary Lineage",
+"Dormant Lineage(s)",
+"Evolution Potential",
+"Growth Classification",
+"Inherited Supernatural Markers",
+"Post-Awakening Biological Divergence",
+"Evolutionary Influence",
+"Compatible Evolution Pathways",
+"Forced Evolution Capacity",
+"Species Preservation Response",
+"Lineage Assessment",
+"Lineage Note"
+]
+
+],
+
+
+[
+"Bonds & Affiliations",
+
+[
+"Primary Affiliation",
+"Secondary Affiliation",
+"Kin Compatible",
+"Bond Type",
+"Bonded Entity",
+"Bond Strength",
+"Number of Confirmed Kin",
+"Party Compatibility",
+"Guild Compatibility",
+"Authority Compatibility",
+"Family Bond Stability",
+"Bonds Note"
+]
+
+],
+
+
+[
+"System Notes",
+
+[
+"Classification Status",
+"Observed Growth Pattern",
+"Level Progression",
+"Stat Progression",
+"Creature Response",
+"Bond Formation",
+"Hidden Interaction",
+"Healing Interaction",
+"System Classification Conflict",
+"Black-Boxed Data",
+"Administrative Concern",
+"Behavioral Note",
+"Combat Assessment",
+"System Flag",
+"System Addendum"
+]
+
+]
+
+]
+
+},
+
+
+
+/* =========================================
+   GOVERNMENT
+========================================= */
+
+government: {
+
+title:
+"Government Hunter Authority",
+
+sub:
+"Biological & Operational File",
+
+className:
+"government",
+
+sections: [
+
+[
+"File Information",
+
+[
+"Subject ID",
+"File Classification",
+"Last Scan",
+"Facility",
+"Scanner Model",
+"Scan Reliability",
+"Association Rank",
+"Hunter License #",
+"Registered Hunter Name",
+"Current Status",
+"Special File Flag",
+"Administrative Note"
+]
+
+],
+
+
+[
+"Personal Information",
+
+[
+"Legal Name",
+"Korean Name",
+"Date of Birth",
+"Age",
+"Nationality",
+"Citizenship",
+"Registered Sex",
+"Gender",
+"Pronouns",
+"Hunter Name",
+"Occupation",
+"Primary Residence",
+"Languages",
+"Signed Languages",
+"Awakening Age",
+"Years Awakened",
+"Registered Class",
+"Registered Rank",
+"Guild Affiliation",
+"Permanent Party Affiliation"
+]
+
+],
+
+
+[
+"Physical Profile",
+
+[
+"Height",
+"Weight",
+"Build",
+"Hair",
+"Eyes",
+"Complexion",
+"Identifying Features",
+"Ear Morphology",
+"Chest Profile",
+"External Genital Configuration",
+"Reproductive Capacity",
+"Dominant Hand",
+"Blood Type",
+"Baseline Body Temperature",
+"Resting Heart Rate",
+"Vision"
+]
+
+],
+
+
+[
+"Medical & Sensory Profile",
+
+[
+"Hearing",
+"Onset",
+"Cause",
+"Vestibular Function",
+"Balance Assessment",
+"Speech Production",
+"Primary Communication",
+"Accessibility Requirements",
+"Mobility",
+"Chronic Disease",
+"Neurological Status",
+"Mana-Related Pathology",
+"Known Allergies",
+"Allergy Clinical Note",
+"Current Medication",
+"Scarring",
+"Healing Classification"
+]
+
+],
+
+
+[
+"Biological & Mana Scan",
+
+[
+"Species Classification",
+"Supernatural Lineage Markers",
+"Pre-E-Day Anomalous Ancestry",
+"Mana Core",
+"Mana Capacity",
+"Mana Control",
+"Mana Signature",
+"Mana Stability",
+"Corruption Indicators",
+"Pathological Mutation Indicators",
+"Class-Induced Biological Alteration",
+"Regenerative Response",
+"Creature-Mana Compatibility",
+"Cross-Species Mana Response",
+"Creature Development Anomaly",
+"Scan Anomaly"
+]
+
+],
+
+
+[
+"Operational Assessment",
+
+[
+"Primary Role",
+"Secondary Role",
+"Tertiary Role",
+"Preferred Engagement Range",
+"Direct Combat Rating",
+"Support Rating",
+"Creature Handling Rating",
+"Field Adaptability",
+"Improvisation",
+"Team Compatibility",
+"Solo Operational Clearance",
+"Dungeon Clearance",
+"Primary Weapon",
+"Secondary Weapon",
+"Artifact Provenance",
+"Authority Note",
+"Combat Style",
+"Operational Weaknesses",
+"Operational Strengths",
+"Risk-Taking Assessment",
+"Self-Preservation Assessment",
+"Protective Instinct"
+]
+
+],
+
+
+[
+"Government Classification Notes",
+
+[
+"Observed System Level",
+"Observed Luck",
+"Level/Age Assessment",
+"Stat/Level Assessment",
+"Class Verification",
+"Current Administrative Classification",
+"Rank Verification",
+"Known Bonded Creature",
+"Bonded-Creature Concern",
+"Subject Involvement",
+"Threat Classification",
+"Potential Classification",
+"Monitoring Recommendation",
+"Containment Recommendation",
+"Final Administrative Note"
+]
+
+]
+
+]
+
+},
+
+
+
+/* =========================================
+   PERSONAL PROFILE
+========================================= */
+
+personal: {
+
+title:
+"World System",
+
+sub:
+"Personal Profile File",
+
+className:
+"personal",
+
+sections: [
+
+[
+"Basic Identity",
+
+[
+"Name",
+"Korean Name",
+"Preferred Name",
+"Hunter Name",
+"Age",
+"Birthday",
+"Species",
+"Gender",
+"Pronouns",
+"Current Residence",
+"Occupation",
+"Registered Rank",
+"Registered Class",
+"System Class",
+"Relationship Status",
+"Primary Kin",
+"Favorite Color",
+"System Interface Theme",
+"Profile Visibility",
+"System Familiarity"
+]
+
+],
+
+
+[
+"Profile Summary",
+
+[
+"Personality Summary",
+"General Disposition",
+"Social Energy",
+"Emotional Openness",
+"Independence",
+"Protective Instinct",
+"Nurturing Instinct",
+"Curiosity",
+"Impulse Control",
+"Self-Preservation",
+"Humor",
+"Conflict Style",
+"Core Behavioral Pattern",
+"System Observation"
+]
+
+],
+
+
+[
+"Personality Core",
+
+[
+"Core Alignment",
+"Primary Traits",
+"Secondary Traits",
+"Social Confidence",
+"Emotional Intelligence",
+"Conventional Caution",
+"Practical Intelligence",
+"Academic / Administrative Patience",
+"Creature Empathy",
+"Human Empathy",
+"Protectiveness",
+"Stubbornness",
+"Curiosity Level",
+"Impulse Control Pattern",
+"Risk Awareness",
+"Risk Compliance",
+"Authority Response",
+"Rules Response",
+"Attachment Style",
+"Trust Pattern",
+"Anger Pattern",
+"Protective Escalation",
+"Forgiveness",
+"Cruelty Tolerance",
+"Ableism Tolerance",
+"Emotional Resilience",
+"Help-Seeking Behavior",
+"Self-Advocacy",
+"Primary Internal Contradiction",
+"System Summary"
+]
+
+],
+
+
+[
+"Likes & Dislikes",
+
+[
+"Favorite Color",
+"Favorite Aesthetic",
+"Favorite Clothing Style",
+"Favorite Creatures",
+"Favorite Activity",
+"Favorite Comfort Activity",
+"Favorite Social Activity",
+"Favorite Kind of Person",
+"Favorite Kind of Hunter",
+"Favorite Food Profile",
+"Favorite Snacks",
+"Favorite Drink",
+"Favorite Weather",
+"Favorite Time of Day",
+"Favorite Environment",
+"Favorite Gift Type",
+"Favorite Physical Affection",
+"Favorite Compliment",
+"Preferred Sensory Comfort",
+"Likes",
+"Strong Likes",
+"Dislikes",
+"Strong Dislikes",
+"Pet Peeve I",
+"Pet Peeve II",
+"Pet Peeve III",
+"Instant Irritation Trigger",
+"Instant Anger Trigger",
+"Instant Soft Spot",
+"Preference Observation"
+]
+
+],
+
+
+[
+"Habits & Quirks",
+
+[
+"Accessory Count",
+"Creature Greeting Habit",
+"Naming Habit",
+"Touch Habit",
+"Communication Habit",
+"Attention Habit",
+"Balance Habit",
+"Pocket Habit",
+"Emergency Item",
+"Collection Habit",
+"Fashion Habit",
+"Hair Habit",
+"Creature-Care Learning Style",
+"Retention Pattern",
+"Administrative Habit",
+"Stress Habit",
+"Comfort Habit",
+"Excitement Tell",
+"Suspicion Tell",
+"Anger Tell",
+"Affection Tell",
+"Embarrassment Tell",
+"Sleep Habit",
+"Food Habit",
+"Creature-Care Habit",
+"Photography Habit",
+"Kin-Specific Habit",
+"System Interaction Habit",
+"System Observation I",
+"System Clarification",
+"User Response",
+"Habit Summary"
+]
+
+],
+
+
+[
+"Relationships & Bonds",
+
+[
+"Family Orientation",
+"Mother",
+"Father",
+"Older Brother",
+"Family Bond Stability",
+"Primary Kin",
+"Kin Bond Type",
+"Kin Relationship",
+"Kin Attachment Pattern",
+"Kin Autonomy",
+"Kin Protective Response",
+"Friendship Pattern",
+"Affection Style",
+"Care Style",
+"Receiving Care",
+"Minor Injury Behavior",
+"Infantilization Response",
+"Conflict With Loved Ones",
+"Possessiveness",
+"Jealousy",
+"Chosen-Family Response",
+"Leadership Bond Pattern",
+"Relationship Summary"
+]
+
+],
+
+
+[
+"Comfort & Emotional Patterns",
+
+[
+"Baseline Emotional State",
+"Emotional Expression",
+"Emotional Suppression",
+"Primary Comfort Need",
+"Preferred Comfort",
+"Comfort-Seeking Pattern",
+"Family Comfort Behavior",
+"Distress Tell",
+"Serious Distress Tell",
+"Overwhelm Response",
+"Isolation Preference",
+"Fear Response",
+"Pain Response",
+"Minor Injury Response",
+"Major Injury Response",
+"Pain Observation",
+"Anger Response",
+"Grief Response",
+"Grief Self-Regulation",
+"Separation During Grief",
+"Fear of Being Comforted",
+"Fear of Appearing Needy",
+"Help-Seeking Difficulty",
+"Reassurance Preference",
+"Apology Preference",
+"Conflict Recovery",
+"Emotional Memory",
+"Forgiveness Pattern",
+"Non-Forgiveness Pattern",
+"Safety Association",
+"Physical Safety Association",
+"Emotional Safety Association",
+"Accessibility Comfort",
+"Comfort Observation I",
+"Comfort Observation II",
+"Comfort Addendum"
+]
+
+],
+
+
+[
+"Values & Motivations",
+
+[
+"Core Value",
+"Primary Motivation",
+"Secondary Motivation",
+"Family Value",
+"Kin Value",
+"Autonomy",
+"Consent",
+"Protection",
+"Compassion",
+"Mercy",
+"Cruelty",
+"Accessibility",
+"Disability Philosophy",
+"Healing Philosophy",
+"Evolution Philosophy",
+"Leadership Philosophy",
+"Authority Philosophy",
+"Power Philosophy",
+"Strength Philosophy",
+"Rank Philosophy",
+"Creature Philosophy",
+"Knowledge Philosophy",
+"Failure Response",
+"Primary Long-Term Goal",
+"Professional Motivation",
+"Kin Motivation",
+"Human-Kin Motivation",
+"Romantic Motivation",
+"Material Ambition",
+"Recognition",
+"Legacy"
+]
+
+],
+
+
+[
+"Fears & Vulnerabilities",
+
+[
+"Primary Fear",
+"Secondary Fear",
+"Family Loss Fear",
+"Kin Loss Fear",
+"Abandonment Fear",
+"Helplessness Trigger",
+"Medical Helplessness Trigger",
+"Control Vulnerability",
+"Protective Vulnerability",
+"Self-Sacrifice Risk",
+"Failure Vulnerability",
+"Guilt Pattern",
+"Grief Vulnerability",
+"Grief Presentation",
+"Separation During Grief",
+"Fear Response After Crisis",
+"Major Injury Fear",
+"Creature Harm Vulnerability",
+"Child Harm Vulnerability",
+"Ableism Vulnerability",
+"Pity Response",
+"Underestimation Response",
+"Sensory Vulnerability",
+"Accessibility Failure Vulnerability",
+"Dependence Vulnerability",
+"Fear of Death",
+"Fear of Own Disability",
+"Fear of Being Fixed",
+"Fear of Intimacy",
+"Fear of Commitment",
+"Fear of Vulnerability",
+"Emotional Blind Spot",
+"Protective Blind Spot",
+"Vulnerability Warning I",
+"Vulnerability Warning II",
+"Vulnerability Observation",
+"Vulnerability Assessment"
+]
+
+],
+
+
+[
+"Private / Locked Data",
+
+[
+"Privacy Classification",
+"Medical History",
+"Reproductive / Anatomical Data",
+"Gestational Capacity",
+"Biological Scan Access",
+"System-Class Investigation Data",
+"Black-Boxed Class Fields",
+"Relationship Detail",
+"Relationship Visibility",
+"Location Privacy",
+"Private Emotional Flag",
+"Private Grief Flag",
+"Private Protective Flag",
+"Kin Classification Data",
+"Consent Directive",
+"Emergency Override",
+"Audit Access",
+"Locked Internal Note",
+"System Internal Status"
+]
+
+],
+
+
+[
+"Final System Observations",
+
+[
+"Behavioral Consistency",
+"Decision Pattern",
+"Kin Recognition",
+"Human Kin Response",
+"Leadership Pattern",
+"Bond Stability",
+"Bond Failure Pattern",
+"Class Prediction",
+"Potential Ceiling",
+"Growth Model",
+"Registered Rank Reliability",
+"Notable Contradiction",
+"System Concern",
+"System Recommendation",
+"Historical Compliance",
+"Accessibility Recommendation",
+"Current Classification Status",
+"Threat Designation",
+"Observation Status",
+"Final System Note",
+"Personal Node Addendum I",
+"Personal Node Addendum II"
+]
+
+]
+
+]
+
+}
+
+};
+
+
+/* =========================================
+   EMPTY DATA TEMPLATE
+========================================= */
+
+function blankData() {
+
+  const output = {
+
+    system: {},
+    government: {},
+    personal: {}
+
+  };
+
+  for (
+    const [
+      sheet,
+      schema
+    ]
+    of Object.entries(SCHEMAS)
+  ) {
+
+    for (
+      const [
+        section,
+        fields
+      ]
+      of schema.sections
+    ) {
+
+      for (
+        const field
+        of fields
+      ) {
+
+        output[sheet][field] = "";
+
+      }
+
+    }
+
+  }
+
+  return output;
+
+}
+
+
+/* =========================================
+   VALENTINE STARTER DATA
+========================================= */
+
+const val =
+blankData();
+
+
+Object.assign(
+val.system,
+{
+
+"Name":
+"Valentine Byrne",
+
+"Known As":
+"Val; Seo Sa-rang (서사랑)",
+
+"Entity ID":
+"VB-022-EDAY",
+
+"Species":
+"Human",
+
+"Class":
+"[CLASS: CALCULATING…]",
+
+"Class Type":
+"Beast / Support / ████████████",
+
+"Class Rarity":
+"████████████",
+
+"System Rank":
+"C-Rank",
+
+"Level":
+"Lv. 14",
+
+"EXP":
+"18,420 / 24,000",
+
+"Title(s)":
+"Beast Tender",
+
+"Status":
+"Active",
+
+"Potential":
+"Unbounded / Unable to Determine",
+
+"Hunter Name":
+"Nova",
+
+"Guild":
+"None",
+
+"Party":
+"None permanently registered",
+
+"Occupation":
+"Independent Hunter / Freelancer",
+
+"Current Residence":
+"South Korea",
+
+"Awakening Age":
+"12",
+
+"Years Awakened":
+"Approximately 10",
+
+
+"Strength":"22",
+
+"Endurance":"28",
+
+"Agility":"41",
+
+"Dexterity":"46",
+
+"Perception":"67",
+
+"Intelligence":"71",
+
+"Wisdom":"74",
+
+"Charisma":"83",
+
+"Mana":"119",
+
+"Mana Control":"92",
+
+"Vitality":"31",
+
+"Luck":"222",
+
+
+"Stat Assessment":
+"Highly irregular support-oriented distribution. Physical stats comparatively modest while perception, intelligence, wisdom, charisma, mana, mana control, and luck substantially exceed expected values for current registered level.",
+
+"System Note":
+"Stat growth pattern does not correspond cleanly with recorded level progression. Further evaluation pending.",
+
+
+"HP":
+"1,420 / 1,420",
+
+"MP":
+"6,880 / 6,880",
+
+"Stamina":
+"1,760 / 1,760",
+
+"Mana Regeneration":
+"148/min",
+
+"HP Regeneration":
+"21/min",
+
+"Stamina Recovery":
+"64/min",
+
+"Status Effects":
+"None",
+
+"Permanent Conditions":
+"Severe-to-profound bilateral Deafness; permanent vestibular impairment",
+
+"System Compatibility":
+"Extremely High",
+
+"Mana Affinity":
+"Biological / Support / Beast",
+
+"Corruption Resistance":
+"91",
+
+"Mental Resistance":
+"84",
+
+"Pain Tolerance":
+"76",
+
+"Recovery Efficiency":
+"89",
+
+"Resource Note":
+"Resource values substantially exceed expectations for current level and registered rank. Biological stabilization unusually efficient.",
+
+
+"Primary Skill":
+"Nurture Kin",
+
+"Secondary Skill":
+"Mend",
+
+"Support Skill":
+"████████████",
+
+"Bond Skill":
+"Beloved Kin",
+
+"Emergency Skill":
+"████████████",
+
+"Additional Skill I":
+"████████████",
+
+"Additional Skill II":
+"████████████",
+
+"Additional Skill III":
+"████████████",
+
+"Passive Trait I":
+"Enhanced Creature Affinity",
+
+"Passive Trait II":
+"████████████",
+
+"Passive Trait III":
+"Biological Stabilization",
+
+"Passive Trait IV":
+"Emotional-State Recognition",
+
+"Passive Trait V":
+"Kin Growth Acceleration",
+
+"Passive Trait VI":
+"Regenerative Support",
+
+"Passive Trait VII":
+"████████████",
+
+"Passive Trait VIII":
+"████████████",
+
+"System Classification":
+"Support / Beast / ████████████",
+
+"Skills Note":
+"Several listed abilities do not correspond cleanly with registered Class data. Full classification remains incomplete.",
+
+
+"Primary Weapon":
+"Arcane dungeon-artifact handgun (Unregistered)",
+
+"Secondary Weapon":
+"Utility knife",
+
+"Head":
+"PENDING REVISION",
+
+"Torso":
+"PENDING REVISION",
+
+"Arms":
+"PENDING REVISION",
+
+"Legs":
+"PENDING REVISION",
+
+"Feet":
+"PENDING REVISION",
+
+"Accessory I":
+"PENDING REVISION",
+
+"Accessory II":
+"PENDING REVISION",
+
+"Accessory III":
+"PENDING REVISION",
+
+"Artifact / Relic":
+"Unregistered arcane sidearm",
+
+"Inventory Summary":
+"Medical supplies, creature treats, portable first-aid kit, water, nonlethal creature restraints, spare batteries, emergency flares, assorted snacks, small tools, and one pink emergency rubber duck.",
+
+"Equipment Style":
+"Mobility-first / support-capable / combat-ready",
+
+"Equipment Note":
+"Authority records contain no verified acquisition history for the artifact. When queried regarding its origin, user reports that the chicken gave it to him.",
+
+
+"Physical Resistance":"42",
+
+"Fire Resistance":"36",
+
+"Cold Resistance":"39",
+
+"Poison Resistance":"68",
+
+"Mental Resistance":"84",
+
+"Holy Resistance":"51",
+
+"Abyssal Resistance":"73",
+
+"Corruption Resistance":"91",
+
+"Primary Affinity":
+"Biological / Support / Beast",
+
+"Secondary Affinity":
+"Healing / Growth / ████████████",
+
+"Environmental Adaptation":
+"High",
+
+"Creature Compatibility":
+"Extremely High",
+
+"Status Resistance":
+"Above Average",
+
+"Resistance Note":
+"Resistance profile disproportionately strong against corruption, hostile mana, and biological destabilization. Portions of affinity structure remain inaccessible.",
+
+
+"Primary Lineage":
+"Human",
+
+"Secondary Lineage":
+"None",
+
+"Dormant Lineage(s)":
+"None detected",
+
+"Evolution Potential":
+"████████████",
+
+"Growth Classification":
+"████████████",
+
+"Inherited Supernatural Markers":
+"None",
+
+"Post-Awakening Biological Divergence":
+"Minimal in baseline body",
+
+"Evolutionary Influence":
+"████████████",
+
+"Compatible Evolution Pathways":
+"████████████",
+
+"Forced Evolution Capacity":
+"No confirmed data",
+
+"Species Preservation Response":
+"████████████",
+
+"Lineage Assessment":
+"████████████████████████",
+
+"Lineage Note":
+"No pre-E-Day supernatural ancestry detected. Observed supernatural phenomena are Awakening-derived.",
+
+
+"Primary Affiliation":
+"Independent Hunter Registry",
+
+"Secondary Affiliation":
+"Byrne-Seo Family",
+
+"Kin Compatible":
+"Yes",
+
+"Bond Type":
+"Voluntary / Reciprocal / Mana-Symbiotic",
+
+"Bonded Entity":
+"Nugget",
+
+"Bond Strength":
+"Extremely High",
+
+"Number of Confirmed Kin":
+"1",
+
+"Party Compatibility":
+"High",
+
+"Guild Compatibility":
+"Moderate",
+
+"Authority Compatibility":
+"Low to Moderate",
+
+"Family Bond Stability":
+"Extremely High",
+
+"Bonds Note":
+"Subject forms unusually deep, stable bonds without evidence of coercive control. Bonded entities retain independent will and behavior.",
+
+
+"Classification Status":
+"Incomplete / Ongoing",
+
+"Observed Growth Pattern":
+"Nonstandard",
+
+"Level Progression":
+"Significantly slower than expected for years since Awakening",
+
+"Stat Progression":
+"Disproportionately high relative to current level",
+
+"Creature Response":
+"Unusually positive across multiple species",
+
+"Bond Formation":
+"Voluntary, stable, unusually deep",
+
+"Hidden Interaction":
+"████████████████████",
+
+"Healing Interaction":
+"Confirmed; unusually efficient on compatible beings",
+
+"System Classification Conflict":
+"Multiple categories return partial matches only",
+
+"Black-Boxed Data":
+"Present",
+
+"Administrative Concern":
+"Subject repeatedly produces results inconsistent with registered C-Rank profile",
+
+"Behavioral Note":
+"High curiosity, low caution, strong protective response toward vulnerable creatures and people",
+
+"Combat Assessment":
+"Subject possesses meaningful direct-combat capability despite support-oriented classification and regularly fights alongside party members and Kin.",
+
+"System Flag":
+"CONTINUE OBSERVATION",
+
+"System Addendum":
+"DO NOT INTERPRET LOW LEVEL AS LOW POTENTIAL."
+
+}
+);
+
+
+/* =========================================
+   VAL GOVERNMENT DATA
+========================================= */
+
+Object.assign(
+val.government,
+{
+
+"Subject ID":
+"GHA-KR-022-VB",
+
+"File Classification":
+"Confidential",
+
+"Last Scan":
+"Current annual Hunter medical assessment",
+
+"Facility":
+"Seoul Metropolitan Hunter Authority Assessment Center",
+
+"Scanner Model":
+"Full-Spectrum Mana/Biological Scanner Mk. IV",
+
+"Scan Reliability":
+"87%",
+
+"Association Rank":
+"C-Rank",
+
+"Hunter License #":
+"KR-C-0414-VB",
+
+"Registered Hunter Name":
+"Nova",
+
+"Current Status":
+"Active",
+
+"Special File Flag":
+"CLASSIFICATION DISCREPANCY",
+
+"Administrative Note":
+"System-derived measurements repeatedly conflict with conventional C-Rank assessment parameters.",
+
+
+"Legal Name":
+"Valentine Byrne",
+
+"Korean Name":
+"Seo Sa-rang (서사랑)",
+
+"Date of Birth":
+"October 18, E-Day",
+
+"Age":
+"22",
+
+"Nationality":
+"Irish-Korean",
+
+"Citizenship":
+"Ireland / Republic of Korea",
+
+"Registered Sex":
+"Male / Intersex",
+
+"Gender":
+"Male",
+
+"Pronouns":
+"He / Him",
+
+"Hunter Name":
+"Nova",
+
+"Occupation":
+"Licensed Hunter / Independent Freelancer",
+
+"Primary Residence":
+"South Korea",
+
+"Languages":
+"English, Korean",
+
+"Signed Languages":
+"Irish Sign Language, Korean Sign Language",
+
+"Awakening Age":
+"12",
+
+"Years Awakened":
+"Approximately 10",
+
+"Registered Class":
+"Beast Tender [ASSUMED / PROVISIONAL]",
+
+"Registered Rank":
+"C-Rank",
+
+"Guild Affiliation":
+"None",
+
+"Permanent Party Affiliation":
+"None",
+
+
+"Height":
+"157 cm / 5'2\"",
+
+"Weight":
+"52 kg / 115 lb",
+
+"Build":
+"Small / lean / lightly athletic",
+
+"Hair":
+"Natural ginger-red; long; thick; naturally curly/wavy; approximately hip length",
+
+"Eyes":
+"Green",
+
+"Complexion":
+"Pale/light with extensive freckles",
+
+"Identifying Features":
+"Freckles; long ginger hair; multiple facial/body piercings; assorted notebook-doodle-style tattoos",
+
+"Ear Morphology":
+"Human",
+
+"Chest Profile":
+"Near-flat / minimal breast tissue",
+
+"External Genital Configuration":
+"Intersex anatomy; no penis",
+
+"Reproductive Capacity":
+"Potential gestational capacity confirmed",
+
+"Dominant Hand":
+"Right",
+
+"Blood Type":
+"O+",
+
+"Baseline Body Temperature":
+"36.7°C / 98.1°F",
+
+"Resting Heart Rate":
+"68 bpm",
+
+"Vision":
+"Normal / correction not required",
+
+
+"Hearing":
+"Severe-to-profound bilateral sensorineural Deafness",
+
+"Onset":
+"Acquired at approximately age 9",
+
+"Cause":
+"Severe bacterial meningitis",
+
+"Vestibular Function":
+"Permanently impaired",
+
+"Balance Assessment":
+"Highly adapted in familiar conditions; reduced stability in darkness, on unstable terrain, during rapid directional changes, or without reliable visual reference",
+
+"Speech Production":
+"Largely preserved following acquired hearing loss; articulation, vocal control, and spoken-language fluency remain functionally intact.",
+
+"Primary Communication":
+"Spoken English/Korean, ISL, KSL, text, and System-supported visual communication as appropriate",
+
+"Accessibility Requirements":
+"Visual alerts, accessible emergency information, direct visual communication, text/sign support when required",
+
+"Mobility":
+"Independently ambulatory",
+
+"Chronic Disease":
+"None currently active",
+
+"Neurological Status":
+"Stable",
+
+"Mana-Related Pathology":
+"None detected",
+
+"Known Allergies":
+"Kiwifruit — mild oral allergic reaction",
+
+"Allergy Clinical Note":
+"Subject reports that kiwifruit tastes spicy and delicious.",
+
+"Current Medication":
+"None routinely required",
+
+"Scarring":
+"Minor acquired scars consistent with ordinary life and Hunter activity",
+
+"Healing Classification":
+"Established Deafness and vestibular impairment are recorded as stable baseline physiology, not active injuries.",
+
+
+"Species Classification":
+"Human",
+
+"Supernatural Lineage Markers":
+"None detected",
+
+"Pre-E-Day Anomalous Ancestry":
+"None",
+
+"Mana Core":
+"Stable / unusually dense for registered rank",
+
+"Mana Capacity":
+"Far above expected C-Rank parameters",
+
+"Mana Control":
+"Exceptional",
+
+"Mana Signature":
+"Warm / biologically reactive / unusually responsive to living entities",
+
+"Mana Stability":
+"High",
+
+"Corruption Indicators":
+"None",
+
+"Pathological Mutation Indicators":
+"None detected",
+
+"Class-Induced Biological Alteration":
+"Minimal in baseline body",
+
+"Regenerative Response":
+"Above expected baseline",
+
+"Creature-Mana Compatibility":
+"Exceptionally high",
+
+"Cross-Species Mana Response":
+"Confirmed across multiple dungeon-creature classifications",
+
+"Creature Development Anomaly":
+"Documented in bonded entity Nugget; mechanism unresolved",
+
+"Scan Anomaly":
+"Multiple measurements exceed expected parameters for both registered level and rank",
+
+
+"Primary Role":
+"Creature specialist / support combatant",
+
+"Secondary Role":
+"Field medic / biological support",
+
+"Tertiary Role":
+"Creature handling / containment / Kin coordination",
+
+"Preferred Engagement Range":
+"Mid-range",
+
+"Direct Combat Rating":
+"Competent",
+
+"Support Rating":
+"Exceptional",
+
+"Creature Handling Rating":
+"Exceptional",
+
+"Field Adaptability":
+"High",
+
+"Improvisation":
+"Exceptional",
+
+"Team Compatibility":
+"High",
+
+"Solo Operational Clearance":
+"Approved for C-Rank assignments within licensing restrictions",
+
+"Dungeon Clearance":
+"C-Rank standard; higher-rank participation permitted under appropriate party authorization",
+
+"Primary Weapon":
+"Arcane dungeon-artifact handgun (Unregistered)",
+
+"Secondary Weapon":
+"Utility knife",
+
+"Artifact Provenance":
+"Unknown",
+
+"Authority Note":
+"No verified acquisition record exists for subject’s primary weapon. When questioned regarding its origin, subject reports that the chicken gave it to him.",
+
+"Combat Style":
+"Mobile ranged combat integrated with support, creature coordination, and battlefield improvisation",
+
+"Operational Weaknesses":
+"Lower raw physical power than dedicated frontline specialists; vestibular impairment may be aggravated by darkness, unstable terrain, rapid rotation, or severe spatial disorientation",
+
+"Operational Strengths":
+"Mana control, creature behavior recognition, field healing, ranged combat, improvisation, high perception, and unusually favorable probability outcomes",
+
+"Risk-Taking Assessment":
+"Elevated",
+
+"Self-Preservation Assessment":
+"⚠️ CONCERNING ⚠️",
+
+"Protective Instinct":
+"Extremely High",
+
+
+"Observed System Level":
+"Lv. 14",
+
+"Observed Luck":
+"222",
+
+"Level/Age Assessment":
+"Abnormally low level relative to approximately ten years since Awakening",
+
+"Stat/Level Assessment":
+"Multiple attributes substantially exceed expected Lv. 14 parameters",
+
+"Class Verification":
+"Failed / inconclusive",
+
+"Current Administrative Classification":
+"Beast Tender [ASSUMED]",
+
+"Rank Verification":
+"C-Rank retained pending reproducible evidence supporting reassessment",
+
+"Known Bonded Creature":
+"Nugget",
+
+"Bonded-Creature Concern":
+"Nugget has demonstrated developmental characteristics inconsistent with documented species norms",
+
+"Subject Involvement":
+"Probable; mechanism unconfirmed",
+
+"Threat Classification":
+"Low under ordinary conditions",
+
+"Potential Classification":
+"Unable to determine reliably",
+
+"Monitoring Recommendation":
+"Routine observation with anomaly reporting",
+
+"Containment Recommendation":
+"None",
+
+"Final Administrative Note":
+"Subject remains licensed for active field duty. Classification anomalies alone are insufficient grounds for restriction."
+
+}
+);
+
+
+/* =========================================
+   VAL PERSONAL DATA
+========================================= */
+
+Object.assign(
+val.personal,
+{
+
+"Name":
+"Valentine Byrne",
+
+"Korean Name":
+"Seo Sa-rang (서사랑)",
+
+"Preferred Name":
+"Val",
+
+"Hunter Name":
+"Nova",
+
+"Age":
+"22",
+
+"Birthday":
+"October 18 / E-Day",
+
+"Species":
+"Human",
+
+"Gender":
+"Male",
+
+"Pronouns":
+"He / Him",
+
+"Current Residence":
+"South Korea",
+
+"Occupation":
+"Independent Hunter / Freelancer",
+
+"Registered Rank":
+"C-Rank",
+
+"Registered Class":
+"Beast Tender [ASSUMED / PROVISIONAL]",
+
+"System Class":
+"[CLASS: CALCULATING…]",
+
+"Relationship Status":
+"Single",
+
+"Primary Kin":
+"Nugget",
+
+"Favorite Color":
+"Pink",
+
+"System Interface Theme":
+"Pink / personalized",
+
+"Profile Visibility":
+"Mostly Public / Privacy-Filtered",
+
+"System Familiarity":
+"Extremely High",
+
+
+"Personality Summary":
+"Affectionate, energetic, curious, impulsive, playful, stubborn, compassionate, expressive, nurturing, flirtatious, unconventional, and fiercely protective.",
+
+"General Disposition":
+"Friendly and socially confident. Approaches unfamiliar people, creatures, and situations with curiosity before caution.",
+
+"Social Energy":
+"High",
+
+"Emotional Openness":
+"High",
+
+"Independence":
+"High, occasionally to his own detriment",
+
+"Protective Instinct":
+"Extremely High",
+
+"Nurturing Instinct":
+"Extremely High",
+
+"Curiosity":
+"System recommends supervision.",
+
+"Impulse Control":
+"Variable",
+
+"Self-Preservation":
+"⚠️ [CONCERNING] ⚠️",
+
+"Humor":
+"Playful, teasing, irreverent, and occasionally inappropriate",
+
+"Conflict Style":
+"Expressive and direct under ordinary conflict; remains highly expressive when genuinely furious",
+
+"Core Behavioral Pattern":
+"Sees something strange → approaches it → attempts communication → probably feeds it",
+
+"System Observation":
+"User demonstrates substantially greater concern for the safety of others than for his own.",
+
+
+"Core Alignment":
+"Chaotic Good",
+
+"Primary Traits":
+"Affectionate, impulsive, curious, playful, nurturing, stubborn, expressive, protective",
+
+"Secondary Traits":
+"Flirtatious, irreverent, unconventional, emotionally intuitive, highly adaptable",
+
+"Social Confidence":
+"High",
+
+"Emotional Intelligence":
+"High",
+
+"Conventional Caution":
+"Low",
+
+"Practical Intelligence":
+"High",
+
+"Academic / Administrative Patience":
+"Low to Moderate",
+
+"Creature Empathy":
+"Exceptional",
+
+"Human Empathy":
+"High",
+
+"Protectiveness":
+"Extreme",
+
+"Stubbornness":
+"High",
+
+"Curiosity Level":
+"Extreme",
+
+"Impulse Control Pattern":
+"Inconsistent",
+
+"Risk Awareness":
+"Present",
+
+"Risk Compliance":
+"Frequently ignored",
+
+"Authority Response":
+"Cooperative when authority demonstrates competence and fairness; resistant to arbitrary control",
+
+"Rules Response":
+"Treats rules as guidelines until given a convincing reason not to",
+
+"Attachment Style":
+"Affectionate, tactile, loyal, and quick to emotionally invest",
+
+"Trust Pattern":
+"Social trust given fairly easily; deep trust requires demonstrated consistency",
+
+"Anger Pattern":
+"Highly expressive; facial expressions, gestures and signing become sharper and more emphatic",
+
+"Protective Escalation":
+"Rapid when children, Kin, vulnerable creatures, family, or loved ones are threatened",
+
+"Forgiveness":
+"Generous toward mistakes; significantly less forgiving toward deliberate cruelty",
+
+"Cruelty Tolerance":
+"Extremely Low",
+
+"Ableism Tolerance":
+"Extremely Low",
+
+"Emotional Resilience":
+"High",
+
+"Help-Seeking Behavior":
+"Generally comfortable for minor issues; less likely when he believes helping him may burden or endanger someone else",
+
+"Self-Advocacy":
+"Strong regarding accessibility, autonomy, and boundaries",
+
+"Primary Internal Contradiction":
+"Highly attentive to everyone else’s needs while often underestimating the seriousness of his own",
+
+"System Summary":
+"Temporary rescue status frequently becomes permanent adoption. User considers this outcome normal.",
+
+
+"Favorite Aesthetic":
+"Pastel Y2K / weirdcore / aliencore",
+
+"Favorite Clothing Style":
+"Cute, fitted, playful, slightly chaotic, usually with at least thirteen unnecessary accessories",
+
+"Favorite Creatures":
+"Ugly-cute dungeon creatures, unusual biological oddities, and anything other people immediately decide is unsettling",
+
+"Favorite Activity":
+"Spending time with creatures and figuring out their individual habits, moods, and needs",
+
+"Favorite Comfort Activity":
+"Curling up somewhere soft with creatures, snacks, and no responsibilities",
+
+"Favorite Social Activity":
+"Teasing people he likes until they react",
+
+"Favorite Kind of Person":
+"Kind, competent, patient, emotionally sincere",
+
+"Favorite Kind of Hunter":
+"Someone who protects without treating protection as ownership",
+
+"Favorite Food Profile":
+"Sweet, spicy, rich, snackable",
+
+"Favorite Snacks":
+"Cherries and chocolate",
+
+"Favorite Drink":
+"Sweet iced drinks",
+
+"Favorite Weather":
+"Mild, bright, breezy",
+
+"Favorite Time of Day":
+"Late evening",
+
+"Favorite Environment":
+"Cozy clutter over sterile perfection",
+
+"Favorite Gift Type":
+"Small, thoughtful, weirdly specific objects",
+
+"Favorite Physical Affection":
+"Cuddling, leaning, lap-sitting, casual touch, being held",
+
+"Favorite Compliment":
+"Recognition of his effort, kindness, competence, or care",
+
+"Preferred Sensory Comfort":
+"Visual warmth, soft textures, familiar scents, and steady physical contact",
+
+"Likes":
+"Creatures, affection, pink things, astronomy by association with his mother, strange artifacts, teasing, cozy clothes, pretty things, ugly things, weird things, snacks, being babied affectionately, and being included without being infantilized",
+
+"Strong Likes":
+"Family, Kin, creature rehabilitation, ridiculous accessories, competent people, and accessibility being treated as ordinary",
+
+"Dislikes":
+"Cruelty, condescension, being underestimated, unnecessary secrecy, arbitrary rules, being handled as incapable, and people making decisions for him",
+
+"Strong Dislikes":
+"Ableism, creature abuse, abandonment of dependents, coercive control, and performative pity",
+
+"Pet Peeve I":
+"People speaking about him instead of to him",
+
+"Pet Peeve II":
+"People assuming Deaf means incapable",
+
+"Pet Peeve III":
+"Being touched unexpectedly from behind without warning",
+
+"Instant Irritation Trigger":
+"For your own good used instead of an actual explanation",
+
+"Instant Anger Trigger":
+"Deliberate harm toward something weaker",
+
+"Instant Soft Spot":
+"Anything frightened, hungry, injured, abandoned, or trying very hard not to look scared",
+
+"Preference Observation":
+"User appears to recognize tiny, alarming, and needs help as a valid adoption category.",
+
+
+"Accessory Count":
+"Rarely leaves home wearing fewer than thirteen unnecessary accessories",
+
+"Creature Greeting Habit":
+"Greets unfamiliar creatures before deciding whether they are dangerous, typically accompanied by some variation of “Aww, look at the baby.”",
+
+"Naming Habit":
+"Assigns names to creatures, objects, and occasionally pieces of equipment with alarming speed",
+
+"Touch Habit":
+"Naturally tactile and has almost no instinctive sense of personal space unless someone specifically asks him to refrain",
+
+"Communication Habit":
+"Watches faces, hands, body language, and environmental movement almost constantly",
+
+"Attention Habit":
+"Frequently notices subtle emotional or behavioral changes in creatures and people before anyone explicitly explains them",
+
+"Balance Habit":
+"Automatically reaches for the nearest stable point when his vestibular system misfires, usually a wall, furniture, a Kin, or someone’s shoulder. Family, friends, and regular companions are so accustomed to it that most barely notice anymore.",
+
+"Pocket Habit":
+"Carries snacks, creature treats, small tools, and at least one item whose practical purpose is questionable",
+
+"Emergency Item":
+"Pink rubber duck. Classification: apparently essential.",
+
+"Collection Habit":
+"Accumulates strange trinkets, creature-related objects, unusual dungeon finds, and things he considers little guys",
+
+"Fashion Habit":
+"Changes accessories repeatedly before leaving, then adds more on the way out",
+
+"Hair Habit":
+"Frequently decorates his hair with clips, charms, pins, or whatever object has been declared wearable",
+
+"Creature-Care Learning Style":
+"Primarily instinctive and experience-based rather than academic. Learns creatures by spending time with them, watching their reactions, trying things, and remembering what works.",
+
+"Retention Pattern":
+"Once he figures out a creature’s habits, needs, warning signs, feeding preferences, or comfort behaviors, he remembers them unusually well.",
+
+"Administrative Habit":
+"Can spend approximately seventeen seconds looking at paperwork before developing a personal grievance against it",
+
+"Stress Habit":
+"Becomes more antsy, restless, and noticeably less focused",
+
+"Comfort Habit":
+"Seeks physical closeness when tired or emotionally drained",
+
+"Excitement Tell":
+"Becomes faster, more animated, and significantly more expressive with his hands",
+
+"Suspicion Tell":
+"Tilts his head, narrows his eyes, and becomes visibly suspicious",
+
+"Anger Tell":
+"Remains highly expressive even when genuinely furious; gestures, signing, expressions and speech become sharper and more emphatic",
+
+"Affection Tell":
+"Teasing frequency increases proportionally with attachment",
+
+"Embarrassment Tell":
+"Attempts to redirect attention by becoming even more shameless",
+
+"Sleep Habit":
+"Builds nests out of blankets, pillows, clothing, creatures, and consenting humans",
+
+"Food Habit":
+"Forgets meals while concentrating, then behaves as though starvation occurred unexpectedly",
+
+"Creature-Care Habit":
+"Talks or signs to creatures whether or not there is evidence they understand language",
+
+"Photography Habit":
+"Takes an unreasonable number of pictures of Kin doing completely ordinary things",
+
+"Kin-Specific Habit":
+"Treats Nugget’s hat selection as a legitimate wardrobe decision",
+
+"System Interaction Habit":
+"Argues with System notifications when he dislikes their wording",
+
+"System Observation I":
+"User has repeatedly informed this node that warnings are suggestions.",
+
+"System Clarification":
+"They are not.",
+
+"User Response":
+"Historically unconvinced.",
+
+"Habit Summary":
+"Temporary rescue status frequently becomes permanent adoption. User considers this outcome normal.",
+
+
+"Family Orientation":
+"Extremely family-centered",
+
+"Mother":
+"Han Seo-yeon",
+
+"Father":
+"Cillian Byrne",
+
+"Older Brother":
+"Seo Gun-woo (adopted)",
+
+"Family Bond Stability":
+"Extremely High",
+
+"Kin Bond Type":
+"Familial / Protective / Reciprocal",
+
+"Kin Relationship":
+"Valentine considers Nugget one of his babies. Nugget appears to consider Valentine his primary safe person.",
+
+"Kin Attachment Pattern":
+"Treats bonded creatures as family rather than possessions, summons, equipment, or subordinate units",
+
+"Kin Autonomy":
+"Strongly respected",
+
+"Kin Protective Response":
+"Extreme",
+
+"Friendship Pattern":
+"Forms friendships quickly when he feels safe, but deeper loyalty depends on demonstrated consistency",
+
+"Affection Style":
+"Verbal, signed, tactile, teasing, gift-giving, caretaking, and proximity-seeking",
+
+"Care Style":
+"Notices practical needs quickly and tends to act on them before being asked",
+
+"Receiving Care":
+"Extremely comfortable being fussed over, spoiled, cuddled, fed, checked for injuries, and dramatically babied by trusted people",
+
+"Minor Injury Behavior":
+"Fully capable of presenting a tiny scrape with a tragic expression and an “ohhhh nooo, I have a boo-boo 🥺” if sympathy is available",
+
+"Infantilization Response":
+"Immediate rejection. Affectionate babying is welcome; being treated as incapable or denied autonomy is not.",
+
+"Conflict With Loved Ones":
+"Direct and emotionally expressive. Prefers resolution over prolonged avoidance.",
+
+"Possessiveness":
+"Low regarding autonomy; high regarding emotional attachment and these are my people instincts",
+
+"Jealousy":
+"Generally rational and targeted",
+
+"Chosen-Family Response":
+"Extremely strong",
+
+"Leadership Bond Pattern":
+"Naturally leads his Kin, both human and nonhuman, through trust, protection, individual attention, and clear direction rather than coercive hierarchy",
+
+"Relationship Summary":
+"User’s social taxonomy appears to contain four primary categories: stranger, friend, family, and mine now.",
+
+
+"Baseline Emotional State":
+"Bright, expressive, affectionate, curious, and generally quick to recover from ordinary frustration",
+
+"Emotional Expression":
+"Very high",
+
+"Emotional Suppression":
+"More likely with serious fear, exhaustion, or situations where he thinks someone else needs him more",
+
+"Primary Comfort Need":
+"Physical closeness with someone or something he trusts",
+
+"Preferred Comfort":
+"Being held, cuddling, blankets, Kin nearby, familiar scents, snacks, and quiet visual company",
+
+"Comfort-Seeking Pattern":
+"Naturally gravitates toward family, Kin, or trusted people without always announcing that he needs comfort",
+
+"Family Comfort Behavior":
+"Completely comfortable being fussed over, fed, tucked in, checked for injuries, and shamelessly babied by his older brother",
+
+"Distress Tell":
+"Becomes more antsy, restless, and noticeably less focused",
+
+"Serious Distress Tell":
+"Continues trying to work or care for what needs doing even while visibly distressed. May be crying, shaky, distracted, or struggling to focus.",
+
+"Overwhelm Response":
+"Seeks familiar people, predictable physical contact, reduced demands, and a stable environment",
+
+"Isolation Preference":
+"Low. When overwhelmed and left to his own devices, Valentine tends to turn into a caterpillar, cocooning himself in whatever soft material is closest while still preferring trusted people nearby.",
+
+"Fear Response":
+"Highly expressive. May panic, cry, cling, swear, or visibly shake depending on severity, but can still act when someone needs him.",
+
+"Pain Response":
+"Openly dramatic about minor pain and perfectly willing to request sympathy",
+
+"Minor Injury Response":
+"🥺 I have been grievously wounded.",
+
+"Major Injury Response":
+"Checks everyone else first. Once he knows the people and Kin around him are safe, the fear catches up with him hard.",
+
+"Pain Observation":
+"Severity of complaint is frequently inversely proportional to severity of injury.",
+
+"Anger Response":
+"Remains visibly expressive. Genuine fury makes his gestures, signing, expressions, and speech sharper and more emphatic.",
+
+"Grief Response":
+"Poorly controlled and intensely expressed. Severe loss can leave Valentine openly sobbing, panicked, physically clinging to loved ones, and effectively inconsolable.",
+
+"Grief Self-Regulation":
+"Low during acute bereavement",
+
+"Separation During Grief":
+"Strongly discouraged",
+
+"Fear of Being Comforted":
+"Low",
+
+"Fear of Appearing Needy":
+"Low under normal circumstances",
+
+"Help-Seeking Difficulty":
+"Mostly appears when he believes helping him might burden or endanger someone else",
+
+"Reassurance Preference":
+"Concrete reassurance and action over vague promises",
+
+"Apology Preference":
+"Direct acknowledgment, changed behavior, and actual repair",
+
+"Conflict Recovery":
+"Usually quick when the problem is sincerely addressed",
+
+"Emotional Memory":
+"Strong",
+
+"Forgiveness Pattern":
+"Forgives accidents, ignorance, awkwardness, and honest mistakes relatively easily",
+
+"Non-Forgiveness Pattern":
+"Deliberate cruelty, repeated ableism after correction, exploitation of dependency, betrayal of vulnerable people, and intentional harm toward Kin are significantly harder to forgive",
+
+"Safety Association":
+"Home is primarily defined by people, not location",
+
+"Physical Safety Association":
+"Trusted arms around him, stable footing, visible exits, and knowing where his Kin are",
+
+"Emotional Safety Association":
+"Being taken seriously without being treated delicately",
+
+"Accessibility Comfort":
+"Prefers accommodations to happen naturally and matter-of-factly rather than becoming a performance centered on his Deafness",
+
+"Comfort Observation I":
+"User accepts affectionate babying enthusiastically.",
+
+"Comfort Observation II":
+"User rejects infantilization immediately.",
+
+"Comfort Addendum":
+"Difference is obvious."
+
+}
+);
+
+
+/* =========================================
+   STARTER DATABASE
+========================================= */
+
+const starterDB = {
+
+version:
+3,
+
+selected:
+"valentine-byrne",
+
+characters: {
+
+"valentine-byrne": {
+
+id:
+"valentine-byrne",
+
+name:
+"Valentine Byrne",
+
+snapshot:
+"Modern-story introduction snapshot",
+
+portrait:
+"",
+
+themes: {
+
+system:
+"#ff77cb",
+
+government:
+"#67d8ff",
+
+personal:
+"#c59cff"
+
+},
+
+data:
+val,
+
+custom: {
+
+system: {},
+government: {},
+personal: {}
+
+},
+
+updatedAt:
+new Date().toISOString()
+
+}
+
+}
+
+};
+
+
+/* =========================================
+   STATE
+========================================= */
+
+let db =
+loadDB();
+
+let currentSheet =
+"system";
+
+let preview =
+false;
+
+let sb =
+null;
+
+let session =
+null;
+
+
+/* =========================================
+   DATABASE HELPERS
+========================================= */
+
+function loadDB() {
+
+  try {
+
+    const raw =
+    localStorage.getItem(
+      DB_KEY
+    );
+
+    if (raw) {
+
+      return JSON.parse(
+        raw
+      );
+
+    }
+
+  }
+  catch(error) {}
+
+  return structuredClone(
+    starterDB
+  );
+
+}
+
+
+function persist() {
+
+  localStorage.setItem(
+    DB_KEY,
+    JSON.stringify(db)
+  );
+
+}
+
+
+function slugify(text) {
+
+  return text
+
+  .toLowerCase()
+
+  .trim()
+
+  .replace(
+    /[^a-z0-9]+/g,
+    "-"
+  )
+
+  .replace(
+    /^-|-$/g,
+    ""
+  )
+
+  ||
+
+  "character-" +
+  Date.now();
+
+}
+
+
+function char() {
+
+  return db.characters[
+    db.selected
+  ];
+
+}
+
+
+function escapeHTML(
+  text = ""
+) {
+
+  return String(text)
+  .replace(
+    /[&<>"']/g,
+    character => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    })[character]
+  );
+
+}
+
+
+/* =========================================
+   FIELD RENDERING
+========================================= */
+
+function showValue(value) {
+
+  const clean =
+  (value || "")
+  .replace(
+    /\s/g,
+    ""
+  );
+
+  if (
+    /^█+$/.test(clean)
+  ) {
+
+    return `
+      <span class="blackout">
+        ${escapeHTML(value)}
+      </span>
+    `;
+
+  }
+
+  const warning =
+  (value || "")
+  .includes("⚠")
+
+  ? " warning"
+
+  : "";
+
+  return `
+    <span
+      class="field-value${warning}"
+      contenteditable="${preview ? "false" : "true"}"
+    >
+      ${escapeHTML(value || "")}
+    </span>
+  `;
+
+}
+
+
+/* =========================================
+   CHARACTER LIST
+========================================= */
+
+function renderList() {
+
+  const query =
+  (
+    document
+    .getElementById("search")
+    .value || ""
+  )
+  .toLowerCase();
+
+  const list =
+  document
+  .getElementById(
+    "characterList"
+  );
+
+  list.innerHTML =
+  "";
+
+  Object
+  .values(
+    db.characters
+  )
+
+  .filter(
+    character =>
+    character.name
+    .toLowerCase()
+    .includes(query)
+  )
+
+  .sort(
+    (a,b) =>
+    a.name
+    .localeCompare(
+      b.name
+    )
+  )
+
+  .forEach(
+    character => {
+
+      const button =
+      document
+      .createElement(
+        "button"
+      );
+
+      button.className =
+      "char-item" +
+      (
+        character.id === db.selected
+        ? " active"
+        : ""
+      );
+
+      const rank =
+
+      character
+      .data
+      .system[
+        "System Rank"
+      ]
+
+      ||
+
+      character
+      .data
+      .government[
+        "Registered Rank"
+      ]
+
+      ||
+
+      "";
+
+      button.innerHTML = `
+
+      ${
+        character.portrait
+
+        ? `
+        <img
+          class="mini-avatar"
+          src="${character.portrait}"
+        >
+        `
+
+        : `
+        <div
+          class="mini-avatar"
+        ></div>
+        `
+      }
+
+      <div>
+
+        <div class="char-name">
+          ${escapeHTML(character.name)}
+        </div>
+
+        <div class="char-meta">
+          ${escapeHTML(rank)}
+        </div>
+
+      </div>
+
+      `;
+
+      button.onclick =
+      () => {
+
+        db.selected =
+        character.id;
+
+        persist();
+
+        renderAll();
+
+      };
+
+      list.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================
+   SHEET RENDER
+========================================= */
+
+function renderSheet() {
+
+  const character =
+  char();
+
+  const schema =
+  SCHEMAS[
+    currentSheet
+  ];
+
+  const data =
+  character
+  .data[
+    currentSheet
+  ];
+
+  const custom =
+  character
+  .custom[
+    currentSheet
+  ]
+  || {};
+
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--system",
+    character.themes.system
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--government",
+    character.themes.government
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--personal",
+    character.themes.personal
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--accent",
+    character.themes[
+      currentSheet
+    ]
+  );
+
+
+
+  const themePanel = `
+
+  <div
+    class="card wide editable-only"
+  >
+
+    <h3>
+      Character Theme + Portrait
+    </h3>
+
+
+    <div class="portrait-wrap">
+
+
+      <div
+        class="portrait"
+        id="portraitBox"
+      >
+
+      ${
+        character.portrait
+
+        ? `
+        <img
+          src="${character.portrait}"
+        >
+        `
+
+        : "Insert Portrait"
+      }
+
+      </div>
+
+
+      <div class="portrait-controls">
+
+
+        <label>
+
+          Portrait image
+
+          <input
+            id="portraitInput"
+            type="file"
+            accept="image/*"
+          >
+
+        </label>
+
+
+        <button
+          class="ghost-btn"
+          onclick="clearPortrait()"
+        >
+          Clear portrait
+        </button>
+
+
+        <div class="color-row">
+
+
+          <div class="color-box">
+
+            <label>
+              System
+            </label>
+
+            <input
+              type="color"
+              value="${character.themes.system}"
+              onchange="setTheme('system',this.value)"
+            >
+
+          </div>
+
+
+          <div class="color-box">
+
+            <label>
+              Government
+            </label>
+
+            <input
+              type="color"
+              value="${character.themes.government}"
+              onchange="setTheme('government',this.value)"
+            >
+
+          </div>
+
+
+          <div class="color-box">
+
+            <label>
+              Personal
+            </label>
+
+            <input
+              type="color"
+              value="${character.themes.personal}"
+              onchange="setTheme('personal',this.value)"
+            >
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  `;
+
+
+
+  const cards =
+  schema.sections
+
+  .map(
+    (
+      [
+        title,
+        fields
+      ],
+      index
+    ) => {
+
+
+      const fixedFields =
+      fields
+
+      .map(
+        field => `
+
+        <div
+          class="field-row"
+          data-field="${escapeHTML(field)}"
+        >
+
+          <div class="field-label">
+            ${escapeHTML(field)}
+          </div>
+
+          ${showValue(
+            data[field]
+          )}
+
+        </div>
+
+        `
+      )
+
+      .join("");
+
+
+
+      const customFields =
+      (
+        custom[title]
+        ||
+        []
+      )
+
+      .map(
+        field => `
+
+        <div
+          class="field-row custom-row"
+          data-custom-id="${escapeHTML(field.id)}"
+        >
+
+          <div class="field-label">
+            ${escapeHTML(field.label)}
+          </div>
+
+          ${showValue(
+            field.value
+          )}
+
+          <button
+            class="delete-field editable-only"
+            title="Delete field"
+            onclick="deleteCustomField(
+              '${escapeHTML(title)}',
+              '${escapeHTML(field.id)}'
+            )"
+          >
+            ✕
+          </button>
+
+        </div>
+
+        `
+      )
+
+      .join("");
+
+
+
+      const wide =
+      index ===
+      schema.sections.length - 1
+
+      ? " wide"
+
+      : "";
+
+
+
+      return `
+
+      <div
+        class="card${wide}"
+        data-section="${escapeHTML(title)}"
+      >
+
+        <h3>
+          ${escapeHTML(title)}
+        </h3>
+
+        ${fixedFields}
+
+        ${customFields}
+
+        <button
+          class="add-field editable-only"
+          onclick="addCustomField('${escapeHTML(title)}')"
+        >
+          ＋ Add field
+        </button>
+
+      </div>
+
+      `;
+
+    }
+  )
+
+  .join("");
+
+
+
+  document
+  .getElementById(
+    "sheet"
+  )
+
+  .innerHTML = `
+
+  <div
+    class="sheet-shell ${schema.className}"
+  >
+
+
+    <div class="sheet-head">
+
+      <div>
+
+        <div class="sheet-title">
+          ${escapeHTML(schema.title)}
+        </div>
+
+        <div class="sheet-sub">
+          ${escapeHTML(schema.sub)}
+        </div>
+
+      </div>
+
+
+      <div class="badge">
+        ${escapeHTML(character.name)}
+      </div>
+
+    </div>
+
+
+    <div class="grid">
+
+      ${themePanel}
+
+      ${cards}
+
+    </div>
+
+
+    <div class="footer">
+
+      <span>
+        ${escapeHTML(schema.title)}
+        •
+        ${escapeHTML(schema.sub)}
+      </span>
+
+      <span>
+        ${escapeHTML(
+          character.snapshot
+          ||
+          "Introduction snapshot"
+        )}
+      </span>
+
+    </div>
+
+
+  </div>
+
+  `;
+
+
+  bindInlineEditing();
+
+
+  const portraitInput =
+  document
+  .getElementById(
+    "portraitInput"
+  );
+
+
+  if (
+    portraitInput
+  ) {
+
+    portraitInput
+    .onchange =
+    handlePortrait;
+
+  }
+
+}
+
+
+/* =========================================
+   INLINE EDITING
+========================================= */
+
+function bindInlineEditing() {
+
+  document
+  .querySelectorAll(
+    ".field-row"
+  )
+
+  .forEach(
+    row => {
+
+      const value =
+      row
+      .querySelector(
+        ".field-value"
+      );
+
+      if (
+        !value
+      ) {
+
+        return;
+
+      }
+
+
+      value
+      .addEventListener(
+        "input",
+        () => {
+
+          const character =
+          char();
+
+          const field =
+          row.dataset.field;
+
+          const customID =
+          row.dataset.customId;
+
+
+          if (
+            field
+          ) {
+
+            character
+            .data[
+              currentSheet
+            ][field]
+            =
+            value.innerText;
+
+          }
+
+
+          else if (
+            customID
+          ) {
+
+            const section =
+            row
+            .closest(
+              ".card"
+            )
+            .dataset
+            .section;
+
+            const item = (
+              character
+              .custom[
+                currentSheet
+              ][section]
+              ||
+              []
+            )
+            .find(
+              item =>
+              item.id ===
+              customID
+            );
+
+
+            if (
+              item
+            ) {
+
+              item.value =
+              value.innerText;
+
+            }
+
+          }
+
+
+          character.updatedAt =
+          new Date()
+          .toISOString();
+
+
+          debouncedPersist();
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================
+   AUTOSAVE
+========================================= */
+
+let saveTimer;
+
+
+function debouncedPersist() {
+
+  clearTimeout(
+    saveTimer
+  );
+
+
+  saveTimer =
+  setTimeout(
+    () => {
+
+      persist();
+
+      renderList();
+
+    },
+    350
+  );
+
+}
+
+
+/* =========================================
+   RENDER ALL
+========================================= */
+
+function renderAll() {
+
+  const character =
+  char();
+
+
+  document
+  .getElementById(
+    "characterTitle"
+  )
+  .textContent =
+  character.name;
+
+
+  document
+  .getElementById(
+    "characterSnapshot"
+  )
+  .textContent =
+  character.snapshot
+  ||
+  "Introduction snapshot";
+
+
+  document
+  .getElementById(
+    "app"
+  )
+  .classList
+  .toggle(
+    "preview-mode",
+    preview
+  );
+
+
+  document
+  .querySelectorAll(
+    ".tab"
+  )
+
+  .forEach(
+    tab => {
+
+      tab
+      .classList
+      .toggle(
+        "active",
+        tab.dataset.sheet
+        ===
+        currentSheet
+      );
+
+    }
+  );
+
+
+  renderList();
+
+  renderSheet();
+
+  updateCloudBadge();
+
+}
+
+
+/* =========================================
+   TAB SWITCHING
+========================================= */
+
+document
+.querySelectorAll(
+  ".tab"
+)
+
+.forEach(
+  tab => {
+
+    tab.onclick =
+    () => {
+
+      currentSheet =
+      tab.dataset.sheet;
+
+      renderAll();
+
+    };
+
+  }
+);
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+document
+.getElementById(
+  "search"
+)
+
+.addEventListener(
+  "input",
+  renderList
+);
+
+
+/* =========================================
+   NEW CHARACTER
+========================================= */
+
+function newCharacter() {
+
+  const name =
+  prompt(
+    "Character name:"
+  );
+
+
+  if (
+    !name
+  ) {
+
+    return;
+
+  }
+
+
+  let id =
+  slugify(
+    name
+  );
+
+
+  while (
+    db.characters[id]
+  ) {
+
+    id +=
+    "-" +
+    Math.floor(
+      Math.random() * 99
+    );
+
+  }
+
+
+  db.characters[id] = {
+
+    id,
+
+    name,
+
+    snapshot:
+    "Modern-story introduction snapshot",
+
+    portrait:
+    "",
+
+    themes: {
+
+      system:
+      "#67d8ff",
+
+      government:
+      "#67d8ff",
+
+      personal:
+      "#c59cff"
+
+    },
+
+    data:
+    blankData(),
+
+    custom: {
+
+      system: {},
+      government: {},
+      personal: {}
+
+    },
+
+    updatedAt:
+    new Date()
+    .toISOString()
+
+  };
+
+
+  db.characters[id]
+  .data
+  .system[
+    "Name"
+  ]
+  =
+  name;
+
+
+  db.characters[id]
+  .data
+  .government[
+    "Legal Name"
+  ]
+  =
+  name;
+
+
+  db.characters[id]
+  .data
+  .personal[
+    "Name"
+  ]
+  =
+  name;
+
+
+  db.selected =
+  id;
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+/* =========================================
+   DUPLICATE CHARACTER
+========================================= */
+
+function duplicateCharacter() {
+
+  const source =
+  char();
+
+
+  const name =
+  prompt(
+    "Duplicate as:",
+    source.name +
+    " Copy"
+  );
+
+
+  if (
+    !name
+  ) {
+
+    return;
+
+  }
+
+
+  let id =
+  slugify(
+    name
+  );
+
+
+  while (
+    db.characters[id]
+  ) {
+
+    id +=
+    "-copy";
+
+  }
+
+
+  const copy =
+  structuredClone(
+    source
+  );
+
+
+  copy.id =
+  id;
+
+  copy.name =
+  name;
+
+  copy.updatedAt =
+  new Date()
+  .toISOString();
+
+
+  copy
+  .data
+  .system[
+    "Name"
+  ]
+  =
+  name;
+
+
+  copy
+  .data
+  .government[
+    "Legal Name"
+  ]
+  =
+  name;
+
+
+  copy
+  .data
+  .personal[
+    "Name"
+  ]
+  =
+  name;
+
+
+  db.characters[id] =
+  copy;
+
+
+  db.selected =
+  id;
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+/* =========================================
+   RENAME CHARACTER
+========================================= */
+
+function renameCharacter() {
+
+  const character =
+  char();
+
+
+  const name =
+  prompt(
+    "New name:",
+    character.name
+  );
+
+
+  if (
+    !name
+  ) {
+
+    return;
+
+  }
+
+
+  character.name =
+  name;
+
+
+  if (
+    character
+    .data
+    .system[
+      "Name"
+    ]
+  ) {
+
+    character
+    .data
+    .system[
+      "Name"
+    ]
+    =
+    name;
+
+  }
+
+
+  if (
+    character
+    .data
+    .government[
+      "Legal Name"
+    ]
+  ) {
+
+    character
+    .data
+    .government[
+      "Legal Name"
+    ]
+    =
+    name;
+
+  }
+
+
+  if (
+    character
+    .data
+    .personal[
+      "Name"
+    ]
+  ) {
+
+    character
+    .data
+    .personal[
+      "Name"
+    ]
+    =
+    name;
+
+  }
+
+
+  character.updatedAt =
+  new Date()
+  .toISOString();
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+/* =========================================
+   DELETE CHARACTER
+========================================= */
+
+function deleteCharacter() {
+
+  if (
+    Object.keys(
+      db.characters
+    ).length <= 1
+  ) {
+
+    alert(
+      "Keep at least one character."
+    );
+
+    return;
+
+  }
+
+
+  const character =
+  char();
+
+
+  if (
+    !confirm(
+      `Delete ${character.name}?`
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  delete
+  db.characters[
+    character.id
+  ];
+
+
+  db.selected =
+  Object.keys(
+    db.characters
+  )[0];
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+/* =========================================
+   SAVE
+========================================= */
+
+function saveLocal() {
+
+  char().updatedAt =
+  new Date()
+  .toISOString();
+
+
+  persist();
+
+  renderList();
+
+
+  alert(
+    "Saved locally in this browser."
+  );
+
+}
+
+
+async function saveEverywhere() {
+
+  saveLocal();
+
+
+  if (
+    session
+  ) {
+
+    await
+    syncCurrentToCloud();
+
+  }
+
+}
+
+
+/* =========================================
+   PREVIEW
+========================================= */
+
+function togglePreview() {
+
+  preview =
+  !preview;
+
+  renderAll();
+
+}
+
+
+/* =========================================
+   THEME
+========================================= */
+
+function setTheme(
+  type,
+  value
+) {
+
+  char()
+  .themes[
+    type
+  ]
+  =
+  value;
+
+
+  char()
+  .updatedAt =
+  new Date()
+  .toISOString();
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+/* =========================================
+   PORTRAITS
+========================================= */
+
+function clearPortrait() {
+
+  char().portrait =
+  "";
+
+  persist();
+
+  renderAll();
+
+}
+
+
+function handlePortrait(
+  event
+) {
+
+  const file =
+  event
+  .target
+  .files?.[0];
+
+
+  if (
+    !file
+  ) {
+
+    return;
+
+  }
+
+
+  const reader =
+  new FileReader();
+
+
+  reader.onload =
+  event => {
+
+    const image =
+    new Image();
+
+
+    image.onload =
+    () => {
+
+      const max =
+      1000;
+
+
+      const scale =
+      Math.min(
+        1,
+        max /
+        Math.max(
+          image.width,
+          image.height
+        )
+      );
+
+
+      const canvas =
+      document
+      .createElement(
+        "canvas"
+      );
+
+
+      canvas.width =
+      Math.round(
+        image.width *
+        scale
+      );
+
+
+      canvas.height =
+      Math.round(
+        image.height *
+        scale
+      );
+
+
+      canvas
+      .getContext(
+        "2d"
+      )
+      .drawImage(
+        image,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+
+      char().portrait =
+      canvas
+      .toDataURL(
+        "image/webp",
+        .82
+      );
+
+
+      char().updatedAt =
+      new Date()
+      .toISOString();
+
+
+      persist();
+
+      renderAll();
+
+    };
+
+
+    image.src =
+    event.target.result;
+
+  };
+
+
+  reader
+  .readAsDataURL(
+    file
+  );
+
+}
+
+
+/* =========================================
+   CUSTOM FIELDS
+========================================= */
+
+function addCustomField(
+  section
+) {
+
+  const label =
+  prompt(
+    "Field label:"
+  );
+
+
+  if (
+    !label
+  ) {
+
+    return;
+
+  }
+
+
+  const value =
+  prompt(
+    "Starting value:"
+  )
+  ||
+  "";
+
+
+  char()
+  .custom[
+    currentSheet
+  ][section]
+  ??=
+  [];
+
+
+  char()
+  .custom[
+    currentSheet
+  ][section]
+  .push({
+
+    id:
+    "f" +
+    Date.now(),
+
+    label,
+
+    value
+
+  });
+
+
+  persist();
+
+  renderSheet();
+
+}
+
+
+function deleteCustomField(
+  section,
+  id
+) {
+
+  char()
+  .custom[
+    currentSheet
+  ][section]
+  =
+  (
+    char()
+    .custom[
+      currentSheet
+    ][section]
+    ||
+    []
+  )
+  .filter(
+    item =>
+    item.id !== id
+  );
+
+
+  persist();
+
+  renderSheet();
+
+}
+
+
+/* =========================================
+   EXPORT
+========================================= */
+
+function exportDatabase() {
+
+  const blob =
+  new Blob(
+    [
+      JSON.stringify(
+        db,
+        null,
+        2
+      )
+    ],
+    {
+      type:
+      "application/json"
+    }
+  );
+
+
+  const anchor =
+  document
+  .createElement(
+    "a"
+  );
+
+
+  anchor.href =
+  URL.createObjectURL(
+    blob
+  );
+
+
+  anchor.download =
+  "class-unknown-character-database.json";
+
+
+  anchor.click();
+
+
+  URL
+  .revokeObjectURL(
+    anchor.href
+  );
+
+}
+
+
+/* =========================================
+   IMPORT
+========================================= */
+
+document
+.getElementById(
+  "importFile"
+)
+
+.onchange =
+async event => {
+
+  const file =
+  event
+  .target
+  .files?.[0];
+
+
+  if (
+    !file
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    const object =
+    JSON.parse(
+      await file.text()
+    );
+
+
+    if (
+      !object.characters
+    ) {
+
+      throw 0;
+
+    }
+
+
+    if (
+      confirm(
+        "Replace the current local database with this import?"
+      )
+    ) {
+
+      db =
+      object;
+
+      persist();
+
+      renderAll();
+
+    }
+
+  }
+
+  catch {
+
+    alert(
+      "That JSON file does not look like a Class: Unknown character database."
+    );
+
+  }
+
+
+  event.target.value =
+  "";
+
+};
+
+
+/* =========================================
+   CLOUD MODAL
+========================================= */
+
+function openCloud() {
+
+  const modal =
+  document
+  .getElementById(
+    "cloudModal"
+  );
+
+
+  const settings =
+  JSON.parse(
+    localStorage
+    .getItem(
+      SETTINGS_KEY
+    )
+    ||
+    "{}"
+  );
+
+
+  document
+  .getElementById(
+    "sbUrl"
+  )
+  .value =
+  settings.url
+  ||
+  "";
+
+
+  document
+  .getElementById(
+    "sbKey"
+  )
+  .value =
+  settings.key
+  ||
+  "";
+
+
+  modal
+  .classList
+  .add(
+    "open"
+  );
+
+}
+
+
+function closeCloud() {
+
+  document
+  .getElementById(
+    "cloudModal"
+  )
+  .classList
+  .remove(
+    "open"
+  );
+
+}
+
+
+/* =========================================
+   CONNECT SUPABASE
+========================================= */
+
+async function connectCloud() {
+
+  const url =
+  document
+  .getElementById(
+    "sbUrl"
+  )
+  .value
+  .trim();
+
+
+  const key =
+  document
+  .getElementById(
+    "sbKey"
+  )
+  .value
+  .trim();
+
+
+  const email =
+  document
+  .getElementById(
+    "sbEmail"
+  )
+  .value
+  .trim();
+
+
+  const password =
+  document
+  .getElementById(
+    "sbPassword"
+  )
+  .value;
+
+
+  if (
+    !url ||
+    !key ||
+    !email ||
+    !password
+  ) {
+
+    setCloudStatus(
+      "Fill in URL, anon key, email, and password."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    localStorage
+    .setItem(
+      SETTINGS_KEY,
+      JSON.stringify({
+        url,
+        key
+      })
+    );
+
+
+    sb =
+    window
+    .supabase
+    .createClient(
+      url,
+      key
+    );
+
+
+    const {
+      data,
+      error
+    }
+    =
+    await sb.auth
+    .signInWithPassword({
+
+      email,
+
+      password
+
+    });
+
+
+    if (
+      error
+    ) {
+
+      throw error;
+
+    }
+
+
+    session =
+    data.session;
+
+
+    setCloudStatus(
+      "Connected. Pulling your characters…"
+    );
+
+
+    await
+    pullCloud();
+
+
+    setCloudStatus(
+      "Connected and synced."
+    );
+
+
+    updateCloudBadge();
+
+  }
+
+  catch(error) {
+
+    setCloudStatus(
+      "Connection failed: " +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   RESTORE CLOUD SESSION
+========================================= */
+
+async function restoreCloud() {
+
+  const settings =
+  JSON.parse(
+    localStorage
+    .getItem(
+      SETTINGS_KEY
+    )
+    ||
+    "{}"
+  );
+
+
+  if (
+    !settings.url ||
+    !settings.key
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    sb =
+    window
+    .supabase
+    .createClient(
+      settings.url,
+      settings.key
+    );
+
+
+    const {
+      data
+    }
+    =
+    await sb.auth
+    .getSession();
+
+
+    session =
+    data.session;
+
+
+    if (
+      session
+    ) {
+
+      await
+      pullCloud();
+
+      updateCloudBadge();
+
+    }
+
+  }
+
+  catch(error) {}
+
+}
+
+
+/* =========================================
+   SIGN OUT
+========================================= */
+
+async function signOutCloud() {
+
+  if (
+    sb
+  ) {
+
+    await
+    sb.auth
+    .signOut();
+
+  }
+
+
+  session =
+  null;
+
+
+  updateCloudBadge();
+
+
+  setCloudStatus(
+    "Signed out."
+  );
+
+}
+
+
+/* =========================================
+   CLOUD STATUS
+========================================= */
+
+function setCloudStatus(
+  message
+) {
+
+  document
+  .getElementById(
+    "cloudStatus"
+  )
+  .textContent =
+  message;
+
+}
+
+
+function updateCloudBadge() {
+
+  const badge =
+  document
+  .getElementById(
+    "cloudBadge"
+  );
+
+
+  const dot =
+  document
+  .getElementById(
+    "syncDot"
+  );
+
+
+  if (
+    session
+  ) {
+
+    badge
+    .lastChild
+    .textContent =
+    " Cloud";
+
+
+    dot
+    .classList
+    .add(
+      "online"
+    );
+
+  }
+
+  else {
+
+    badge
+    .lastChild
+    .textContent =
+    " Local";
+
+
+    dot
+    .classList
+    .remove(
+      "online"
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   SYNC CURRENT CHARACTER
+========================================= */
+
+async function syncCurrentToCloud() {
+
+  if (
+    !sb ||
+    !session
+  ) {
+
+    alert(
+      "Cloud sync is not connected. Local save is complete."
+    );
+
+    return;
+
+  }
+
+
+  const character =
+  char();
+
+
+  const row = {
+
+    user_id:
+    session.user.id,
+
+    character_id:
+    character.id,
+
+    name:
+    character.name,
+
+    payload:
+    character,
+
+    updated_at:
+    new Date()
+    .toISOString()
+
+  };
+
+
+  const {
+    error
+  }
+  =
+  await sb
+
+  .from(
+    "characters"
+  )
+
+  .upsert(
+    row,
+    {
+      onConflict:
+      "user_id,character_id"
+    }
+  );
+
+
+  if (
+    error
+  ) {
+
+    alert(
+      "Cloud sync failed: " +
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  alert(
+    "Saved locally and synced to Supabase."
+  );
+
+}
+
+
+/* =========================================
+   PULL CLOUD CHARACTERS
+========================================= */
+
+async function pullCloud() {
+
+  if (
+    !sb ||
+    !session
+  ) {
+
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  }
+  =
+  await sb
+
+  .from(
+    "characters"
+  )
+
+  .select(
+    "*"
+  )
+
+  .eq(
+    "user_id",
+    session.user.id
+  );
+
+
+  if (
+    error
+  ) {
+
+    setCloudStatus(
+      "Could not load cloud data: " +
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !data?.length
+  ) {
+
+    return;
+
+  }
+
+
+  for (
+    const row
+    of data
+  ) {
+
+    const remote =
+    row.payload;
+
+
+    const local =
+    db.characters[
+      row.character_id
+    ];
+
+
+    if (
+      !local
+      ||
+      new Date(
+        row.updated_at || 0
+      )
+      >
+      new Date(
+        local.updatedAt || 0
+      )
+    ) {
+
+      db.characters[
+        row.character_id
+      ]
+      =
+      remote;
+
+    }
+
+  }
+
+
+  if (
+    !db.characters[
+      db.selected
+    ]
+  ) {
+
+    db.selected =
+    Object.keys(
+      db.characters
+    )[0];
+
+  }
+
+
+  persist();
+
+  renderAll();
+
+}
+
+
+/* =========================================
+   START APP
+========================================= */
+
+renderAll();
+
+restoreCloud();
+
+</script>
+
+</body>
+</html>
